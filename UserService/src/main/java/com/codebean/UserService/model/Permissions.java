@@ -1,0 +1,47 @@
+package com.codebean.UserService.model;
+
+/*
+IntelliJ IDEA 2024.2.4 (Community Edition)
+Build #IC-242.23726.103, built on October 23, 2024
+@Author mcputro a.k.a. Mu'ti Cahyono Putro
+Created on 10 Jan 2025 11:01
+@Last Modified 10 Jan 2025 11:01
+Version 1.0
+*/
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
+import java.util.List;
+
+@Setter
+@Getter
+@Entity
+@Table(name = "Permissions")
+public class Permissions {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
+
+    @Column(name = "Name")
+    private String name;
+
+    @ManyToMany(mappedBy = "listPermission")
+    private List<User> users;
+
+    @Column(name = "CreatedBy", updatable = false, nullable = false)
+    private String createdBy;
+
+    @Column(name = "CreatedDate", updatable = false, nullable = false)
+    private Date createdDate = new Date();
+
+    @Column(name = "UpdatedBy", insertable = false)
+    private String updatedBy;
+
+    @Column(name = "UpdatedDate", insertable = false)
+    private Date updatedDate;
+}
