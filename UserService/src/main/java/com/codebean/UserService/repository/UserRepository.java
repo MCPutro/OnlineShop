@@ -13,9 +13,13 @@ import com.codebean.UserService.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+
+    List<User> findAllByRole_Name(String role);
 }

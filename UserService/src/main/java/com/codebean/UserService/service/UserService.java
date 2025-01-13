@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Pageable;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -135,7 +136,10 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         // Implementasi logika untuk mendapatkan semua user dengan paging\
-        return null;
+        List<User> customer = this.userRepository.findAllByRole_Name("Customer");
+        return new ResponseHandler().handleResponse(
+                "Berhasil", HttpStatus.OK, customer, null, request
+        );
     }
 
     @Override
