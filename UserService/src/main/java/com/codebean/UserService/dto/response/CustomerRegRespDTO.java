@@ -9,13 +9,17 @@ Created on 13 Jan 2025 10:49
 Version 1.0
 */
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class UserRegisterDTO {
+@Builder
+public class CustomerRegRespDTO {
+    private Long id;
     private String username;
     private String email;
     private String phoneNumber;
+    private String role;
 }

@@ -9,7 +9,7 @@ Created on 13 Jan 2025 12:16
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.UserRegisterDTO;
+import com.codebean.UserService.dto.request.CustomerRegReqDTO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -40,7 +40,7 @@ public class codeTest {
 
     @Test
     void name() {
-        UserRegisterDTO registerDTO = new UserRegisterDTO();
+        CustomerRegReqDTO registerDTO = new CustomerRegReqDTO();
         registerDTO.setUsername("ad");
 
         validate(registerDTO);

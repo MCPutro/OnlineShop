@@ -9,7 +9,8 @@ Created on 10 Jan 2025 12:37
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.UserRegisterDTO;
+import com.codebean.UserService.dto.request.CustomerRegReqDTO;
+import com.codebean.UserService.dto.response.CustomerRegRespDTO;
 import com.codebean.UserService.hadler.ResponseHandler;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
@@ -20,7 +21,6 @@ import com.codebean.UserService.repository.RoleRepository;
 import com.codebean.UserService.model.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,27 +93,26 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             if (optionalRole.isEmpty()) {
                 return new ResponseHandler().handleResponse("Role tidak ditemukan",
                         HttpStatus.BAD_REQUEST, null, "FVUSR01001", request);
+            } else {
+                optionalRole.ifPresent(user::setRole);
             }
-
-            optionalRole.ifPresent(user::setRole);
 
             this.userRepository.save(user);
 
             return new ResponseHandler().handleResponse(
                     "Berhasil di daftarkan",
                     HttpStatus.CREATED,
-                    user,
+                    this.customerModelToDTO(user),
                     null, request
             );
 
         } catch (Throwable e) {
-            ResponseEntity<Object> objectResponseEntity = new ResponseHandler().handleResponse(
+            return new ResponseHandler().handleResponse(
                     e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     null,
                     "FEUSR01001",
                     request);
-            return objectResponseEntity;
 //            return null;
         }
     }
@@ -175,20 +174,29 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 //    }
 
 
-    public User userRegisDTOtoModel(UserRegisterDTO dto, String role, String createBy) {
-
+    public User customerRegisDTOtoModel(CustomerRegReqDTO dto, String role, String createBy) {
         try {
 
-            User user = this.modelMapper.map(dto, User.class);
-            user.setRole(new Role(role));
-            user.setCreatedDate(new Date());
-            user.setCreatedBy(createBy);
+            User customer = this.modelMapper.map(dto, User.class);
+            customer.setRole(new Role(role));
+            customer.setCreatedDate(new Date());
+            customer.setCreatedBy(createBy);
 
-            return user;
+            return customer;
         } catch (Throwable e) {
             e.printStackTrace();
             return null;
         }
 
+    }
+
+    public CustomerRegRespDTO customerModelToDTO(User user) {
+        return CustomerRegRespDTO.builder()
+                .id(user.getID())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole().getName())
+                .build();
     }
 }

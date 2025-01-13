@@ -9,7 +9,6 @@ Created on 10 Jan 2025 13:21
 Version 1.0
 */
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +18,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserRegisterDTO {
+public class CustomerRegReqDTO {
 
     @NotEmpty(message = "username cannot be empty")
     @NotBlank(message = "username cannot be blank")
