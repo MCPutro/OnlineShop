@@ -10,38 +10,63 @@ Version 1.0
 */
 
 import com.codebean.UserService.dto.request.UserRegisterDTO;
+import com.codebean.UserService.exception.ValidateException;
+import com.codebean.UserService.hadler.ResponseHandler;
+import com.codebean.UserService.model.Role;
+import com.codebean.UserService.model.User;
 import com.codebean.UserService.service.UserService;
+import com.codebean.UserService.service.ValidationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Set;
+
 @RestController
-@RequestMapping("v1/user")
+@RequestMapping("/public/v1")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping("")
-    public String createUser(@RequestBody UserRegisterDTO user) {
-        try {
+    @Autowired
+    private ValidationService validator;
+
+    @PostMapping(path = "/customer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> createUser(@RequestBody UserRegisterDTO dto, HttpServletRequest request) {
+
+        // validasi data input
+        this.validator.validate(dto, "FVUSR01001", request);
+
+        // convert dto to model cara 1
+        User newUser = User.builder()
+                .role(new Role("customer"))
+                .createdBy("sistem")
+                .createdDate(new Date())
+                .build();
+        BeanUtils.copyProperties(dto, newUser);
+        System.out.println("1>>" + newUser);
+
+        // convert dto to model cara 2
+        User user = this.userService.userRegisDTOtoModel(dto, "Customer", "sistem");
+        System.out.println("1>>" + user);
 
 
-
-
-            this.userService.save()
-            return "OK";
-//            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
-//            return ResponseEntity.internalServerError().build();
-            return e.getMessage();
-        }
-
-
-
+        // panggil function save user
+        ResponseEntity<Object> save = this.userService.save(user, request);
+        System.out.println("2>>>>>>>>>" + save);
+        return save;
     }
 }
