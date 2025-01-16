@@ -11,7 +11,7 @@ Version 1.0
 
 import com.codebean.UserService.dto.request.CustomerRegReqDTO;
 import com.codebean.UserService.dto.response.CustomerRegRespDTO;
-import com.codebean.UserService.hadler.ResponseHandler;
+import com.codebean.UserService.handler.ResponseHandler;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
 import com.codebean.UserService.repository.UserAddressRepository;
@@ -26,8 +26,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionOperations;
 
 import java.awt.print.Pageable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +56,11 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
     private ModelMapper modelMapper;
 
+    private List<String> listError;
+
+    @Autowired
+    private TransactionOperations transactionOperations;
+
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository, UserAddressRepository userAddressRepository, UserProfileRepository userProfileRepository) {
         this.userRepository = userRepository;
@@ -62,6 +69,8 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
         this.userProfileRepository = userProfileRepository;
         // ModelMapper instance
         this.modelMapper = new ModelMapper();
+
+        this.listError = new ArrayList<>();
 
         // Custom mapping
 //        TypeMap<UserRegisterDTO, User> typeMap = modelMapper.createTypeMap(UserRegisterDTO.class, User.class);
@@ -74,26 +83,29 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     }
 
     @Override
-    @Transactional
     public ResponseEntity<Object> save(User user, HttpServletRequest request) {
         try {
+            this.listError.clear();
+
             // cek email
             if (this.userRepository.existsByEmail(user.getEmail())) {
-                return new ResponseHandler().handleResponse("Email sudah terdaftar",
-                        HttpStatus.BAD_REQUEST, null, "FVUSR01001", request);
+                this.listError.add("Email Already Exists");
             }
 
             // cek username
             if (this.userRepository.existsByUsername(user.getUsername())) {
-                return new ResponseHandler().handleResponse("Username sudah terdaftar",
-                        HttpStatus.BAD_REQUEST, null, "FVUSR01001", request);
+                this.listError.add("Username Already Exists");
             }
 
             // cek role
             Optional<Role> optionalRole = this.roleRepository.findByName(user.getRole().getName());
             if (optionalRole.isEmpty()) {
-                return new ResponseHandler().handleResponse("Role tidak ditemukan",
-                        HttpStatus.BAD_REQUEST, null, "FVUSR01001", request);
+                this.listError.add("Role Not Found");
+            }
+
+            if (!this.listError.isEmpty()) {
+                return new ResponseHandler().handleResponse(null,
+                        HttpStatus.BAD_REQUEST, this.listError, "FVUSR01001", request);
             } else {
                 optionalRole.ifPresent(user::setRole);
             }
@@ -109,12 +121,12 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
         } catch (Throwable e) {
             return new ResponseHandler().handleResponse(
-                    e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    null,
-                    "FEUSR01001",
-                    request);
-//            return null;
+                    e.getMessage(), // String message
+                    HttpStatus.INTERNAL_SERVER_ERROR, //HttpStatus status
+                    null, // Object data
+                    "FEUSR01001", //Object errorCode
+                    request //HttpServletRequest request
+            );
         }
     }
 

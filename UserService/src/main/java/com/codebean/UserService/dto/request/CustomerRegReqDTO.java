@@ -9,10 +9,8 @@ Created on 10 Jan 2025 13:21
 Version 1.0
 */
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,27 +18,28 @@ import lombok.Setter;
 @Getter
 public class CustomerRegReqDTO {
 
-    @NotEmpty(message = "username cannot be empty")
-    @NotBlank(message = "username cannot be blank")
-    @NotNull(message = "username cannot be null")
-    @Size(min = 8, max = 50, message = "min 8 dan max 50")
+    @NotEmpty(message = "cannot be empty")
+    @NotBlank(message = "cannot be blank")
+    @NotNull(message = "cannot be null")
+//    @Size(min = 8, max = 20, message = "must contain 8-20 character")
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._]{7,19}$", message = "harus di awali dengan huruf, between 8-20 character long, simbol yang diperboleh kan hanya . dan _ ")
     private String username;
 
-    @NotEmpty(message = "password cannot be empty")
-    @NotBlank(message = "password cannot be blank")
-    @NotNull(message = "password cannot be null")
-    @Size(min = 8, max = 50, message = "min 8 dan max 50")
+    @NotEmpty(message = "cannot be empty")
+    @NotBlank(message = "cannot be blank")
+    @NotNull(message = "cannot be null")
+    @Size(min = 8, max = 50, message = "must contain 8-50 character")
     private String password;
 
-    @NotEmpty(message = "email cannot be empty")
-    @NotBlank(message = "email cannot be blank")
-    @NotNull(message = "email cannot be null")
-    @Size(min = 8, max = 50, message = "min 8 dan max 50")
+    @NotEmpty(message = "cannot be empty")
+    @NotBlank(message = "cannot be blank")
+    @NotNull(message = "cannot be null")
+    @Size(min = 8, max = 50, message = "must contain 8-50 character")
     private String email;
 
 //    @NotEmpty(message = "phone number cannot be empty.")
 //    @NotBlank(message = "phone number cannot be blank.")
 //    @NotNull(message = "phone number cannot be null")
-//    @JsonProperty("phone_number")
-//    private String phoneNumber;
+    @JsonProperty("phone_number")
+    private String phoneNumber;
 }

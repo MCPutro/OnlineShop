@@ -25,15 +25,8 @@ public class ValidationService {
     private Validator validator;
 
     public void validate(Object dto, String errorCode, HttpServletRequest request) {
-//        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(dto);
-//        if (!constraintViolations.isEmpty()) {
-//            throw new ConstraintViolationException(constraintViolations);
-//        }
-
         Set<ConstraintViolation<Object>> constraintViolationSet = validator.validate(dto);
         if (!constraintViolationSet.isEmpty()) {
-            //error
-//            throw new ConstraintViolationException(constraintViolationSet);
             throw new ValidateException(constraintViolationSet, errorCode, request);
         }
 

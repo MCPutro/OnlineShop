@@ -10,15 +10,19 @@ Version 1.0
 */
 
 import com.codebean.UserService.exception.ValidateException;
-import com.codebean.UserService.hadler.ResponseHandler;
+import com.codebean.UserService.handler.ResponseHandler;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestControllerAdvice
 public class ErrorController {
+    private List<String> errorList = new ArrayList<>();
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> constraintViolationException(ConstraintViolationException exception) {
@@ -34,14 +38,14 @@ public class ErrorController {
 
     @ExceptionHandler(ValidateException.class)
     public ResponseEntity<Object> validationException(ValidateException exception) {
-        System.out.println("xxxxxxx -- validationException");
-        System.out.println(exception.getErrorCode());
-        System.out.println(exception.getMessage());
-        System.out.println(exception.getRequest().getRequestURI());
+        this.errorList.clear();
+        exception.getConstraintViolations().forEach(violation -> {
+            this.errorList.add("invalid "+violation.getPropertyPath()+" - "+violation.getMessage());
+        });
         return new ResponseHandler().handleResponse(
-                exception.getMessage(), // String message,
+                "exception.getMessage()", // String message,
                 HttpStatus.BAD_REQUEST,// HttpStatus status,
-                null, // Object obj,
+                this.errorList, // Object obj,
                 exception.getErrorCode(),// Object errorCode,
                 exception.getRequest()// HttpServletRequest request
         );

@@ -37,7 +37,7 @@ public class UserController {
     public ResponseEntity<Object> createUser(@RequestBody CustomerRegReqDTO dto, HttpServletRequest request) {
 
         // validasi data input
-        this.validator.validate(dto, "FVUSR01001", request);
+        this.validator.validate(dto, "FVUSR01001x", request);
 
         // convert dto to model cara 1
         User newUser = User.builder()
@@ -57,7 +57,7 @@ public class UserController {
         return this.userService.save(customer, request);
     }
 
-    @GetMapping(path = "/customer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping( "/customer")
     public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
         return this.userService.findAll(null, request);
     }
