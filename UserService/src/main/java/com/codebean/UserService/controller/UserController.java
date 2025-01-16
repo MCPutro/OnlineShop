@@ -9,7 +9,8 @@ Created on 10 Jan 2025 13:23
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.CustomerRegReqDTO;
+import com.codebean.UserService.dto.request.UserRegReqDto;
+import com.codebean.UserService.dto.request.UserUpdateReqDto;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.service.UserService;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/public/v1")
+@RequestMapping("/public")
 public class UserController {
 
     @Autowired
@@ -33,8 +34,8 @@ public class UserController {
     @Autowired
     private ValidationService validator;
 
-    @PostMapping(path = "/customer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> createUser(@RequestBody CustomerRegReqDTO dto, HttpServletRequest request) {
+    @PostMapping(path = "/v1/customer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> createUser(@RequestBody UserRegReqDto dto, HttpServletRequest request) {
 
         // validasi data input
         this.validator.validate(dto, "FVUSR01001x", request);
@@ -49,7 +50,7 @@ public class UserController {
         System.out.println("1>>" + newUser);
 
         // convert dto to model cara 2
-        User customer = this.userService.customerRegisDTOtoModel(dto, "Customer", "sistem");
+        User customer = this.userService.custDTOtoModel(dto, "Customer", "sistem");
         System.out.println("1>>" + customer);
 
 
@@ -57,8 +58,18 @@ public class UserController {
         return this.userService.save(customer, request);
     }
 
-    @GetMapping( "/customer")
+    @GetMapping( "/v1/customer")
     public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
         return this.userService.findAll(null, request);
+    }
+
+    @PatchMapping(path = "/v1/customer/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?>updateCustomerDetails(@PathVariable(value = "id") Long id , @RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
+        this.validator.validate(dto, "FVUSR01002", request);
+
+        User user = this.userService.custDTOtoModel(dto, "Customer", "sistem");
+
+
+        return this.userService.update(id, user, request);
     }
 }

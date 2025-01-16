@@ -11,14 +11,19 @@ Version 1.0
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
 @Setter
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class RolePermissions {
 
 
@@ -30,11 +35,13 @@ public class RolePermissions {
     private String createdBy;
 
     @Column(name = "CreatedDate", updatable = false, nullable = false)
-    private Date createdDate = new Date();
+    @CreatedDate
+    private Date createdDate;
 
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
     @Column(name = "UpdatedDate", insertable = false)
+    @LastModifiedDate
     private Date updatedDate;
 }

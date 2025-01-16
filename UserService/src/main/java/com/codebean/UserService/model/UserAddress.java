@@ -14,6 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -23,6 +26,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "UserAddress")
+@EntityListeners(AuditingEntityListener.class)
 public class UserAddress {
 
     @Id
@@ -48,11 +52,13 @@ public class UserAddress {
     private String createdBy;
 
     @Column(name = "CreatedDate", updatable = false, nullable = false)
-    private Date createdDate = new Date();
+    @CreatedDate
+    private Date createdDate;
 
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
     @Column(name = "UpdatedDate", insertable = false)
+    @LastModifiedDate
     private Date updatedDate;
 }

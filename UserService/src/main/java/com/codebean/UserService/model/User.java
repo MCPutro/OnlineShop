@@ -9,8 +9,12 @@ Created on 10 Jan 2025 07:33
 Version 1.0
 */
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.List;
@@ -22,6 +26,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "Users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -38,7 +43,7 @@ public class User {
     @Column(name = "Email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "PhoneNumber", unique = true)
+    @Column(name = "PhoneNumber")
     private String phoneNumber;
 
     @ManyToOne
@@ -46,7 +51,8 @@ public class User {
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserProfile userProfile;
+    @JsonManagedReference
+    private UserProfile profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) // cascade di sini maksud nya akan melakukan update data di table user address juga
     private List<UserAddress> addresses; // Daftar alamat yang dimiliki user, 1 user bisa punya banyak alamat, lihat dari sisi class user
@@ -55,12 +61,14 @@ public class User {
     private String createdBy;
 
     @Column(name = "CreatedDate", updatable = false, nullable = false)
-    private Date createdDate = new Date();
+    @CreatedDate
+    private Date createdDate;
 
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
-    @Column(name = "UpdatedDate", insertable = false)
+    @Column(name = "UpdatedDate")
+    @LastModifiedDate
     private Date updatedDate;
 
     @Column(name = "DeletedAt")
@@ -76,24 +84,5 @@ public class User {
     )
     private List<Permissions> listPermission;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "ID=" + ID +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", role=" + role +
-                ", deletedAt=" + deletedAt +
-                ", userProfile=" + userProfile +
-                ", addresses=" + addresses +
-                ", createdBy='" + createdBy + '\'' +
-                ", createdDate=" + createdDate +
-                ", updatedBy='" + updatedBy + '\'' +
-                ", updatedDate=" + updatedDate +
-                ", listPermission=" + listPermission +
-                '}';
-    }
 }
 

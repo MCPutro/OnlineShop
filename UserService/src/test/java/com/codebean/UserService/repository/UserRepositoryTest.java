@@ -42,24 +42,24 @@ class UserRepositoryTest {
             userRole.setCreatedBy("sistem");
             userRole.setUpdatedBy("sistem");
             this.userRoleRepository.save(userRole);
-            assertEquals(1, userRole.getId());
-            assertNotNull(userRole.getId());
+            assertEquals(1, userRole.getID());
+            assertNotNull(userRole.getID());
         }
         {
             Role userRole = new Role("Staff");
             userRole.setCreatedBy("sistem");
             userRole.setUpdatedBy("sistem");
             this.userRoleRepository.save(userRole);
-            assertEquals(2, userRole.getId());
-            assertNotNull(userRole.getId());
+            assertEquals(2, userRole.getID());
+            assertNotNull(userRole.getID());
         }
         {
             Role userRole = new Role("Customer");
             userRole.setCreatedBy("sistem");
             userRole.setUpdatedBy("sistem");
             this.userRoleRepository.save(userRole);
-            assertEquals(3, userRole.getId());
-            assertNotNull(userRole.getId());
+            assertEquals(3, userRole.getID());
+            assertNotNull(userRole.getID());
         }
     }
 
@@ -88,9 +88,9 @@ class UserRepositoryTest {
     void TestDeleteRoleById() {
         Role userRole1 = this.listUserRoles.get(0);
 
-        this.userRoleRepository.deleteById(userRole1.getId());
+        this.userRoleRepository.deleteById(userRole1.getID());
 
-        Role userRole = this.userRoleRepository.findById(userRole1.getId()).orElse(null);
+        Role userRole = this.userRoleRepository.findById(userRole1.getID()).orElse(null);
 
         assertNull(userRole);
 

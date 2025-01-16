@@ -12,6 +12,9 @@ Version 1.0
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -19,12 +22,13 @@ import java.util.Date;
 @Getter
 @Entity
 @Table(name = "Role")
+@EntityListeners(AuditingEntityListener.class)
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long id;
+    private Long ID;
 
     @Column(name = "Name", nullable = false, unique = true)
     private String name;
@@ -33,12 +37,14 @@ public class Role {
     private String createdBy;
 
     @Column(name = "CreatedDate", updatable = false, nullable = false)
-    private Date createdDate = new Date();
+    @CreatedDate
+    private Date createdDate;
 
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
     @Column(name = "UpdatedDate", insertable = false)
+    @LastModifiedDate
     private Date updatedDate;
 
     public Role() {

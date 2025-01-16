@@ -9,8 +9,12 @@ Created on 10 Jan 2025 07:33
 Version 1.0
 */
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -21,15 +25,17 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "UserProfile")
+@EntityListeners(AuditingEntityListener.class)
 public class UserProfile {
 
     @Id
     @Column(name = "UserId")
-    private Long id;
+    private Long ID;
 
-    @OneToOne(mappedBy = "", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapsId // Menandakan bahwa userId adalah primary key dan foreign key
     @JoinColumn(name = "UserId", referencedColumnName = "ID") // name = "UserId": Kolom UserId di tabel UserProfile(entity saat ini) adalah foreign key. referencedColumnName = "ID": Kolom ID di tabel users adalah kolom yang dirujuk sebagai primary key.
+    @JsonBackReference
     private User user;
 
     @Column(name = "FirstName")
@@ -51,12 +57,14 @@ public class UserProfile {
     private String createdBy;
 
     @Column(name = "CreatedDate",updatable = false,nullable = false)
-    private Date createdDate = new Date();
+    @CreatedDate
+    private Date createdDate;
 
     @Column(name = "UpdatedBy",insertable = false)
     private String updatedBy;
 
     @Column(name = "UpdatedDate",insertable = false)
+    @LastModifiedDate
     private Date updatedDate;
 
 

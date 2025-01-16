@@ -9,11 +9,11 @@ Created on 10 Jan 2025 12:37
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.CustomerRegReqDTO;
 import com.codebean.UserService.dto.response.CustomerRegRespDTO;
 import com.codebean.UserService.handler.ResponseHandler;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
+import com.codebean.UserService.model.UserProfile;
 import com.codebean.UserService.repository.UserAddressRepository;
 import com.codebean.UserService.repository.UserProfileRepository;
 import com.codebean.UserService.repository.UserRepository;
@@ -26,13 +26,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionOperations;
+//import org.springframework.transaction.support.TransactionOperations;
 
 import java.awt.print.Pageable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -58,8 +55,8 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
     private List<String> listError;
 
-    @Autowired
-    private TransactionOperations transactionOperations;
+//    @Autowired
+//    private TransactionOperations transactionOperations;
 
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository, UserAddressRepository userAddressRepository, UserProfileRepository userProfileRepository) {
@@ -110,6 +107,12 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 optionalRole.ifPresent(user::setRole);
             }
 
+            // user profile
+            user.setProfile(UserProfile.builder()
+                    .user(user)
+                    .createdBy("system")
+                    .build());
+
             this.userRepository.save(user);
 
             return new ResponseHandler().handleResponse(
@@ -132,9 +135,53 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
     @Override
     @Transactional
-    public ResponseEntity<Object> update(Long id, User user, HttpServletRequest request) {
-        // Implementasi logika untuk mengupdate user berdasarkan ID
-        return null;
+    public ResponseEntity<Object> update(Long id, User userUpdate, HttpServletRequest request) {
+        try {
+            Optional<User> optionalUser = this.userRepository.findById(id);
+
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                UserProfile existingProfile = user.getProfile();
+
+                System.out.println("-----------------------------");
+                System.out.println(userUpdate.getProfile().getFirstName());
+                System.out.println(userUpdate.getProfile().getLastName());
+                System.out.println(userUpdate.getProfile().getGender());
+                System.out.println(userUpdate.getProfile().getProfilePicture());
+                System.out.println("-----------------------------");
+
+                //update profile
+                if (existingProfile != null) {
+                    existingProfile.setFirstName(userUpdate.getProfile() != null ? userUpdate.getProfile().getFirstName() : existingProfile.getFirstName());
+                    existingProfile.setLastName(userUpdate.getProfile() != null ? userUpdate.getProfile().getLastName() : existingProfile.getLastName());
+                    existingProfile.setDateOfBirth(userUpdate.getProfile() != null ? userUpdate.getProfile().getDateOfBirth() : existingProfile.getDateOfBirth());
+                    existingProfile.setGender(userUpdate.getProfile() != null ? userUpdate.getProfile().getGender() : existingProfile.getGender());
+                    existingProfile.setProfilePicture(userUpdate.getProfile() != null ? userUpdate.getProfile().getProfilePicture() : existingProfile.getProfilePicture());
+                } else {
+                    existingProfile = userUpdate.getProfile();
+                    existingProfile.setUser(user);
+                    existingProfile.setCreatedBy("system");
+                }
+                existingProfile.setUpdatedBy("system");
+
+                user.setProfile(existingProfile);
+                user.setUpdatedBy("system");
+                user.setUsername(userUpdate.getUsername());
+                user.setPassword(userUpdate.getPassword());
+                user.setEmail(userUpdate.getEmail());
+                user.setPhoneNumber(userUpdate.getPhoneNumber());
+
+                this.userRepository.save(user);
+
+            } else {
+                // return id tidak ditemukan
+            }
+
+            return null;
+        } catch (Throwable t) {
+            //return error ise
+            return null;
+        }
     }
 
     @Override
@@ -190,12 +237,11 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 //    }
 
 
-    public User customerRegisDTOtoModel(CustomerRegReqDTO dto, String role, String createBy) {
+    public User custDTOtoModel(Object dto, String role, String createBy) {
         try {
 
             User customer = this.modelMapper.map(dto, User.class);
             customer.setRole(new Role(role));
-            customer.setCreatedDate(new Date());
             customer.setCreatedBy(createBy);
 
             return customer;
