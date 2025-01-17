@@ -12,7 +12,10 @@ Version 1.0
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -47,6 +50,11 @@ public class User {
     @Column(name = "PhoneNumber")
     private String phoneNumber;
 
+//    @Column(name = "IsActive", columnDefinition = "bit default 1 not null")
+    @Column(name = "IsActive", nullable = false)
+    @ColumnDefault("1")
+    private Boolean isActive = true;
+
     @ManyToOne
     @JoinColumn(name = "RoleId", referencedColumnName = "ID", nullable = false)
     private Role role;
@@ -59,6 +67,7 @@ public class User {
     private List<UserAddress> addresses; // Daftar alamat yang dimiliki user, 1 user bisa punya banyak alamat, lihat dari sisi class user
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)
+    @CreatedBy
     private String createdBy;
 
     @Column(name = "CreatedDate", updatable = false, nullable = false)
@@ -66,14 +75,12 @@ public class User {
     private LocalDateTime createdDate;
 
     @Column(name = "UpdatedBy", insertable = false)
+    @LastModifiedBy
     private String updatedBy;
 
     @Column(name = "UpdatedDate")
     @LastModifiedDate
     private LocalDateTime updatedDate;
-
-    @Column(name = "DeletedAt")
-    private LocalDateTime deletedAt;
 
     @ManyToMany
     @JoinTable(

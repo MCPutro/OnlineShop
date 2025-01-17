@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,6 +140,10 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Transactional
     public ResponseEntity<Object> update(Long id, User userUpdate, HttpServletRequest request) {
         try {
+            if (!Objects.equals(id, userUpdate.getID())) {
+                return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
+            }
+
             Optional<User> optionalUser = this.userRepository.findById(id);
 
             if (optionalUser.isPresent()) {
@@ -153,28 +158,23 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                     user.getProfile().setProfilePicture(userUpdate.getProfile() != null ? userUpdate.getProfile().getProfilePicture() : user.getProfile().getProfilePicture());
                 } else {
                     userUpdate.getProfile().setUser(user);
-                    userUpdate.getProfile().setCreatedBy("system");
                     user.setProfile(userUpdate.getProfile());
                 }
 
                 // update user
-                user.getProfile().setUpdatedBy("system");
-                user.setUpdatedBy("system");
                 user.setUsername(userUpdate.getUsername());
                 user.setPassword(userUpdate.getPassword());
                 user.setEmail(userUpdate.getEmail());
                 user.setPhoneNumber(userUpdate.getPhoneNumber());
 
                 this.userRepository.save(user);
-
+                return new ResponseEntity<>("berhasil di update", HttpStatus.OK);
             } else {
-                // return id tidak ditemukan
+                return new ResponseEntity<>("User gak ada", HttpStatus.NOT_FOUND);
             }
-
-            return null;
         } catch (Throwable t) {
-            //return error ise
-            return null;
+            //return error
+            return new ResponseEntity<>(t.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -236,7 +236,6 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
             User customer = this.modelMapper.map(dto, User.class);
             customer.setRole(new Role(role));
-            customer.setCreatedBy(createBy);
 
             return customer;
         } catch (Throwable e) {

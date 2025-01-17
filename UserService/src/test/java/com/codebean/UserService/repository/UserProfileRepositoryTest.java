@@ -90,7 +90,7 @@ class UserProfileRepositoryTest {
                 userProfile.setFirstName("Akshay");
                 userProfile.setLastName("Khan");
                 userProfile.setGender("Male");
-                userProfile.setDateOfBirth(new Date());
+                userProfile.setDateOfBirth(LocalDateTime.now());
 
                 this.userProfileRepository.save(userProfile);
             }
