@@ -16,6 +16,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -38,21 +39,19 @@ public class Role {
 
     @Column(name = "CreatedDate", updatable = false, nullable = false)
     @CreatedDate
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
     @Column(name = "UpdatedDate", insertable = false)
     @LastModifiedDate
-    private Date updatedDate;
+    private LocalDateTime updatedDate;
 
     public Role() {
     }
 
     public Role(String name) {
         this.name = name;
-        this.setCreatedDate(new Date());
-        this.setUpdatedDate(new Date());
     }
 }

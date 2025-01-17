@@ -9,6 +9,7 @@ Created on 16 Jan 2025 17:13
 Version 1.0
 */
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -23,6 +25,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserProfileDto {
 
     @NotEmpty(message = "cannot be empty")
@@ -38,7 +41,7 @@ public class UserProfileDto {
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
@@ -49,4 +52,15 @@ public class UserProfileDto {
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
     private String profilePicture;
+
+    @Override
+    public String toString() {
+        return "UserProfileDto{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                '}';
+    }
 }

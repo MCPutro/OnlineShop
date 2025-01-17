@@ -9,6 +9,8 @@ Created on 13 Jan 2025 10:49
 Version 1.0
 */
 
+import com.codebean.UserService.dto.request.UserProfileDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,10 +18,12 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-public class CustomerRegRespDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserDetailRespDTO {
     private Long id;
     private String username;
     private String email;
     private String phoneNumber;
     private String role;
+    private UserProfileDto profile;
 }

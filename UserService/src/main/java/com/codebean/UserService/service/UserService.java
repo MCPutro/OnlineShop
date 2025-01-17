@@ -9,7 +9,8 @@ Created on 10 Jan 2025 12:37
 Version 1.0
 */
 
-import com.codebean.UserService.dto.response.CustomerRegRespDTO;
+import com.codebean.UserService.dto.request.UserProfileDto;
+import com.codebean.UserService.dto.response.UserDetailRespDTO;
 import com.codebean.UserService.handler.ResponseHandler;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
@@ -119,7 +120,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             return new ResponseHandler().handleResponse(
                     "Berhasil di daftarkan",
                     HttpStatus.CREATED,
-                    this.customerModelToDTO(user),
+                    user,
                     null, request
             );
 
@@ -245,13 +246,21 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
     }
 
-    public CustomerRegRespDTO customerModelToDTO(User user) {
-        return CustomerRegRespDTO.builder()
+    public UserDetailRespDTO customerModelToDTO(User user) {
+
+        UserProfileDto userProfileDto = null;
+        //profile
+        if (user.getProfile() != null) {
+            userProfileDto = this.modelMapper.map(user.getProfile(), UserProfileDto.class);
+        }
+
+        return UserDetailRespDTO.builder()
                 .id(user.getID())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .role(user.getRole().getName())
+                .profile(userProfileDto)
                 .build();
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -45,7 +46,7 @@ public class UserProfile {
     private String lastName;
 
     @Column(name = "DateOfBirth")
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
 
     @Column(name = "Gender")
     private String gender;
@@ -58,14 +59,14 @@ public class UserProfile {
 
     @Column(name = "CreatedDate",updatable = false,nullable = false)
     @CreatedDate
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     @Column(name = "UpdatedBy",insertable = false)
     private String updatedBy;
 
     @Column(name = "UpdatedDate",insertable = false)
     @LastModifiedDate
-    private Date updatedDate;
+    private LocalDateTime updatedDate;
 
 
 
