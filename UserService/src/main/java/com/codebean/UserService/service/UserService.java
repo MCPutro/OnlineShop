@@ -100,6 +100,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 this.listError.add("Role Not Found");
             }
 
+            //return if you got error
             if (!this.listError.isEmpty()) {
                 return new ResponseHandler().handleResponse(null,
                         HttpStatus.BAD_REQUEST, this.listError, "FVUSR01001", request);
@@ -141,30 +142,22 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
-                UserProfile existingProfile = user.getProfile();
 
-                System.out.println("-----------------------------");
-                System.out.println(userUpdate.getProfile().getFirstName());
-                System.out.println(userUpdate.getProfile().getLastName());
-                System.out.println(userUpdate.getProfile().getGender());
-                System.out.println(userUpdate.getProfile().getProfilePicture());
-                System.out.println("-----------------------------");
-
-                //update profile
-                if (existingProfile != null) {
-                    existingProfile.setFirstName(userUpdate.getProfile() != null ? userUpdate.getProfile().getFirstName() : existingProfile.getFirstName());
-                    existingProfile.setLastName(userUpdate.getProfile() != null ? userUpdate.getProfile().getLastName() : existingProfile.getLastName());
-                    existingProfile.setDateOfBirth(userUpdate.getProfile() != null ? userUpdate.getProfile().getDateOfBirth() : existingProfile.getDateOfBirth());
-                    existingProfile.setGender(userUpdate.getProfile() != null ? userUpdate.getProfile().getGender() : existingProfile.getGender());
-                    existingProfile.setProfilePicture(userUpdate.getProfile() != null ? userUpdate.getProfile().getProfilePicture() : existingProfile.getProfilePicture());
+                //update user profile
+                if (user.getProfile() != null) {
+                    user.getProfile().setFirstName(userUpdate.getProfile() != null ? userUpdate.getProfile().getFirstName() : user.getProfile().getFirstName());
+                    user.getProfile().setLastName(userUpdate.getProfile() != null ? userUpdate.getProfile().getLastName() : user.getProfile().getLastName());
+                    user.getProfile().setDateOfBirth(userUpdate.getProfile() != null ? userUpdate.getProfile().getDateOfBirth() : user.getProfile().getDateOfBirth());
+                    user.getProfile().setGender(userUpdate.getProfile() != null ? userUpdate.getProfile().getGender() : user.getProfile().getGender());
+                    user.getProfile().setProfilePicture(userUpdate.getProfile() != null ? userUpdate.getProfile().getProfilePicture() : user.getProfile().getProfilePicture());
                 } else {
-                    existingProfile = userUpdate.getProfile();
-                    existingProfile.setUser(user);
-                    existingProfile.setCreatedBy("system");
+                    userUpdate.getProfile().setUser(user);
+                    userUpdate.getProfile().setCreatedBy("system");
+                    user.setProfile(userUpdate.getProfile());
                 }
-                existingProfile.setUpdatedBy("system");
 
-                user.setProfile(existingProfile);
+                // update user
+                user.getProfile().setUpdatedBy("system");
                 user.setUpdatedBy("system");
                 user.setUsername(userUpdate.getUsername());
                 user.setPassword(userUpdate.getPassword());
@@ -218,7 +211,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     // Fungsi untuk Address
     @Transactional
     public ResponseEntity<Object> saveAddress(UserAddress address, HttpServletRequest request) {
-        // Implementasi logika untuk menyimpan address ke dalam database
+
         return null;
     }
 

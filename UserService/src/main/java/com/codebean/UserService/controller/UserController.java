@@ -9,6 +9,7 @@ Created on 10 Jan 2025 13:23
 Version 1.0
 */
 
+import com.codebean.UserService.dto.request.UserAddressDto;
 import com.codebean.UserService.dto.request.UserRegReqDto;
 import com.codebean.UserService.dto.request.UserUpdateReqDto;
 import com.codebean.UserService.model.Role;
@@ -58,18 +59,30 @@ public class UserController {
         return this.userService.save(customer, request);
     }
 
-    @GetMapping( "/v1/customer")
+    @GetMapping("/v1/customer")
     public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
         return this.userService.findAll(null, request);
     }
 
     @PatchMapping(path = "/v1/customer/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?>updateCustomerDetails(@PathVariable(value = "id") Long id , @RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
+    public ResponseEntity<?> updateCustomerDetails(@PathVariable(value = "id") Long id, @RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
         this.validator.validate(dto, "FVUSR01002", request);
 
         User user = this.userService.custDTOtoModel(dto, "Customer", "sistem");
 
-
         return this.userService.update(id, user, request);
+    }
+
+    @PatchMapping(path = "/v1/customer/address/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUserAddress(@RequestBody UserAddressDto dto, HttpServletRequest request) {
+
+        User user = userService.custDTOtoModel(dto, "Customer", "sistem");
+        user.getAddresses().forEach(address -> {
+            System.out.println(address.getAddress());
+            System.out.println(address.getCountry());
+            System.out.println(address.getPostalCode());
+        });
+
+        return null;
     }
 }
