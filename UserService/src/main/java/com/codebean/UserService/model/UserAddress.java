@@ -38,7 +38,7 @@ public class UserAddress {
     private Long ID;
 
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_UserAddress_User"))
+    @JoinColumn(name = "UserId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_Address_User"))
     // Kolom userId pada tabel UserAddress(saat ini) akan menyimpan referensi ke ID user, Parameter referencedColumnName dalam anotasi @JoinColumn digunakan untuk menentukan nama kolom yang akan dirujuk oleh foreign key di entitas yang sedang didefinisikan
     private User user; // beberapa alamat bisa di milikik oleh user yang sama, jadi relasinya banyak alamat menuju ke 1 user
 

@@ -50,13 +50,13 @@ public class User {
     @Column(name = "PhoneNumber")
     private String phoneNumber;
 
-//    @Column(name = "IsActive", columnDefinition = "bit default 1 not null")
-    @Column(name = "IsActive", nullable = false)
-    @ColumnDefault("1")
+//    @Column(name = "IsActive", nullable = false)
+//    @ColumnDefault("1")
+    @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isActive = true;
 
     @ManyToOne
-    @JoinColumn(name = "RoleId", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "RoleId", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_User_Role"))
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
