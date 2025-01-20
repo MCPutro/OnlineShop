@@ -9,9 +9,7 @@ Created on 10 Jan 2025 13:23
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.UserAddressDto;
 import com.codebean.UserService.dto.request.UserRegReqDto;
-import com.codebean.UserService.dto.request.UserUpdateReqDto;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.service.UserService;
@@ -48,7 +46,7 @@ public class UserPublicController {
         System.out.println("1>>" + newUser);
 
         // convert dto to model cara 2
-        User customer = this.userService.custDTOtoModel(dto, "Customer", "sistem");
+        User customer = this.userService.custDTOtoUserModel(dto, "Customer", "sistem");
         System.out.println("1>>" + customer);
 
 

@@ -9,11 +9,9 @@ Created on 10 Jan 2025 07:34
 Version 1.0
 */
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,6 +25,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "UserAddress")
 @EntityListeners(AuditingEntityListener.class)
@@ -38,9 +37,12 @@ public class UserAddress {
     private Long ID;
 
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_Address_User"))
-    // Kolom userId pada tabel UserAddress(saat ini) akan menyimpan referensi ke ID user, Parameter referencedColumnName dalam anotasi @JoinColumn digunakan untuk menentukan nama kolom yang akan dirujuk oleh foreign key di entitas yang sedang didefinisikan
-    private User user; // beberapa alamat bisa di milikik oleh user yang sama, jadi relasinya banyak alamat menuju ke 1 user
+    @JoinColumn(name = "UserId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_Address_User")) // Kolom userId pada tabel UserAddress(saat ini) akan menyimpan referensi ke ID user, Parameter referencedColumnName dalam anotasi @JoinColumn digunakan untuk menentukan nama kolom yang akan dirujuk oleh foreign key di entitas yang sedang didefinisikan
+    @JsonBackReference
+    private User user; // beberapa alamat bisa dimiliki oleh user yang sama, jadi relasinya banyak alamat menuju ke 1 user
+
+    @Column(name = "Name", nullable = false)
+    private String name;
 
     @Column(name = "Address", nullable = false)
     private String address;
@@ -50,6 +52,9 @@ public class UserAddress {
 
     @Column(name = "PostalCode", nullable = false)
     private String postalCode;
+
+    @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
+    private Boolean isActive = true;
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)
     @CreatedBy

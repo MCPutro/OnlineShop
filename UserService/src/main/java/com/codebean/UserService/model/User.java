@@ -59,11 +59,12 @@ public class User {
     @JoinColumn(name = "RoleId", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_User_Role"))
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
     @JsonManagedReference
     private UserProfile profile;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) // cascade di sini maksud nya akan melakukan update data di table user address juga
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // cascade di sini maksud nya akan melakukan update data di table user address juga
+    @JsonManagedReference
     private List<UserAddress> addresses; // Daftar alamat yang dimiliki user, 1 user bisa punya banyak alamat, lihat dari sisi class user
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)
@@ -91,6 +92,11 @@ public class User {
             , uniqueConstraints = {@UniqueConstraint(name = "Uniq_User_Permissions", columnNames = {"UserId", "AccessId"})}
     )
     private List<Permissions> listPermission;
+
+    public void addAddress(UserAddress address) {
+        addresses.add(address);
+        address.setUser(this);
+    }
 
 }
 

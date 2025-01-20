@@ -24,7 +24,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,6 @@ import java.util.*;
  * FE = Failed Error
  */
 
-
 @Service
 public class UserService implements com.codebean.UserService.core.Service<User> {
 
@@ -53,6 +51,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
     private UserProfileRepository userProfileRepository;
 
+    @Autowired
     private ModelMapper modelMapper;
 
     private List<String> listError;
@@ -66,8 +65,6 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
         this.roleRepository = roleRepository;
         this.userAddressRepository = userAddressRepository;
         this.userProfileRepository = userProfileRepository;
-        // ModelMapper instance
-        this.modelMapper = new ModelMapper();
 
         this.listError = new ArrayList<>();
 
@@ -104,30 +101,20 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
             //return if you got error
             if (!this.listError.isEmpty()) {
-                return new ResponseHandler().handleResponse(null,
-                        HttpStatus.BAD_REQUEST, this.listError, "FVUSR01001", request);
+                return new ResponseHandler().handleResponse(null, HttpStatus.BAD_REQUEST, this.listError, "FVUSR01001", request);
             } else {
                 optionalRole.ifPresent(user::setRole);
             }
 
             // user profile
-            user.setProfile(UserProfile.builder()
-                    .user(user)
-                    .createdBy("system")
-                    .build());
+            user.setProfile(UserProfile.builder().user(user).build());
 
             this.userRepository.save(user);
 
-            return new ResponseHandler().handleResponse(
-                    "Berhasil di daftarkan",
-                    HttpStatus.CREATED,
-                    user,
-                    null, request
-            );
+            return new ResponseHandler().handleResponse("Berhasil di daftarkan", HttpStatus.CREATED, user, null, request);
 
         } catch (Throwable e) {
-            return new ResponseHandler().handleResponse(
-                    e.getMessage(), // String message
+            return new ResponseHandler().handleResponse(e.getMessage(), // String message
                     HttpStatus.INTERNAL_SERVER_ERROR, //HttpStatus status
                     null, // Object data
                     "FEUSR01001", //Object errorCode
@@ -188,18 +175,19 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
-        // Implementasi logika untuk mendapatkan semua user dengan paging\
         List<User> customer = this.userRepository.findAllByRole_Name("Customer");
-        return new ResponseHandler().handleResponse(
-                "Berhasil", HttpStatus.OK, customer, null, request
-        );
+        return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, customer, null, request);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
-        // Implementasi logika untuk mendapatkan user berdasarkan ID
-        return null;
+        Optional<User> optionalUser = this.userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, optionalUser, null, request);
+        }
+
+        return new ResponseHandler().handleResponse("Kosong", HttpStatus.OK, null, null, request);
     }
 
     @Override
@@ -209,19 +197,24 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
         return null;
     }
 
-    // Fungsi untuk Address
-    @Transactional
-    public ResponseEntity<Object> saveAddress(UserAddress address, HttpServletRequest request) {
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findUserWithAddressStatus(Long userId, Boolean addressStatus, HttpServletRequest request) {
+        try {
+            addressStatus = (addressStatus == null) ? Boolean.TRUE : addressStatus;
 
-        return null;
+            Optional<User> optionalUser = this.userRepository.findById(userId);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                List<UserAddress> listActiveUserAddress = this.userAddressRepository.findAllByUserAndIsActive(user, addressStatus);
+                user.setAddresses(listActiveUserAddress);
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
-//    // Fungsi untuk Role
-//    @Transactional
-//    public ResponseEntity<Object> saveRole(Role role, HttpServletRequest request) {
-//        // Implementasi logika untuk menyimpan role ke dalam database
-//        return null;
-//    }
 
 //    // Fungsi untuk Permission
 //    @Transactional
@@ -230,10 +223,8 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 //        return null;
 //    }
 
-
-    public User custDTOtoModel(Object dto, String role, String createBy) {
+    public User custDTOtoUserModel(Object dto, String role, String createBy) {
         try {
-
             User customer = this.modelMapper.map(dto, User.class);
             customer.setRole(new Role(role));
 
@@ -242,8 +233,8 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             e.printStackTrace();
             return null;
         }
-
     }
+
 
     public UserDetailRespDTO customerModelToDTO(User user) {
 
@@ -253,13 +244,6 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             userProfileDto = this.modelMapper.map(user.getProfile(), UserProfileDto.class);
         }
 
-        return UserDetailRespDTO.builder()
-                .id(user.getID())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole().getName())
-                .profile(userProfileDto)
-                .build();
+        return UserDetailRespDTO.builder().id(user.getID()).username(user.getUsername()).email(user.getEmail()).phoneNumber(user.getPhoneNumber()).role(user.getRole().getName()).profile(userProfileDto).build();
     }
 }

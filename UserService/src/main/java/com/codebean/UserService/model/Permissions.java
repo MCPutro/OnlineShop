@@ -37,6 +37,9 @@ public class Permissions {
     @Column(name = "Name")
     private String name;
 
+    @Column(name = "Description")
+    private String description;
+
     @ManyToMany(mappedBy = "listPermission")
     private List<User> users;
 

@@ -80,7 +80,6 @@ class UserRepositoryTest {
         assertEquals(3, this.listUserRoles.size());
 
 
-
     }
 
     @Test
@@ -95,5 +94,16 @@ class UserRepositoryTest {
         assertNull(userRole);
 
 
+    }
+
+
+    @Test
+    void name() {
+
+        coba(null);
+    }
+
+    void coba(Boolean asd) {
+        System.out.println(asd);
     }
 }

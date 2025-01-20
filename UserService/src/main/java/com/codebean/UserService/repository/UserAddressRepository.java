@@ -9,10 +9,24 @@ Created on 10 Jan 2025 08:14
 Version 1.0
 */
 
+import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 public interface UserAddressRepository extends CrudRepository<UserAddress, Long> {
+
+    List<UserAddress> findAllByUserAndIsActive(User user, Boolean isActive);
+
+//    @Modifying
+//    @Query("update UserAddress ua set ua.isActive = false where ua.ID = :addressId  ")
+//    int softDeleteById(@Param("addressId") Long id);
+
 }
