@@ -10,46 +10,64 @@ Version 1.0
 */
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Setter
 @Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "Categories")
+@EntityListeners(AuditingEntityListener.class)
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "Name")
+    @Column(name = "Name", unique = true, nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "categories")
     private List<Product> productList;
 
+    @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
+    private Boolean isActive = true;
+
+    @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)
     private String createdBy;
 
+    @CreatedDate
     @Column(name = "CreatedDate", updatable = false, nullable = false)
-    private Date createdDate = new Date();
+    private LocalDateTime createdDate;
 
+    @LastModifiedBy
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
+    @LastModifiedDate
     @Column(name = "UpdatedDate", insertable = false)
-    private Date updatedDate;
+    private LocalDateTime updatedDate;
+
+    public Category(String name) {
+        this.name = name;
+    }
 
     @Override
     public String toString() {
         return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", productList=" + productList +
+                ", isActive=" + isActive +
                 ", createdBy='" + createdBy + '\'' +
                 ", createdDate=" + createdDate +
                 ", updatedBy='" + updatedBy + '\'' +

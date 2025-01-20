@@ -12,7 +12,13 @@ Version 1.0
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +26,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "Products")
+@EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id
@@ -36,11 +43,14 @@ public class Product {
     @Column(name = "Stock", nullable = false)
     private Integer stock;
 
-    @Column(name = "IsActive", nullable = false)
-    private Boolean isActive;
+    @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
+    private Boolean isActive = true;
 
     @Column(name = "Description")
     private String description;
+
+    @Version
+    private int version;
 
     @ManyToMany
     @JoinTable(
@@ -52,17 +62,21 @@ public class Product {
     )
     private List<Category> categories;
 
+    @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)
     private String createdBy;
 
+    @CreatedDate
     @Column(name = "CreatedDate", updatable = false, nullable = false)
-    private Date createdDate = new Date();
+    private LocalDateTime createdDate;
 
+    @LastModifiedBy
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
+    @LastModifiedDate
     @Column(name = "UpdatedDate", insertable = false)
-    private Date updatedDate;
+    private LocalDateTime updatedDate;
 
     @Override
     public String toString() {
