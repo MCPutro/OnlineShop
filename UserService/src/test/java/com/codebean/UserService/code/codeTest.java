@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.UserService.dto.request.UserRegReqDto;
+import io.jsonwebtoken.Jwt;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.Set;
 
 @SpringBootTest
@@ -54,5 +56,13 @@ public class codeTest {
             System.out.println(violation.getPropertyPath());
             System.out.println("++++++++");
         }
+    }
+
+    @Test
+    void generateToken() {
+        JwtUtil jwtUtil = new JwtUtil();
+
+        String s = jwtUtil.generateToken("qwe.a3456789.", Arrays.asList("makan", "minum", "tidur"));
+        System.out.println(s);
     }
 }

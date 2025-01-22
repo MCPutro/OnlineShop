@@ -14,8 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/private/v1")
-public class UserPrivateController {
+@RequestMapping("/api/v1")
+public class UserController {
 
     @Autowired
     private UserService userService;

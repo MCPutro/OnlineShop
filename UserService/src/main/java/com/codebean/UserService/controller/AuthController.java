@@ -9,6 +9,7 @@ Created on 10 Jan 2025 13:23
 Version 1.0
 */
 
+import com.codebean.UserService.dto.request.UserLoginDto;
 import com.codebean.UserService.dto.request.UserRegReqDto;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
@@ -22,8 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/public")
-public class UserPublicController {
+@RequestMapping("/auth")
+public class AuthController {
 
     @Autowired
     private UserService userService;
@@ -32,7 +33,7 @@ public class UserPublicController {
     private ValidationService validator;
 
     @PostMapping(path = "/v1/customer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> createUser(@RequestBody UserRegReqDto dto, HttpServletRequest request) {
+    public ResponseEntity<Object> CustomerRegister(@RequestBody UserRegReqDto dto, HttpServletRequest request) {
 
         // validasi data input
         this.validator.validate(dto, "FVUSR01001x", request);
@@ -54,5 +55,13 @@ public class UserPublicController {
         return this.userService.save(customer, request);
     }
 
+    @PostMapping("/v1/login")
+    public ResponseEntity<Object> Login(@RequestBody UserLoginDto dto, HttpServletRequest request) {
+
+        // validasi data input
+        this.validator.validate(dto, "FVUSR01001x", request);
+
+        return null;
+    }
 
 }
