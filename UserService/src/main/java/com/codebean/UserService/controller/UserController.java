@@ -34,16 +34,20 @@ public class UserController {
     @GetMapping(path = "/customer/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
 //        return this.userService.findById(userId, request);
-        return this.userService.findUserWithAddressStatus(userId, true, request);
-
+        return this.userService.findByIdWithAddressStatus(userId, true, request);
     }
 
-    @PatchMapping(path = "/customer/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateCustomerProfile(@PathVariable(value = "id") Long id, @RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
+    @DeleteMapping(path = "/customer/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> deleteUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
+        return this.userService.delete(userId,  request);
+    }
+
+    @PatchMapping(path = "/customer/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateCustomerProfile(@PathVariable(value = "userId") Long userId, @RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
 
         this.validator.validate(dto, "FVUSR01002", request);
         User user = this.userService.custDTOtoUserModel(dto, "Customer", "sistem");
-        return this.userService.update(id, user, request);
+        return this.userService.update(userId, user, request);
 
     }
 
@@ -72,4 +76,6 @@ public class UserController {
         return this.userAddressService.delete(addressId, request);
 
     }
+
+
 }

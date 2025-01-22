@@ -45,6 +45,7 @@ public class UserAddressService implements Service<UserAddress> {
 
     @Override
     public ResponseEntity<Object> save(UserAddress userAddress, HttpServletRequest request) {
+        this.userAddressRepository.save(userAddress);
         return null;
     }
 
@@ -52,18 +53,29 @@ public class UserAddressService implements Service<UserAddress> {
     @Transactional
     public ResponseEntity<Object> update(Long userId, UserAddress userAddress, HttpServletRequest request) {
         try {
-            Optional<User> optionalUser = this.userRepository.findById(userId);
+            // find user
+            Optional<User> optionalUser = this.userRepository.findFirstByIDAndIsActive(userId, true);
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
-                user.addAddress(userAddress);
-                this.userRepository.save(user);
+                // find address
+                Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findFirstByIDAndIsActiveIsTrue(userAddress.getID());
+                // if address is exist and user id is match then update
+                if (optionalUserAddress.isPresent() && optionalUserAddress.get().getUser().getID().equals(user.getID())) {
+                    optionalUserAddress.ifPresent(data -> {
+                        data.setAddress(userAddress.getAddress());
+                        data.setCountry(userAddress.getCountry());
+                        data.setName(userAddress.getName());
+                        data.setPostalCode(userAddress.getPostalCode());
+                    });
+                } else {
+                    return new ResponseEntity<>("bad request", HttpStatus.NOT_FOUND);
+                }
             } else {
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>("Berhasil di simpan", HttpStatus.OK);
+            return new ResponseEntity<>("Berhasil di update", HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return new ResponseEntity<>("bad request", HttpStatus.NOT_FOUND);
         }
     }
 

@@ -19,12 +19,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserAddressRepository extends CrudRepository<UserAddress, Long> {
 
     List<UserAddress> findAllByUserAndIsActive(User user, Boolean isActive);
 
+    Optional<UserAddress> findFirstByIDAndIsActiveIsTrue(Long id);
 //    @Modifying
 //    @Query("update UserAddress ua set ua.isActive = false where ua.ID = :addressId  ")
 //    int softDeleteById(@Param("addressId") Long id);

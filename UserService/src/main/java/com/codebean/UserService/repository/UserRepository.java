@@ -20,9 +20,14 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<User, Long> {
 
     boolean existsByEmail(String email);
+
     boolean existsByUsername(String username);
 
     List<User> findAllByRole_Name(String role);
+
+    List<User> findAllByRole_NameAndIsActive(String roleName, Boolean isActive);
+
+    Optional<User> findFirstByIDAndIsActive(Long id, Boolean isActive);
 
     Optional<User> findFirstByUsername(String username);
 }

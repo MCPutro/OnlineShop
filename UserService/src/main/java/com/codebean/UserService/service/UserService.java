@@ -109,6 +109,9 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             // user profile
             user.setProfile(UserProfile.builder().user(user).build());
 
+            // belum di encrypt
+            user.setPassword(user.getUsername() + user.getPassword());
+
             this.userRepository.save(user);
 
             return new ResponseHandler().handleResponse("Berhasil di daftarkan", HttpStatus.CREATED, user, null, request);
@@ -131,10 +134,15 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
             }
 
-            Optional<User> optionalUser = this.userRepository.findById(id);
+            Optional<User> optionalUser = this.userRepository.findFirstByIDAndIsActive(id, true);
 
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
+
+                // cek email
+                if (this.userRepository.existsByEmail(userUpdate.getEmail())) {
+                    return new ResponseEntity<>("Email sudah terdaftar", HttpStatus.BAD_REQUEST);
+                }
 
                 //update user profile
                 if (user.getProfile() != null) {
@@ -149,7 +157,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 }
 
                 // update user
-                user.setUsername(userUpdate.getUsername());
+//                user.setUsername(userUpdate.getUsername()); // untuk username apa bisa di update ?
                 user.setPassword(userUpdate.getPassword());
                 user.setEmail(userUpdate.getEmail());
                 user.setPhoneNumber(userUpdate.getPhoneNumber());
@@ -157,7 +165,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 this.userRepository.save(user);
                 return new ResponseEntity<>("berhasil di update", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("User gak ada", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Bad Request", HttpStatus.NOT_FOUND);
             }
         } catch (Throwable t) {
             //return error
@@ -168,14 +176,18 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Override
     @Transactional
     public ResponseEntity<Object> delete(Long id, HttpServletRequest request) {
-        // Implementasi logika untuk menghapus user berdasarkan ID
-        return null;
+        Optional<User> optionalUser = this.userRepository.findFirstByIDAndIsActive(id, true);
+        if (optionalUser.isPresent()) {
+            optionalUser.ifPresent(user -> user.setIsActive(false));
+            return new ResponseEntity<>("Berhasil di hapus", HttpStatus.OK);
+        } else
+            return new ResponseEntity<>("User tidak ditemukan", HttpStatus.BAD_REQUEST);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
-        List<User> customer = this.userRepository.findAllByRole_Name("Customer");
+        List<User> customer = this.userRepository.findAllByRole_NameAndIsActive("Customer", true);
         return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, customer, null, request);
     }
 
@@ -198,11 +210,11 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> findUserWithAddressStatus(Long userId, Boolean addressStatus, HttpServletRequest request) {
+    public ResponseEntity<Object> findByIdWithAddressStatus(Long userId, Boolean addressStatus, HttpServletRequest request) {
         try {
             addressStatus = (addressStatus == null) ? Boolean.TRUE : addressStatus;
 
-            Optional<User> optionalUser = this.userRepository.findById(userId);
+            Optional<User> optionalUser = this.userRepository.findFirstByIDAndIsActive(userId, true);
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 List<UserAddress> listActiveUserAddress = this.userAddressRepository.findAllByUserAndIsActive(user, addressStatus);
