@@ -22,4 +22,6 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     Optional<Category> findFirstByName(String name);
 
     List<Category> findAllByIsActive(Boolean isActive);
+
+//    Optional<Category> findFirstByIdAndIsActive(Long id, Boolean isActive);
 }

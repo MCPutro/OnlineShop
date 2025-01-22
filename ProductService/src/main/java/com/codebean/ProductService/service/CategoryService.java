@@ -49,22 +49,36 @@ public class CategoryService implements iService<Category> {
     @Transactional
     public ResponseEntity<Object> update(Long id, Category category, HttpServletRequest request) {
         try {
-            Optional<Category> optionalCategory = this.categoryRepository.findById(id);
-            if (optionalCategory.isEmpty()) {
+            Optional<Category> optionalCategoryByName = this.categoryRepository.findFirstByName(category.getName());
+            if (optionalCategoryByName.isPresent()) {
+                return new ResponseEntity<>("Category sudah ada", HttpStatus.NOT_FOUND);
+            }
+
+            Optional<Category> optionalCategoryById = this.categoryRepository.findById(id);
+            if (optionalCategoryById.isEmpty()) {
                 return new ResponseEntity<>("gak ketemu", HttpStatus.NOT_FOUND);
             }
-            optionalCategory.get().setName(category.getName());
+
+            optionalCategoryById.ifPresent(data -> {
+                data.setName(category.getName());
+            });
+
+            return new ResponseEntity<>("berhasil", HttpStatus.OK);
+
         } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     @Override
     @Transactional
     public ResponseEntity<Object> delete(Long id, HttpServletRequest request) {
-        try{
+        try {
             Optional<Category> optionalCategory = this.categoryRepository.findById(id);
-            optionalCategory.ifPresent(category -> {category.setIsActive(false);});
+            optionalCategory.ifPresent(category -> {
+                category.setIsActive(false);
+            });
             return null;
         } catch (Exception e) {
             throw new RuntimeException(e);

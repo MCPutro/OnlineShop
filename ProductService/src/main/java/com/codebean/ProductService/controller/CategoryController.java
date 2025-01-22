@@ -9,9 +9,12 @@ Created on 20 Jan 2025 14:42
 Version 1.0
 */
 
+import com.codebean.ProductService.dto.request.CategoryAddDto;
 import com.codebean.ProductService.model.Category;
 import com.codebean.ProductService.service.CategoryService;
+import com.codebean.ProductService.service.ValidationService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +26,16 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private ValidationService validationService;
+
     @PostMapping(path = "/category")
-    public ResponseEntity<?> addCategory(@RequestBody Category category, HttpServletRequest request) {
+    public ResponseEntity<?> addCategory(@RequestBody CategoryAddDto dto, HttpServletRequest request) {
+        this.validationService.validate(dto, "CTG010010", request);
+
+        Category category = new Category();
+        BeanUtils.copyProperties(dto, category);
+
         return this.categoryService.save(category, request);
     }
 
@@ -42,5 +53,15 @@ public class CategoryController {
     @DeleteMapping(path = "/category/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId, HttpServletRequest request) {
         return this.categoryService.delete(categoryId, request);
+    }
+
+    @PatchMapping(path = "/category/{categoryId}")
+    public ResponseEntity<Object> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryAddDto dto, HttpServletRequest request) {
+        this.validationService.validate(dto, "CTG010010", request);
+
+        Category category = new Category();
+        BeanUtils.copyProperties(dto, category);
+
+        return this.categoryService.update(categoryId, category, request);
     }
 }
