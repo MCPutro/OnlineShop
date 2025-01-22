@@ -33,7 +33,6 @@ public class UserController {
 
     @GetMapping(path = "/customer/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
-//        return this.userService.findById(userId, request);
         return this.userService.findByIdWithAddressStatus(userId, true, request);
     }
 
@@ -44,37 +43,29 @@ public class UserController {
 
     @PatchMapping(path = "/customer/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateCustomerProfile(@PathVariable(value = "userId") Long userId, @RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
-
         this.validator.validate(dto, "FVUSR01002", request);
         User user = this.userService.custDTOtoUserModel(dto, "Customer", "sistem");
         return this.userService.update(userId, user, request);
-
     }
 
     @PostMapping(path = "/customer/{userId}/address", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addUserAddress(@PathVariable(value = "userId") Long userId, @RequestBody AddressDto dto, HttpServletRequest request) {
-
         this.validator.validate(dto, "FVUSR01002", request);
         UserAddress address = userAddressService.addressDTOtoUserAddressModel(dto);
-        return this.userAddressService.update(userId, address, request);
-
+        return this.userAddressService.addAddress(userId, address, request);
     }
 
     @PatchMapping(path = "/customer/{userId}/address/{addressId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUserAddress(@PathVariable(value = "userId") Long userId, @PathVariable(value = "addressId") Long addressId, @RequestBody AddressDto dto, HttpServletRequest request) {
-
         this.validator.validate(dto, "FVUSR01002", request);
         UserAddress address = userAddressService.addressDTOtoUserAddressModel(dto);
         address.setID(addressId);
         return this.userAddressService.update(userId, address, request);
-
     }
 
     @DeleteMapping(path = "/customer/{userId}/address/{addressId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUserAddress(@PathVariable(value = "userId") Long userId, @PathVariable(value = "addressId") Long addressId, HttpServletRequest request) {
-
         return this.userAddressService.delete(addressId, request);
-
     }
 
 

@@ -31,4 +31,6 @@ public interface UserAddressRepository extends CrudRepository<UserAddress, Long>
 //    @Query("update UserAddress ua set ua.isActive = false where ua.ID = :addressId  ")
 //    int softDeleteById(@Param("addressId") Long id);
 
+    List<UserAddress> findAllByIsActiveIsTrueAndUser_ID(Long userID);
+
 }

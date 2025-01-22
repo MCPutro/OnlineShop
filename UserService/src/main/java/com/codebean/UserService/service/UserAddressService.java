@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,8 +46,12 @@ public class UserAddressService implements Service<UserAddress> {
 
     @Override
     public ResponseEntity<Object> save(UserAddress userAddress, HttpServletRequest request) {
-        this.userAddressRepository.save(userAddress);
-        return null;
+        try {
+            this.userAddressRepository.save(userAddress);
+            return new ResponseEntity<>("Address berhasil di simpan", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Address gagal di simpan", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
@@ -81,17 +86,16 @@ public class UserAddressService implements Service<UserAddress> {
 
     @Override
     @Transactional
-    public ResponseEntity<Object> delete(Long id, HttpServletRequest request) {
+    public ResponseEntity<Object> delete(Long addressId, HttpServletRequest request) {
         try {
-            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findById(id);
+            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findById(addressId);
             optionalUserAddress.ifPresent(userAddress -> userAddress.setIsActive(false));
+            return new ResponseEntity<>("Adddress berhasil di hapus", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-
-            throw new RuntimeException(e);
-
+            return new ResponseEntity<>("Adddress gagal di hapus", HttpStatus.OK);
         }
-        return null;
+
     }
 
     @Override
@@ -100,13 +104,37 @@ public class UserAddressService implements Service<UserAddress> {
     }
 
     @Override
-    public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
-        return null;
+    public ResponseEntity<Object> findById(Long userId, HttpServletRequest request) {
+        List<UserAddress> listActiveUserAddress = this.userAddressRepository.findAllByIsActiveIsTrueAndUser_ID(userId);
+        return new ResponseEntity<>(listActiveUserAddress, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Object> findByParam(Pageable pageable, String columnName, String value, HttpServletRequest request) {
         return null;
+    }
+
+    @Transactional
+    public ResponseEntity<Object> addAddress(Long userId, UserAddress userAddress, HttpServletRequest request) {
+        try {
+            //find user by user id
+            Optional<User> optionalUser = this.userRepository.findFirstByIDAndIsActive(userId, true);
+            // if data exist
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                userAddress.setUser(user);
+                this.userAddressRepository.save(userAddress);
+
+                return new ResponseEntity<>("Adddress berhasil ditambah", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("User gak ada", HttpStatus.BAD_REQUEST);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Adddress gagal ditambah", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public UserAddress addressDTOtoUserAddressModel(Object dto) {
