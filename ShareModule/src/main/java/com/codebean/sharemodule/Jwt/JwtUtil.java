@@ -1,36 +1,66 @@
-package com.codebean.UserService.utils;
+package com.codebean.sharemodule.Jwt;
 
 /*
 IntelliJ IDEA 2024.2.4 (Community Edition)
 Build #IC-242.23726.103, built on October 23, 2024
 @Author mcputro a.k.a. Mu'ti Cahyono Putro
-Created on 23 Jan 2025 17:32
-@Last Modified 23 Jan 2025 17:32
+Created on 22 Jan 2025 13:42
+@Last Modified 22 Jan 2025 13:42
 Version 1.0
 */
 
-import com.codebean.UserService.model.Permissions;
-import com.codebean.UserService.model.User;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.Getter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 
-@Component
 public class JwtUtil {
-    private String secretKey = "9a4f2c8d3b7a1e6f45c8a0b3f267d8b1d4e6f3c8a9x"; // Gantilah dengan key yang lebih aman
-    private int expirationInMilliSeconds = 1000 * 60 * 60; // 1 detik * 60 * 60 = 1 jam
-    private Map<String, Object> JwtResponse = new HashMap<>();
+    private String secretKey;
+    private Integer expirationInSeconds;
+    private final Map<String, Object> JwtResponse = new HashMap<>();
+
+    public JwtUtil() {
+        Properties properties = new Properties();
+
+        // Memuat file sharemodule-config.properties dari classpath
+        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream("sharemodule-config.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find sharemodule-config.properties");
+                throw new IllegalArgumentException("sharemodule-sharemodule-config.properties not found in resources");
+            }
+
+//            URL resourceUrl = JwtUtil.class.getClassLoader().getResource("sharemodule-config.properties");
+//            if (resourceUrl != null) {
+//                System.out.println("Config file loaded from: " + resourceUrl);
+//            } else {
+//                System.out.println("Config file not found in classpath");
+//            }
+
+            // Memuat data properties dari file
+            properties.load(input);
+
+            // Mengakses data dari file properties
+            this.secretKey = properties.getProperty("jwt.secretKey");
+
+            String stringExpiredTimeInSeconds = properties.getProperty("jwt.expiredTimeInSeconds");
+
+            if (stringExpiredTimeInSeconds == null || stringExpiredTimeInSeconds.isEmpty() || stringExpiredTimeInSeconds.equals("0")) {
+                expirationInSeconds = 360;
+            } else {
+                expirationInSeconds = Integer.parseInt(stringExpiredTimeInSeconds);
+            }
+
+//            System.out.println("secretKey: " + secretKey);
+//            System.out.println("Duration: " + (expirationInSeconds + 3));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     // Fungsi untuk mendapatkan kunci yang digunakan untuk memverifikasi tanda tangan token
     private SecretKey getSigningKey() {
@@ -43,31 +73,19 @@ public class JwtUtil {
         return new SecretKeySpec(secretKey.getBytes(), "HMACSHA256");
     }
 
-//    // Generate JWT token
-//    public String generateToken(String username, List<String> permission) {
-//        return Jwts.builder()
-//                .subject(username)
-//                .claim("permission", String.join(" ", permission))
-//                .issuedAt(new Date())
-//                .expiration(new Date(System.currentTimeMillis() + expirationInMilliSeconds)) // 1 jam
-//                .signWith(getSigningKey2())
-//                .compact();
-//    }
-
     // Generate JWT token
-    public String newGenerateToken(String username, Long userId, List<String> permission) {
+    public String generateToken(String username, Long userId, List<String> permission) {
 
         return Jwts.builder()
                 .subject(username)
                 .claim(JwtConstants.PERMISSIONS, String.join(" ", permission))
                 .claim(JwtConstants.USERID, userId)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expirationInMilliSeconds)) // 1 jam
+                .expiration(new Date(System.currentTimeMillis() + (expirationInSeconds * 1000) ))
                 .signWith(getSigningKey2())
                 .compact();
     }
 
-    // Fungsi untuk memvalidasi token JWT
     public Map<String, Object> validateToken(String token) {
         this.JwtResponse.clear();
         try {
@@ -127,5 +145,23 @@ public class JwtUtil {
         return this.JwtResponse;
     }
 
+    public String getSecretKey() {
+        return secretKey;
+    }
 
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public Integer getExpirationInSeconds() {
+        return expirationInSeconds;
+    }
+
+    public void setExpirationInSeconds(Integer expirationInSeconds) {
+        this.expirationInSeconds = expirationInSeconds;
+    }
+
+    public Map<String, Object> getJwtResponse() {
+        return JwtResponse;
+    }
 }

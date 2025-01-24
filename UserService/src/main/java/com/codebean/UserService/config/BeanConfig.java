@@ -9,7 +9,9 @@ Created on 20 Jan 2025 11:54
 Version 1.0
 */
 
+import com.codebean.sharemodule.Jwt.JwtUtil;
 import com.codebean.UserService.auditor.AuditorAwareConfig;
+import com.codebean.sharemodule.test.CodeTest;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,5 +35,10 @@ public class BeanConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(10);
+    }
+
+    @Bean
+    public JwtUtil jwtUtil(){
+        return new JwtUtil();
     }
 }

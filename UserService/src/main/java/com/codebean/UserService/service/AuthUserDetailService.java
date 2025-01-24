@@ -14,7 +14,7 @@ import com.codebean.UserService.dto.response.UserRegRespDto;
 import com.codebean.UserService.model.Permissions;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.repository.UserRepository;
-import com.codebean.UserService.utils.JwtUtil;
+import com.codebean.sharemodule.Jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +68,7 @@ public class AuthUserDetailService implements UserDetailsService {
                 return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
             }
 
-            String token = this.jwtUtil.newGenerateToken(userDB.getUsername(), userDB.getID(),
+            String token = this.jwtUtil.generateToken(userDB.getUsername(), userDB.getID(),
                     userDB.getPermissions().stream()
                             .map(Permissions::getName).toList()
             );
@@ -97,13 +97,6 @@ public class AuthUserDetailService implements UserDetailsService {
         }
 
         User userDB = optionalUser.get();
-        System.out.println(userDB.getPermissions() == null);
-        if (userDB.getPermissions() != null) {
-            for (Permissions permission : userDB.getPermissions()) {
-                System.out.println(">>>> AuthUserDetailService.loadUserByUsername() : " + permission.getName());
-            }
-        }
-        System.out.println(">>>> AuthUserDetailService.loadUserByUsername() : " + userDB);
 
         return new org.springframework.security.core.userdetails.User(
                 userDB.getUsername(),

@@ -26,6 +26,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         // Menyediakan respons 401 Unauthorized dengan pesan JSON
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
-        response.getWriter().write("{\"error\": \"Unauthorized access\", {\"error\":\""+authException.getMessage()+"\"}}");
+//        response.getWriter().write("{\"error\": \"Unauthorized access\", {\"error\":\""+authException.getMessage()+"\"}}");
+        response.getWriter().write("{\"error\": \"Unauthorized access\"}");
     }
 }
