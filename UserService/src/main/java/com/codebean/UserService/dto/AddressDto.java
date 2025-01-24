@@ -1,4 +1,4 @@
-package com.codebean.UserService.dto.request;
+package com.codebean.UserService.dto;
 
 /*
 IntelliJ IDEA 2024.2.4 (Community Edition)

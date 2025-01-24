@@ -9,10 +9,7 @@ Created on 10 Jan 2025 11:51
 Version 1.0
 */
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -26,13 +23,24 @@ import java.util.Date;
 
 @Setter
 @Getter
+@Entity
+@Table(name = "DefaultRolePermission", uniqueConstraints = {@UniqueConstraint(columnNames = {"RoleId", "PermissionId"})})
 @EntityListeners(AuditingEntityListener.class)
 public class RolePermissions {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private Long roleId;
+    @ManyToOne
+    @JoinColumn(name = "RoleId", nullable = false)
+    private Role role;
 
-    private Long permissionId;
+    @ManyToOne
+    @JoinColumn(name = "PermissionId")
+    private Permissions permission;
+
+    private Boolean isActive;
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)
     @CreatedBy

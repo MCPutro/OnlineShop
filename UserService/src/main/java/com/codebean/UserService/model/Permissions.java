@@ -21,6 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -34,14 +35,14 @@ public class Permissions {
     @Column(name = "ID")
     private Long ID;
 
-    @Column(name = "Name")
+    @Column(name = "Name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "Description")
     private String description;
 
-    @ManyToMany(mappedBy = "listPermission")
-    private List<User> users;
+    @ManyToMany(mappedBy = "permissions")
+    private Set<User> users;
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)
     @CreatedBy

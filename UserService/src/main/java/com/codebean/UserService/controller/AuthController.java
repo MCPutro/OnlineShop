@@ -13,6 +13,7 @@ import com.codebean.UserService.dto.request.UserLoginDto;
 import com.codebean.UserService.dto.request.UserRegReqDto;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
+import com.codebean.UserService.service.AuthUserDetailService;
 import com.codebean.UserService.service.UserService;
 import com.codebean.UserService.service.ValidationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private AuthUserDetailService authUserDetailService;
 
     @Autowired
     private ValidationService validator;
@@ -39,29 +40,29 @@ public class AuthController {
         this.validator.validate(dto, "FVUSR01001x", request);
 
         // convert dto to model cara 1
-        User newUser = User.builder()
-                .role(new Role("customer"))
-                .createdBy("sistem")
-                .build();
+        User newUser = new User();
+        newUser.setRole(new Role("Customer"));
         BeanUtils.copyProperties(dto, newUser);
-        System.out.println("1>>" + newUser);
 
-        // convert dto to model cara 2
-        User customer = this.userService.custDTOtoUserModel(dto, "Customer", "sistem");
-        System.out.println("1>>" + customer);
+//        // convert dto to model cara 2
+//        User customer = this.userService.custDTOtoUserModel(dto, "Customer", "sistem");
+//        System.out.println("1>>" + customer);
 
-
-        // panggil function save user
-        return this.userService.save(customer, request);
+        return this.authUserDetailService.registerUser(newUser, request);
     }
 
     @PostMapping("/v1/login")
     public ResponseEntity<Object> Login(@RequestBody UserLoginDto dto, HttpServletRequest request) {
-
         // validasi data input
         this.validator.validate(dto, "FVUSR01001x", request);
 
-        return null;
+        User userLoginReq = new User();
+        BeanUtils.copyProperties(dto, userLoginReq);
+
+        return this.authUserDetailService.loginUser(userLoginReq, request);
+
+
     }
 
 }
+

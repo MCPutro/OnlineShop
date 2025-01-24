@@ -38,7 +38,7 @@ public class UserProfile {
     @OneToOne(mappedBy = "", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapsId // Menandakan bahwa userId adalah primary key dan foreign key
     @JoinColumn(name = "UserId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_Profile_User")) // name = "UserId": Kolom UserId di tabel UserProfile(entity saat ini) adalah foreign key. referencedColumnName = "ID": Kolom ID di tabel users adalah kolom yang dirujuk sebagai primary key.
-    @JsonBackReference
+//    @JsonBackReference
     private User user;
 
     @Column(name = "FirstName")

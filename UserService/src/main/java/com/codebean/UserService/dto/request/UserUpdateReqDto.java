@@ -9,6 +9,7 @@ Created on 16 Jan 2025 11:04
 Version 1.0
 */
 
+import com.codebean.UserService.dto.UserProfileDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.*;

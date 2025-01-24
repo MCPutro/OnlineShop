@@ -4,26 +4,27 @@ package com.codebean.UserService.dto.response;
 IntelliJ IDEA 2024.2.4 (Community Edition)
 Build #IC-242.23726.103, built on October 23, 2024
 @Author mcputro a.k.a. Mu'ti Cahyono Putro
-Created on 13 Jan 2025 10:49
-@Last Modified 13 Jan 2025 10:49
+Created on 24 Jan 2025 01:11
+@Last Modified 24 Jan 2025 01:11
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.UserProfileDto;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
-@Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDetailRespDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserLoginRespDto {
     private Long id;
     private String username;
     private String email;
-    private String phoneNumber;
+    private Boolean isActive;
     private String role;
-    private UserProfileDto profile;
+    private String token;
 }

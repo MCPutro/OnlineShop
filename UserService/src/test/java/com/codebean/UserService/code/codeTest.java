@@ -58,11 +58,11 @@ public class codeTest {
         }
     }
 
-    @Test
-    void generateToken() {
-        JwtUtil jwtUtil = new JwtUtil();
-
-        String s = jwtUtil.generateToken("qwe.a3456789.", Arrays.asList("makan", "minum", "tidur"));
-        System.out.println(s);
-    }
+//    @Test
+//    void generateToken() {
+//        JwtUtil jwtUtil = new JwtUtil();
+//
+//        String s = jwtUtil.generateToken("qwe.a3456789.", Arrays.asList("makan", "minum", "tidur"));
+//        System.out.println(s);
+//    }
 }

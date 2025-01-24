@@ -18,13 +18,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Setter
 @Getter
@@ -34,7 +33,7 @@ import java.util.List;
 @Entity
 @Table(name = "Users")
 @EntityListeners(AuditingEntityListener.class)
-public class User /**implements UserDetails*/ {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +52,7 @@ public class User /**implements UserDetails*/ {
     @Column(name = "PhoneNumber")
     private String phoneNumber;
 
-//    @Column(name = "IsActive", nullable = false)
+    //    @Column(name = "IsActive", nullable = false)
 //    @ColumnDefault("1")
     @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isActive = true;
@@ -63,11 +62,11 @@ public class User /**implements UserDetails*/ {
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
-    @JsonManagedReference
+//    @JsonManagedReference
     private UserProfile profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // cascade di sini maksud nya akan melakukan update data di table user address juga
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<UserAddress> addresses; // Daftar alamat yang dimiliki user, 1 user bisa punya banyak alamat, lihat dari sisi class user
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)
@@ -94,16 +93,21 @@ public class User /**implements UserDetails*/ {
             inverseJoinColumns = @JoinColumn(name = "AccessId")
             , uniqueConstraints = {@UniqueConstraint(name = "Uniq_User_Permissions", columnNames = {"UserId", "AccessId"})}
     )
-    private List<Permissions> listPermission;
+    private Set<Permissions> permissions;
 
     public void addAddress(UserAddress address) {
         addresses.add(address);
         address.setUser(this);
     }
 
-/**    @Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        Set<Permissions> listPermission1 = this.permissions;
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        for (Permissions permission : listPermission1) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(permission.getName()));
+        }
+        return grantedAuthorities;
     }
 
     @Override
@@ -125,6 +129,6 @@ public class User /**implements UserDetails*/ {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
-    */
+
 }
 

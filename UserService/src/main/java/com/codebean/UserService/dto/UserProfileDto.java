@@ -1,4 +1,4 @@
-package com.codebean.UserService.dto.request;
+package com.codebean.UserService.dto;
 
 /*
 IntelliJ IDEA 2024.2.4 (Community Edition)
@@ -10,15 +10,12 @@ Version 1.0
 */
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Setter
 @Getter

@@ -9,17 +9,13 @@ Created on 10 Jan 2025 12:37
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.UserProfileDto;
-import com.codebean.UserService.dto.response.UserDetailRespDTO;
+import com.codebean.UserService.dto.AddressDto;
+import com.codebean.UserService.dto.UserProfileDto;
+import com.codebean.UserService.dto.UserDetailDTO;
+import com.codebean.UserService.dto.response.UserRegRespDto;
 import com.codebean.UserService.handler.ResponseHandler;
-import com.codebean.UserService.model.User;
-import com.codebean.UserService.model.UserAddress;
-import com.codebean.UserService.model.UserProfile;
-import com.codebean.UserService.repository.UserAddressRepository;
-import com.codebean.UserService.repository.UserProfileRepository;
-import com.codebean.UserService.repository.UserRepository;
-import com.codebean.UserService.repository.RoleRepository;
-import com.codebean.UserService.model.Role;
+import com.codebean.UserService.model.*;
+import com.codebean.UserService.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Pageable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -50,6 +47,12 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     private UserAddressRepository userAddressRepository;
 
     private UserProfileRepository userProfileRepository;
+
+    @Autowired
+    private PermissionsRepository permissionsRepository;
+
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -109,12 +112,21 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             // user profile
             user.setProfile(UserProfile.builder().user(user).build());
 
-            // belum di encrypt
-            user.setPassword(user.getUsername() + user.getPassword());
+            //set default permissions by role
+            List<RolePermissions> listRolePermissions = this.rolePermissionRepository.findAllByRole_NameAndIsActiveIsTrue(user.getRole().getName());
+            Set<Permissions> collect = listRolePermissions.stream().map(RolePermissions::getPermission).collect(Collectors.toSet());
+//            Optional<Permissions> profile = permissionsRepository.findFirstByName("PROFILE");
+//            Set<Permissions> ss = new HashSet<>();
+//            ss.add(profile.get());
+            user.setPermissions(collect);
 
             this.userRepository.save(user);
 
-            return new ResponseHandler().handleResponse("Berhasil di daftarkan", HttpStatus.CREATED, user, null, request);
+            //mapping response
+            UserRegRespDto response = this.modelMapper.map(user, UserRegRespDto.class);
+            response.setRole(user.getRole().getName());
+
+            return new ResponseHandler().handleResponse("Berhasil di daftarkan", HttpStatus.CREATED, response, null, request);
 
         } catch (Throwable e) {
             return new ResponseHandler().handleResponse(e.getMessage(), // String message
@@ -185,14 +197,14 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         List<User> customer = this.userRepository.findAllByRole_NameAndIsActive("Customer", true);
         return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, customer, null, request);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
         Optional<User> optionalUser = this.userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -219,7 +231,10 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 User user = optionalUser.get();
                 List<UserAddress> listActiveUserAddress = this.userAddressRepository.findAllByUserAndIsActive(user, addressStatus);
                 user.setAddresses(listActiveUserAddress);
-                return new ResponseEntity<>(user, HttpStatus.OK);
+
+                UserDetailDTO userDetailDTO = this.userModelToDTO(user);
+
+                return new ResponseEntity<>(userDetailDTO, HttpStatus.OK);
             }
             return null;
         } catch (Exception e) {
@@ -248,14 +263,32 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     }
 
 
-    public UserDetailRespDTO customerModelToDTO(User user) {
+    public UserDetailDTO userModelToDTO(User user) {
 
-        UserProfileDto userProfileDto = null;
+
+        UserDetailDTO userDetailDTO = this.modelMapper.map(user, UserDetailDTO.class);
+
+        userDetailDTO.setRole(user.getRole().getName());
+
         //profile
+        UserProfileDto userProfileDto = null;
         if (user.getProfile() != null) {
             userProfileDto = this.modelMapper.map(user.getProfile(), UserProfileDto.class);
         }
+        userDetailDTO.setProfile(userProfileDto);
 
-        return UserDetailRespDTO.builder().id(user.getID()).username(user.getUsername()).email(user.getEmail()).phoneNumber(user.getPhoneNumber()).role(user.getRole().getName()).profile(userProfileDto).build();
+        //address
+        List<AddressDto> addressDtoList = new ArrayList<>();
+        for (UserAddress userAddress : user.getAddresses()) {
+            AddressDto addressDto = this.modelMapper.map(userAddress, AddressDto.class);
+            addressDtoList.add(addressDto);
+        }
+        userDetailDTO.setAddresses(addressDtoList);
+
+//        //permission
+//        List<String> list = user.getPermissions().stream().map(Permissions::getName).toList();
+
+//        return UserDetailDTO.builder().id(user.getID()).username(user.getUsername()).email(user.getEmail()).phoneNumber(user.getPhoneNumber()).role(user.getRole().getName()).profile(userProfileDto).build();
+        return userDetailDTO;
     }
 }

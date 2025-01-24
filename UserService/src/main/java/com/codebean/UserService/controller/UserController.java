@@ -1,6 +1,6 @@
 package com.codebean.UserService.controller;
 
-import com.codebean.UserService.dto.request.AddressDto;
+import com.codebean.UserService.dto.AddressDto;
 import com.codebean.UserService.dto.request.UserUpdateReqDto;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
@@ -9,8 +9,10 @@ import com.codebean.UserService.service.UserService;
 import com.codebean.UserService.service.ValidationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,19 +28,29 @@ public class UserController {
     @Autowired
     private ValidationService validator;
 
-    @GetMapping(path = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ALLPROFILE')")
+    @GetMapping(path = "/customers", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
         return this.userService.findAll(null, request);
     }
 
-    @GetMapping(path = "/customer/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
-        return this.userService.findByIdWithAddressStatus(userId, true, request);
+    @PreAuthorize("hasAuthority('PROFILE')")
+    @GetMapping(path = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getUserById( HttpServletRequest request) {
+        try {
+            // get user id from jwt token
+            Long userId = Long.valueOf((String) request.getAttribute("userId"));
+
+            return this.userService.findByIdWithAddressStatus(userId, true, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("invalid request", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping(path = "/customer/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> deleteUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
-        return this.userService.delete(userId,  request);
+        return this.userService.delete(userId, request);
     }
 
     @PatchMapping(path = "/customer/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
