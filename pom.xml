@@ -10,8 +10,9 @@
     <packaging>pom</packaging>
     <name>Parent-Project</name>
 
-     <modules>
+    <modules>
         <module>UserService</module>
         <module>ProductService</module>
+        <module>ShareModule</module>
     </modules>
 </project>

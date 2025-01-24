@@ -11,7 +11,6 @@ Version 1.0
 
 import com.codebean.sharemodule.Jwt.JwtUtil;
 import com.codebean.UserService.auditor.AuditorAwareConfig;
-import com.codebean.sharemodule.test.CodeTest;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
