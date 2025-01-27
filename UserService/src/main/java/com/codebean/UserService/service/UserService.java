@@ -13,9 +13,11 @@ import com.codebean.UserService.dto.AddressDto;
 import com.codebean.UserService.dto.UserProfileDto;
 import com.codebean.UserService.dto.UserDetailDTO;
 import com.codebean.UserService.dto.response.UserRegRespDto;
+import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.handler.ResponseHandler;
 import com.codebean.UserService.model.*;
 import com.codebean.UserService.repository.*;
+import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,23 +90,23 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
             // cek email
             if (this.userRepository.existsByEmail(user.getEmail())) {
-                this.listError.add("Email Already Exists");
+                this.listError.add(Constants.EMAILADDRESSALREADYEXIST);
             }
 
             // cek username
             if (this.userRepository.existsByUsername(user.getUsername())) {
-                this.listError.add("Username Already Exists");
+                this.listError.add(Constants.USERNAMEALREADYEXIST);
             }
 
             // cek role
             Optional<Role> optionalRole = this.roleRepository.findByName(user.getRole().getName());
             if (optionalRole.isEmpty()) {
-                this.listError.add("Role Not Found");
+                this.listError.add(Constants.INVALIDROLE);
             }
 
             //return if you got error
             if (!this.listError.isEmpty()) {
-                return new ResponseHandler().handleResponse(null, HttpStatus.BAD_REQUEST, this.listError, "FVUSR01001", request);
+                return Response.badRequest(this.listError, "FVUSR01001", request);
             } else {
                 optionalRole.ifPresent(user::setRole);
             }
@@ -115,26 +117,19 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             //set default permissions by role
             List<RolePermissions> listRolePermissions = this.rolePermissionRepository.findAllByRole_NameAndIsActiveIsTrue(user.getRole().getName());
             Set<Permissions> collect = listRolePermissions.stream().map(RolePermissions::getPermission).collect(Collectors.toSet());
-//            Optional<Permissions> profile = permissionsRepository.findFirstByName("PROFILE");
-//            Set<Permissions> ss = new HashSet<>();
-//            ss.add(profile.get());
             user.setPermissions(collect);
 
             this.userRepository.save(user);
 
-            //mapping response
-            UserRegRespDto response = this.modelMapper.map(user, UserRegRespDto.class);
-            response.setRole(user.getRole().getName());
+            //mapping userResponse
+            UserRegRespDto userResponse = this.modelMapper.map(user, UserRegRespDto.class);
+            userResponse.setRole(user.getRole().getName());
 
-            return new ResponseHandler().handleResponse("Berhasil di daftarkan", HttpStatus.CREATED, response, null, request);
+            return Response.created(Constants.ACCOUNTCREATED, userResponse, request);
 
         } catch (Throwable e) {
-            return new ResponseHandler().handleResponse(e.getMessage(), // String message
-                    HttpStatus.INTERNAL_SERVER_ERROR, //HttpStatus status
-                    null, // Object data
-                    "FEUSR01001", //Object errorCode
-                    request //HttpServletRequest request
-            );
+            this.listError.add(e.getMessage());
+            return Response.internalServerError(this.listError, "FEUSR01001", request);
         }
     }
 

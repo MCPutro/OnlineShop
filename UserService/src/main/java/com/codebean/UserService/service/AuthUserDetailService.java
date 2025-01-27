@@ -11,9 +11,11 @@ Version 1.0
 
 import com.codebean.UserService.dto.response.UserLoginRespDto;
 import com.codebean.UserService.dto.response.UserRegRespDto;
+import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Permissions;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.repository.UserRepository;
+import com.codebean.UserService.utils.Constants;
 import com.codebean.sharemodule.Jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Optional;
+
 
 @Service
 public class AuthUserDetailService implements UserDetailsService {
@@ -47,25 +50,29 @@ public class AuthUserDetailService implements UserDetailsService {
 
     public ResponseEntity<Object> registerUser(User user, HttpServletRequest request) {
         String encode = this.passwordEncoder.encode(user.getUsername() + user.getPassword());
-//        System.out.println(user.getUsername() + user.getPassword());
-//        System.out.println("encode : " + encode);
+
         user.setPassword(encode);
 
         return this.userService.save(user, request);
     }
 
+    @Transactional
     public ResponseEntity<Object> loginUser(User user, HttpServletRequest request) {
         try {
             //find user by username
             Optional<User> optionalUserByUsername = this.userRepository.findFirstByUsername(user.getUsername());
             if (!optionalUserByUsername.isPresent()) {
-                return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
+                return Response.unauthorized(Constants.WRONGUSERNAMEORPASSWORD, "FEAUT0010", request);
             }
 
             User userDB = optionalUserByUsername.get();
 
             if (!this.passwordEncoder.matches((user.getUsername() + user.getPassword()), userDB.getPassword())) {
-                return new ResponseEntity<>("Wrong username or password", HttpStatus.UNAUTHORIZED);
+                return Response.unauthorized(Constants.WRONGUSERNAMEORPASSWORD, "FEAUT0010", request);
+            }
+
+            if (!userDB.getIsActive()) {
+                return Response.unauthorized(Constants.ACCOUNTISNOTACTIVE, "FEAUT0020", request);
             }
 
             String token = this.jwtUtil.generateToken(userDB.getUsername(), userDB.getID(),
@@ -79,10 +86,10 @@ public class AuthUserDetailService implements UserDetailsService {
             userLoginRespDto.setId(userDB.getID());
             userLoginRespDto.setRole(userDB.getRole().getName());
 
-            return new ResponseEntity<>(userLoginRespDto, HttpStatus.OK);
-
+            return Response.success(Constants.LOGINSUCCESS, userLoginRespDto, request);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            return Response.internalServerError(e.getMessage(), "FEAUT0030", request);
         }
 
 

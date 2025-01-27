@@ -28,7 +28,7 @@ public class UserController {
     @Autowired
     private ValidationService validator;
 
-    @PreAuthorize("hasAuthority('ALLPROFILE')")
+    @PreAuthorize("hasAuthority('ALLCUSTOMER')")
     @GetMapping(path = "/customers", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
         return this.userService.findAll(null, request);
@@ -36,7 +36,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('PROFILE')")
     @GetMapping(path = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getUserById( HttpServletRequest request) {
+    public ResponseEntity<Object> getUserByToken( HttpServletRequest request) {
         try {
             // get user id from jwt token
             Long userId = Long.valueOf((String) request.getAttribute("userId"));
@@ -46,6 +46,12 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity<>("invalid request", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PreAuthorize("hasAuthority('ALLCUSTOMERDETAIL')")
+    @GetMapping(path = "/customer/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> getUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
+        return this.userService.delete(userId, request);
     }
 
     @DeleteMapping(path = "/customer/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
