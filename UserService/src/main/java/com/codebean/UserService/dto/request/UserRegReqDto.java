@@ -30,6 +30,8 @@ public class UserRegReqDto {
     @Size(min = 8, max = 50, message = "must contain 8-50 character")
     private String password;
 
+    private String confirmPassword;
+
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")

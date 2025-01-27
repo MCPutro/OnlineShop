@@ -9,6 +9,7 @@ Created on 13 Jan 2025 14:01
 Version 1.0
 */
 
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.exception.ValidateException;
 import com.codebean.UserService.handler.ResponseHandler;
 import jakarta.validation.ConstraintViolationException;
@@ -46,7 +47,20 @@ public class ErrorController {
         return new ResponseHandler().handleResponse(
                 "exception.getMessage()", // String message,
                 HttpStatus.BAD_REQUEST,// HttpStatus status,
-                this.errorList, // Object obj,
+                this.errorList, // Object data,
+                exception.getErrorCode(),// Object errorCode,
+                exception.getRequest()// HttpServletRequest request
+        );
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Object> apiException(ApiException exception) {
+        this.errorList.clear();
+        this.errorList.add(exception.getReason());
+        return new ResponseHandler().handleResponse(
+                "exception.getMessage()", // String message,
+                HttpStatus.BAD_REQUEST,// HttpStatus status,
+                this.errorList, // Object data,
                 exception.getErrorCode(),// Object errorCode,
                 exception.getRequest()// HttpServletRequest request
         );
@@ -58,7 +72,7 @@ public class ErrorController {
         return new ResponseHandler().handleResponse(
                 null, // String message,
                 HttpStatus.FORBIDDEN,// HttpStatus status,
-                exception.getMessage(), // Object obj,
+                exception.getMessage(), // Object data,
                 "FORBIDDEN",// Object errorCode,
                 null// HttpServletRequest request
         );

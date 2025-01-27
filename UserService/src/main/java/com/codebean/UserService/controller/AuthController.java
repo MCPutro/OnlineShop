@@ -11,6 +11,7 @@ Version 1.0
 
 import com.codebean.UserService.dto.request.UserLoginDto;
 import com.codebean.UserService.dto.request.UserRegReqDto;
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.service.AuthUserDetailService;
@@ -19,6 +20,7 @@ import com.codebean.UserService.service.ValidationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,10 @@ public class AuthController {
 
         // validasi data input
         this.validator.validate(dto, "FVUSR01001x", request);
+
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Password do not match", "FVUSR01001x", request);
+        }
 
         // convert dto to model cara 1
         User newUser = new User();
