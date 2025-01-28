@@ -32,4 +32,6 @@ public class UserAddressRespDto {
     private String country;
 
     private String postalCode;
+
+    private Boolean isActive;
 }

@@ -221,7 +221,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             return Response.success(Constants.SUCCESS, userDetailDTO, request);
         }
 
-        return new ResponseHandler().handleResponse("Kosong", HttpStatus.OK, null, null, request);
+        return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01005", request);
     }
 
     @Override
@@ -234,6 +234,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Transactional(readOnly = true) //done
     public ResponseEntity<Object> findByIdWithAddressStatus(Long userId, Boolean addressStatus, HttpServletRequest request) {
         try {
+            this.listError.clear();
             addressStatus = (addressStatus == null) ? Boolean.TRUE : addressStatus;
 
             Optional<User> optionalUser = this.userRepository.findFirstByIDAndIsActive(userId, true);
@@ -244,12 +245,13 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
                 UserDetailDto userDetailDTO = this.userModelToDTO(user);
 
-                return new ResponseEntity<>(userDetailDTO, HttpStatus.OK);
+                return Response.success(Constants.SUCCESS, userDetailDTO, request);
             }
-            return null;
+            return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01006", request);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            this.listError.add(e.getMessage());
+            return Response.internalServerError(this.listError, "FEUSR01006", request);
         }
     }
 

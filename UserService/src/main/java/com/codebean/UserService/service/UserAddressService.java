@@ -80,7 +80,6 @@ public class UserAddressService implements Service<UserAddress> {
                     return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "1235", request);
                 }
             } else {
-//                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
                 return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "1235", request);
             }
             return Response.success(Constants.ADDRESS_UPDATED_SUCCESSFULLY, null, request);

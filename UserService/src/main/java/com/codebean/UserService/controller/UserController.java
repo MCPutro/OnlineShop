@@ -122,6 +122,7 @@ public class UserController {
         return this.userAddressService.update(userId, address, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('EDITUSERDETAIL')")//cek
     @PatchMapping(path = "/user/{userId}/address/{addressId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUserAddress(@PathVariable(value = "userId") Long userId, @PathVariable(value = "addressId") Long addressId, @RequestBody UserAddressReqDto dto, HttpServletRequest request) {
         this.validationService.validate(dto, "FVUSR01002", request);
@@ -130,11 +131,13 @@ public class UserController {
         return this.userAddressService.update(userId, address, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('BLMDIBUAT')")
     @DeleteMapping(path = "/user/{userId}/address/{addressId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUserAddress(@PathVariable(value = "userId") Long userId, @PathVariable(value = "addressId") Long addressId, HttpServletRequest request) {
         return this.userAddressService.delete(addressId, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('BLMDIBUAT')")
     @DeleteMapping(path = "/user/address/{addressId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUserAddressByToken(@PathVariable(value = "addressId") Long addressId, HttpServletRequest request) {
         // get user id from token
