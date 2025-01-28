@@ -9,10 +9,11 @@ Created on 10 Jan 2025 12:37
 Version 1.0
 */
 
-import com.codebean.UserService.dto.AddressDto;
+import com.codebean.UserService.dto.request.UserAddressReqDto;
 import com.codebean.UserService.dto.PermissionDto;
 import com.codebean.UserService.dto.UserProfileDto;
 import com.codebean.UserService.dto.UserDetailDto;
+import com.codebean.UserService.dto.response.UserAddressRespDto;
 import com.codebean.UserService.dto.response.UserRegRespDto;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.handler.ResponseHandler;
@@ -21,10 +22,8 @@ import com.codebean.UserService.repository.*;
 import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -122,7 +121,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             UserRegRespDto userResponse = this.modelMapper.map(user, UserRegRespDto.class);
             userResponse.setRole(user.getRole().getName());
 
-            return Response.created(Constants.ACCOUNT_CREATED, userResponse, request);
+            return Response.created(Constants.ACCOUNT_CREATED_SUCCESSFULLY, userResponse, request);
 
         } catch (Throwable e) {
             this.listError.add(e.getMessage());
@@ -131,7 +130,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     }
 
     @Override
-    @Transactional
+    @Transactional // done 1
     public ResponseEntity<Object> update(Long id, User userUpdate, HttpServletRequest request) {
         try {
             this.listError.clear();
@@ -198,20 +197,14 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
         List<UserDetailDto> listUserDetailDTO = new ArrayList<>();
         iterableUser.forEach(user -> {
-            UserDetailDto userDetail = this.modelMapper.map(user, UserDetailDto.class);
-            userDetail.setRole(user.getRole().getName());
-            userDetail.setProfile(this.modelMapper.map(user.getProfile(), UserProfileDto.class));
-            listUserDetailDTO.add(userDetail);
-            if (user.getAddresses() != null && !user.getAddresses().isEmpty()) {
-                userDetail.setAddresses(this.modelUserAddressToDTO(user.getAddresses()));
-            }
+            listUserDetailDTO.add(this.userModelToDTO(user));
 
         });
         return Response.success(Constants.SUCCESS, listUserDetailDTO, request);
     }
 
     @Override
-    @Transactional
+    @Transactional //done
     public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
         Optional<User> optionalUser = this.userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -220,17 +213,11 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             userDetailDTO.setRole(user.getRole().getName());
             userDetailDTO.setProfile(this.modelMapper.map(user.getProfile(), UserProfileDto.class));
 
-            // address
-            if (user.getAddresses() != null && !user.getAddresses().isEmpty()) {
-                userDetailDTO.setAddresses(this.modelUserAddressToDTO(user.getAddresses()));
-            }
-
             // permission
             if (user.getPermissions() != null && !user.getPermissions().isEmpty()) {
                 userDetailDTO.setPermissions(this.modelPermissionToDto(user.getPermissions()));
             }
 
-//            return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, optionalUser, null, request);
             return Response.success(Constants.SUCCESS, userDetailDTO, request);
         }
 
@@ -244,7 +231,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
         return null;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) //done
     public ResponseEntity<Object> findByIdWithAddressStatus(Long userId, Boolean addressStatus, HttpServletRequest request) {
         try {
             addressStatus = (addressStatus == null) ? Boolean.TRUE : addressStatus;
@@ -287,7 +274,6 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
     public UserDetailDto userModelToDTO(User user) {
 
-
         UserDetailDto userDetailDTO = this.modelMapper.map(user, UserDetailDto.class);
 
         userDetailDTO.setRole(user.getRole().getName());
@@ -299,24 +285,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
         }
         userDetailDTO.setProfile(userProfileDto);
 
-        //address
-        List<AddressDto> addressDtoList = new ArrayList<>();
-        for (UserAddress userAddress : user.getAddresses()) {
-            AddressDto addressDto = this.modelMapper.map(userAddress, AddressDto.class);
-            addressDtoList.add(addressDto);
-        }
-        userDetailDTO.setAddresses(addressDtoList);
-
-//        //permission
-//        List<String> list = user.getPermissions().stream().map(Permissions::getName).toList();
-
-//        return UserDetailDTO.builder().id(user.getID()).username(user.getUsername()).email(user.getEmail()).phoneNumber(user.getPhoneNumber()).role(user.getRole().getName()).profile(userProfileDto).build();
         return userDetailDTO;
-    }
-
-    private List<AddressDto> modelUserAddressToDTO(List<UserAddress> listUserAddress) {
-        return this.modelMapper.map(listUserAddress, new TypeToken<List<AddressDto>>() {
-        }.getType());
     }
 
     private Set<PermissionDto> modelPermissionToDto(Set<Permissions> permissions) {

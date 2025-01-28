@@ -9,6 +9,8 @@ Created on 13 Jan 2025 10:49
 Version 1.0
 */
 
+import com.codebean.UserService.dto.request.UserAddressReqDto;
+import com.codebean.UserService.dto.response.UserAddressRespDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -20,7 +22,6 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDetailDto {
     private Long id;
     private String username;
@@ -29,6 +30,6 @@ public class UserDetailDto {
     private String role;
     private Boolean isActive;
     private UserProfileDto profile;
-    private List<AddressDto> addresses;
+    private List<UserAddressRespDto> addresses;
     private Set<PermissionDto> permissions;
 }

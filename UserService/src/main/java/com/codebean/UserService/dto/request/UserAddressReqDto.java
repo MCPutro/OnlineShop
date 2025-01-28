@@ -1,4 +1,4 @@
-package com.codebean.UserService.dto;
+package com.codebean.UserService.dto.request;
 
 /*
 IntelliJ IDEA 2024.2.4 (Community Edition)
@@ -21,11 +21,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class AddressDto {
-
-//    @NotNull(message = "cannot be null")
-//    @JsonProperty("id")
-//    private Long ID;
+public class UserAddressReqDto {
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")

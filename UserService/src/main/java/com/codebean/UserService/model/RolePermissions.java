@@ -40,6 +40,7 @@ public class RolePermissions {
     @JoinColumn(name = "PermissionId")
     private Permissions permission;
 
+    @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isActive;
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)

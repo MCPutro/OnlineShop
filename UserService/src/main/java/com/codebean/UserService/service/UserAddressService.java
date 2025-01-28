@@ -10,10 +10,14 @@ Version 1.0
 */
 
 import com.codebean.UserService.core.Service;
+import com.codebean.UserService.dto.request.UserAddressReqDto;
+import com.codebean.UserService.dto.response.UserAddressRespDto;
+import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
 import com.codebean.UserService.repository.UserAddressRepository;
 import com.codebean.UserService.repository.UserRepository;
+import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +59,7 @@ public class UserAddressService implements Service<UserAddress> {
     }
 
     @Override
-    @Transactional
+    @Transactional // done 1
     public ResponseEntity<Object> update(Long userId, UserAddress userAddress, HttpServletRequest request) {
         try {
             // find user
@@ -73,12 +77,13 @@ public class UserAddressService implements Service<UserAddress> {
                         data.setPostalCode(userAddress.getPostalCode());
                     });
                 } else {
-                    return new ResponseEntity<>("bad request", HttpStatus.NOT_FOUND);
+                    return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "1235", request);
                 }
             } else {
-                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+                return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "1235", request);
             }
-            return new ResponseEntity<>("Berhasil di update", HttpStatus.OK);
+            return Response.success(Constants.ADDRESS_UPDATED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
             return new ResponseEntity<>("bad request", HttpStatus.NOT_FOUND);
         }
@@ -114,7 +119,7 @@ public class UserAddressService implements Service<UserAddress> {
         return null;
     }
 
-    @Transactional
+    @Transactional //done 1
     public ResponseEntity<Object> addAddress(Long userId, UserAddress userAddress, HttpServletRequest request) {
         try {
             //find user by user id
@@ -125,15 +130,15 @@ public class UserAddressService implements Service<UserAddress> {
                 userAddress.setUser(user);
                 this.userAddressRepository.save(userAddress);
 
-                return new ResponseEntity<>("Adddress berhasil ditambah", HttpStatus.OK);
+                UserAddressRespDto userAddressRespDto = this.modelMapper.map(userAddress, UserAddressRespDto.class);
+
+                return Response.success(Constants.ADDRESS_SUCCESSFULLY_ADDED, userAddressRespDto, request);
             } else {
-                return new ResponseEntity<>("User gak ada", HttpStatus.BAD_REQUEST);
+                return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSRA01001", request);
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Adddress gagal ditambah", HttpStatus.INTERNAL_SERVER_ERROR);
+            return Response.internalServerError(e.getMessage(), "FVUSRA01002", request);
         }
     }
 

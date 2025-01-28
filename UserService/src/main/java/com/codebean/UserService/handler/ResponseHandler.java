@@ -33,9 +33,10 @@ public class ResponseHandler {
             map.put("success", !status.isError());
             if (errorCode != null) {
                 map.put("error_code", errorCode);
-                map.put("path", request == null ? "" : request.getRequestURI());
                 map.put("error_detail", data == null ? "" : data);
+                map.put("path", request == null ? "" : request.getRequestURI());
                 map.put("path2", request == null ? "" : request.getContextPath());
+                map.put("method", request == null ? "" : request.getMethod());
             }
         } else {
             map.put("message", message);
