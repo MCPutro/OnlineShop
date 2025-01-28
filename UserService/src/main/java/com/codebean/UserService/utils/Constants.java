@@ -10,14 +10,20 @@ Version 1.0
 */
 
 public class Constants {
-    public static final String LOGINSUCCESS = "Login Success";
-    public static final String ACCOUNTCREATED = "Account Created";
+    public static final String USER_ID = "userId";
 
-    public static final String WRONGUSERNAMEORPASSWORD = "Invalid username or password";
-    public static final String ACCOUNTISNOTACTIVE = "Account is not active";
-    public static final String INVALIDROLE = "Invalid role";
+    public static final String LOGIN_SUCCESS = "Login Success";
+    public static final String ACCOUNT_CREATED = "Account Created";
+    public static final String SUCCESS = "Success";
+    public static final String UPDATES_SUCCESS = "Updates Success";
 
-    public static final String EMAILADDRESSALREADYEXIST = "Email Address Already Exist";
-    public static final String USERNAMEALREADYEXIST = "Username Already Exist";
+    public static final String INVALID_USERNAME_OR_PASSWORD = "Invalid username or password";
+    public static final String INVALID_ROLE = "Invalid role";
+    public static final String INVALID_REQUEST = "Invalid request";
+
+    public static final String ACCOUNT_IS_NOT_ACTIVE = "Account is not active";
+
+    public static final String EMAIL_ADDRESS_ALREADY_EXIST = "Email Address Already Exist";
+    public static final String USERNAME_ALREADY_EXIST = "Username Already Exist";
 
 }

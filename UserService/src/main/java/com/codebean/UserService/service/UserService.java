@@ -10,8 +10,9 @@ Version 1.0
 */
 
 import com.codebean.UserService.dto.AddressDto;
+import com.codebean.UserService.dto.PermissionDto;
 import com.codebean.UserService.dto.UserProfileDto;
-import com.codebean.UserService.dto.UserDetailDTO;
+import com.codebean.UserService.dto.UserDetailDto;
 import com.codebean.UserService.dto.response.UserRegRespDto;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.handler.ResponseHandler;
@@ -20,7 +21,10 @@ import com.codebean.UserService.repository.*;
 import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -37,6 +41,7 @@ import java.util.stream.Collectors;
  * Modul Code : 01
  * FV = Failed Validation
  * FE = Failed Error
+ * ex = FVUSR01001 -> [FV] [USR] [01] 001
  */
 
 @Service
@@ -73,14 +78,6 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
         this.listError = new ArrayList<>();
 
-        // Custom mapping
-//        TypeMap<UserRegisterDTO, User> typeMap = modelMapper.createTypeMap(UserRegisterDTO.class, User.class);
-//        typeMap.addMappings(mapper -> {
-//            mapper.map(UserRegisterDTO::getUsername, User::setUsername);
-//            mapper.map(UserRegisterDTO::getPassword, User::setPassword);
-//            mapper.map(UserRegisterDTO::getEmail, User::setEmail);
-//            mapper.map(UserRegisterDTO::getPhoneNumber, User::setPhoneNumber);
-//        });
     }
 
     @Override
@@ -90,18 +87,18 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
             // cek email
             if (this.userRepository.existsByEmail(user.getEmail())) {
-                this.listError.add(Constants.EMAILADDRESSALREADYEXIST);
+                this.listError.add(Constants.EMAIL_ADDRESS_ALREADY_EXIST);
             }
 
             // cek username
             if (this.userRepository.existsByUsername(user.getUsername())) {
-                this.listError.add(Constants.USERNAMEALREADYEXIST);
+                this.listError.add(Constants.USERNAME_ALREADY_EXIST);
             }
 
             // cek role
             Optional<Role> optionalRole = this.roleRepository.findByName(user.getRole().getName());
             if (optionalRole.isEmpty()) {
-                this.listError.add(Constants.INVALIDROLE);
+                this.listError.add(Constants.INVALID_ROLE);
             }
 
             //return if you got error
@@ -125,7 +122,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             UserRegRespDto userResponse = this.modelMapper.map(user, UserRegRespDto.class);
             userResponse.setRole(user.getRole().getName());
 
-            return Response.created(Constants.ACCOUNTCREATED, userResponse, request);
+            return Response.created(Constants.ACCOUNT_CREATED, userResponse, request);
 
         } catch (Throwable e) {
             this.listError.add(e.getMessage());
@@ -137,19 +134,17 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Transactional
     public ResponseEntity<Object> update(Long id, User userUpdate, HttpServletRequest request) {
         try {
-            if (!Objects.equals(id, userUpdate.getID())) {
-                return new ResponseEntity<>("BAD_REQUEST", HttpStatus.BAD_REQUEST);
-            }
-
+            this.listError.clear();
             Optional<User> optionalUser = this.userRepository.findFirstByIDAndIsActive(id, true);
 
             if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-
                 // cek email
                 if (this.userRepository.existsByEmail(userUpdate.getEmail())) {
-                    return new ResponseEntity<>("Email sudah terdaftar", HttpStatus.BAD_REQUEST);
+                    this.listError.add(Constants.EMAIL_ADDRESS_ALREADY_EXIST);
+                    return Response.badRequest(this.listError, "FVUSR01002", request);
                 }
+
+                User user = optionalUser.get();
 
                 //update user profile
                 if (user.getProfile() != null) {
@@ -164,19 +159,24 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 }
 
                 // update user
-//                user.setUsername(userUpdate.getUsername()); // untuk username apa bisa di update ?
-                user.setPassword(userUpdate.getPassword());
                 user.setEmail(userUpdate.getEmail());
                 user.setPhoneNumber(userUpdate.getPhoneNumber());
 
+                //save change
                 this.userRepository.save(user);
-                return new ResponseEntity<>("berhasil di update", HttpStatus.OK);
+
+                UserDetailDto userDetailDto = this.modelMapper.map(user, UserDetailDto.class);
+                userDetailDto.setRole(user.getRole().getName());
+                //return response
+                return Response.success(Constants.UPDATES_SUCCESS, userDetailDto, request);
             } else {
-                return new ResponseEntity<>("Bad Request", HttpStatus.NOT_FOUND);
+                this.listError.add(Constants.INVALID_REQUEST);
+                return Response.badRequest(this.listError, "FVUSR01003", request);
             }
         } catch (Throwable t) {
             //return error
-            return new ResponseEntity<>(t.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            this.listError.add(t.getMessage());
+            return Response.internalServerError(this.listError, "FEUSR01004", request);
         }
     }
 
@@ -194,8 +194,20 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Override
     @Transactional
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
-        List<User> customer = this.userRepository.findAllByRole_NameAndIsActive("Customer", true);
-        return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, customer, null, request);
+        Iterable<User> iterableUser = this.userRepository.findAll();
+
+        List<UserDetailDto> listUserDetailDTO = new ArrayList<>();
+        iterableUser.forEach(user -> {
+            UserDetailDto userDetail = this.modelMapper.map(user, UserDetailDto.class);
+            userDetail.setRole(user.getRole().getName());
+            userDetail.setProfile(this.modelMapper.map(user.getProfile(), UserProfileDto.class));
+            listUserDetailDTO.add(userDetail);
+            if (user.getAddresses() != null && !user.getAddresses().isEmpty()) {
+                userDetail.setAddresses(this.modelUserAddressToDTO(user.getAddresses()));
+            }
+
+        });
+        return Response.success(Constants.SUCCESS, listUserDetailDTO, request);
     }
 
     @Override
@@ -203,7 +215,23 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
         Optional<User> optionalUser = this.userRepository.findById(id);
         if (optionalUser.isPresent()) {
-            return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, optionalUser, null, request);
+            User user = optionalUser.get();
+            UserDetailDto userDetailDTO = this.modelMapper.map(user, UserDetailDto.class);
+            userDetailDTO.setRole(user.getRole().getName());
+            userDetailDTO.setProfile(this.modelMapper.map(user.getProfile(), UserProfileDto.class));
+
+            // address
+            if (user.getAddresses() != null && !user.getAddresses().isEmpty()) {
+                userDetailDTO.setAddresses(this.modelUserAddressToDTO(user.getAddresses()));
+            }
+
+            // permission
+            if (user.getPermissions() != null && !user.getPermissions().isEmpty()) {
+                userDetailDTO.setPermissions(this.modelPermissionToDto(user.getPermissions()));
+            }
+
+//            return new ResponseHandler().handleResponse("Berhasil", HttpStatus.OK, optionalUser, null, request);
+            return Response.success(Constants.SUCCESS, userDetailDTO, request);
         }
 
         return new ResponseHandler().handleResponse("Kosong", HttpStatus.OK, null, null, request);
@@ -227,7 +255,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 List<UserAddress> listActiveUserAddress = this.userAddressRepository.findAllByUserAndIsActive(user, addressStatus);
                 user.setAddresses(listActiveUserAddress);
 
-                UserDetailDTO userDetailDTO = this.userModelToDTO(user);
+                UserDetailDto userDetailDTO = this.userModelToDTO(user);
 
                 return new ResponseEntity<>(userDetailDTO, HttpStatus.OK);
             }
@@ -245,10 +273,9 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 //        return null;
 //    }
 
-    public User custDTOtoUserModel(Object dto, String role, String createBy) {
+    public User dtoUserToModel(Object dto) {
         try {
             User customer = this.modelMapper.map(dto, User.class);
-            customer.setRole(new Role(role));
 
             return customer;
         } catch (Throwable e) {
@@ -258,10 +285,10 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     }
 
 
-    public UserDetailDTO userModelToDTO(User user) {
+    public UserDetailDto userModelToDTO(User user) {
 
 
-        UserDetailDTO userDetailDTO = this.modelMapper.map(user, UserDetailDTO.class);
+        UserDetailDto userDetailDTO = this.modelMapper.map(user, UserDetailDto.class);
 
         userDetailDTO.setRole(user.getRole().getName());
 
@@ -285,5 +312,15 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
 //        return UserDetailDTO.builder().id(user.getID()).username(user.getUsername()).email(user.getEmail()).phoneNumber(user.getPhoneNumber()).role(user.getRole().getName()).profile(userProfileDto).build();
         return userDetailDTO;
+    }
+
+    private List<AddressDto> modelUserAddressToDTO(List<UserAddress> listUserAddress) {
+        return this.modelMapper.map(listUserAddress, new TypeToken<List<AddressDto>>() {
+        }.getType());
+    }
+
+    private Set<PermissionDto> modelPermissionToDto(Set<Permissions> permissions) {
+        return this.modelMapper.map(permissions, new TypeToken<Set<PermissionDto>>() {
+        }.getType());
     }
 }

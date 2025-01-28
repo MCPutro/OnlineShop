@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserProfileDto {
 
     @NotEmpty(message = "cannot be empty")
@@ -35,8 +34,6 @@ public class UserProfileDto {
     @NotNull(message = "cannot be null")
     private String lastName;
 
-    @NotEmpty(message = "cannot be empty")
-    @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
     private LocalDateTime dateOfBirth;
 
@@ -45,19 +42,9 @@ public class UserProfileDto {
     @NotNull(message = "cannot be null")
     private String gender;
 
-    @NotEmpty(message = "cannot be empty")
-    @NotBlank(message = "cannot be blank")
-    @NotNull(message = "cannot be null")
-    private String profilePicture;
+//    @NotEmpty(message = "cannot be empty")
+//    @NotBlank(message = "cannot be blank")
+//    @NotNull(message = "cannot be null")
+//    private String profilePicture;
 
-    @Override
-    public String toString() {
-        return "UserProfileDto{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", gender='" + gender + '\'' +
-                ", profilePicture='" + profilePicture + '\'' +
-                '}';
-    }
 }

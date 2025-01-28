@@ -60,7 +60,7 @@ public class AuthController {
     @PostMapping("/v1/login")
     public ResponseEntity<Object> Login(@RequestBody UserLoginDto dto, HttpServletRequest request) {
         // validasi data input
-        this.validator.validate(dto, "FVUSR01001x", request);
+        this.validator.validate(dto, "FVUSR02001", request);
 
         User userLoginReq = new User();
         BeanUtils.copyProperties(dto, userLoginReq);

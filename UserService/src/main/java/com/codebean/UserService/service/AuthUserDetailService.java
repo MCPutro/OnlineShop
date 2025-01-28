@@ -10,7 +10,6 @@ Version 1.0
 */
 
 import com.codebean.UserService.dto.response.UserLoginRespDto;
-import com.codebean.UserService.dto.response.UserRegRespDto;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Permissions;
 import com.codebean.UserService.model.User;
@@ -20,7 +19,6 @@ import com.codebean.sharemodule.Jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,7 +27,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -62,17 +59,17 @@ public class AuthUserDetailService implements UserDetailsService {
             //find user by username
             Optional<User> optionalUserByUsername = this.userRepository.findFirstByUsername(user.getUsername());
             if (!optionalUserByUsername.isPresent()) {
-                return Response.unauthorized(Constants.WRONGUSERNAMEORPASSWORD, "FEAUT0010", request);
+                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FEAUT0010", request);
             }
 
             User userDB = optionalUserByUsername.get();
 
             if (!this.passwordEncoder.matches((user.getUsername() + user.getPassword()), userDB.getPassword())) {
-                return Response.unauthorized(Constants.WRONGUSERNAMEORPASSWORD, "FEAUT0010", request);
+                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FEAUT0010", request);
             }
 
             if (!userDB.getIsActive()) {
-                return Response.unauthorized(Constants.ACCOUNTISNOTACTIVE, "FEAUT0020", request);
+                return Response.unauthorized(Constants.ACCOUNT_IS_NOT_ACTIVE, "FEAUT0020", request);
             }
 
             String token = this.jwtUtil.generateToken(userDB.getUsername(), userDB.getID(),
@@ -86,7 +83,7 @@ public class AuthUserDetailService implements UserDetailsService {
             userLoginRespDto.setId(userDB.getID());
             userLoginRespDto.setRole(userDB.getRole().getName());
 
-            return Response.success(Constants.LOGINSUCCESS, userLoginRespDto, request);
+            return Response.success(Constants.LOGIN_SUCCESS, userLoginRespDto, request);
         } catch (Exception e) {
 
             return Response.internalServerError(e.getMessage(), "FEAUT0030", request);

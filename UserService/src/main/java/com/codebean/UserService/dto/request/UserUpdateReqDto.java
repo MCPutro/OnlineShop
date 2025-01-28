@@ -11,19 +11,19 @@ Version 1.0
 
 import com.codebean.UserService.dto.UserProfileDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Setter
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserUpdateReqDto {
 
-    @NotNull(message = "cannot be null")
-    @JsonProperty("id")
-    private Long ID;
+//    @NotNull(message = "cannot be null")
+//    @JsonProperty("id")
+//    private Long ID;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
@@ -32,11 +32,6 @@ public class UserUpdateReqDto {
     @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._]{7,19}$", message = "harus di awali dengan huruf, terdiri dari 8-20 karakter, simbol yang diperboleh kan hanya . dan _ ")
     private String username;
 
-    @NotEmpty(message = "cannot be empty")
-    @NotBlank(message = "cannot be blank")
-    @NotNull(message = "cannot be null")
-    @Size(min = 8, max = 50, message = "must contain 8-50 character")
-    private String password;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
@@ -49,7 +44,7 @@ public class UserUpdateReqDto {
     @NotNull(message = "cannot be null")
     private String phoneNumber;
 
-    @JsonProperty("profile")
+    @Valid
     private UserProfileDto profile;
 
 }

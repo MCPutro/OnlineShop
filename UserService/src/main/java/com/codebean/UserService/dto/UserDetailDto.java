@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -20,12 +21,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDetailDTO {
+public class UserDetailDto {
     private Long id;
     private String username;
     private String email;
     private String phoneNumber;
     private String role;
+    private Boolean isActive;
     private UserProfileDto profile;
     private List<AddressDto> addresses;
+    private Set<PermissionDto> permissions;
 }
