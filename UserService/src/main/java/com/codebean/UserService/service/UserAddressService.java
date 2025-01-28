@@ -50,12 +50,13 @@ public class UserAddressService implements Service<UserAddress> {
 
     @Override
     public ResponseEntity<Object> save(UserAddress userAddress, HttpServletRequest request) {
-        try {
-            this.userAddressRepository.save(userAddress);
-            return new ResponseEntity<>("Address berhasil di simpan", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Address gagal di simpan", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        try {
+//            this.userAddressRepository.save(userAddress);
+//            return new ResponseEntity<>("Address berhasil di simpan", HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Address gagal di simpan", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
