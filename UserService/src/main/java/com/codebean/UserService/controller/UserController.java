@@ -1,8 +1,10 @@
 package com.codebean.UserService.controller;
 
 import com.codebean.UserService.dto.request.UserAddressReqDto;
+import com.codebean.UserService.dto.request.UserCreateReqDto;
 import com.codebean.UserService.dto.request.UserUpdateReqDto;
 import com.codebean.UserService.handler.Response;
+import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
 import com.codebean.UserService.service.UserAddressService;
@@ -28,6 +30,23 @@ public class UserController {
 
     @Autowired
     private ValidationService validationService;
+
+    @PreAuthorize("hasAuthority('SHOWUSERDETAIL')")
+    @PostMapping(path = "/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> createUser(@RequestBody UserCreateReqDto dto, HttpServletRequest request) {
+        try {
+            this.validationService.validate(dto, "asdad", request);
+
+            User user = this.userService.dtoUserToModel(dto);
+            user.setRole(new Role(dto.getRole()));
+
+            return  this.userService.save(user, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @PreAuthorize("hasAuthority('SHOWUSERS')") //done
     @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)

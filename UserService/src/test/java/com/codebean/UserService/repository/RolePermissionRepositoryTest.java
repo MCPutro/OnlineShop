@@ -1,11 +1,16 @@
 package com.codebean.UserService.repository;
 
+import com.codebean.UserService.dto.PermissionDto;
+import com.codebean.UserService.dto.response.RolePermissionRespDto;
+import com.codebean.UserService.model.Permissions;
+import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.RolePermissions;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 /*
@@ -23,6 +28,9 @@ class RolePermissionRepositoryTest {
     @Autowired
     private RolePermissionRepository rolePermissionRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Test
     void FindByRoleName() {
         List<RolePermissions> customer = this.rolePermissionRepository.findAllByRole_NameAndIsActiveIsTrue("Customer");
@@ -31,5 +39,29 @@ class RolePermissionRepositoryTest {
         for (RolePermissions rolePermissions : customer) {
             System.out.println(rolePermissions.getPermission().getName());
         }
+    }
+
+    @Test
+    void FindAllActiveRole() {
+        List<RolePermissions> allByIsActive = this.rolePermissionRepository.findAllByRole_IsActiveAndIsActive(true, true);
+
+        Map<Long, RolePermissionRespDto> mapRole = new HashMap<>();
+
+        for (RolePermissions rp : allByIsActive) {
+            // cek role udah ada belum
+            RolePermissionRespDto rolePer = mapRole.get(rp.getRole().getID());
+            if (rolePer == null) {
+                RolePermissionRespDto data = new RolePermissionRespDto(rp.getRole().getID(), rp.getRole().getName(), rp.getIsActive());
+
+                data.getPermissions().add(this.modelMapper.map(rp.getPermission(), PermissionDto.class));
+
+                mapRole.put(rp.getRole().getID(), data);
+            } else {
+                rolePer.getPermissions().add(this.modelMapper.map(rp.getPermission(), PermissionDto.class));
+            }
+        }
+
+        System.out.println(mapRole);
+
     }
 }

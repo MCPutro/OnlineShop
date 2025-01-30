@@ -16,4 +16,6 @@ import java.util.List;
 
 public interface RolePermissionRepository extends CrudRepository<RolePermissions, Long> {
     List<RolePermissions> findAllByRole_NameAndIsActiveIsTrue(String roleName);
+
+    List<RolePermissions> findAllByRole_IsActiveAndIsActive(Boolean roleIsActive, Boolean permissionIsActive);
 }

@@ -17,6 +17,7 @@ import com.codebean.UserService.model.User;
 import com.codebean.UserService.service.AuthUserDetailService;
 import com.codebean.UserService.service.UserService;
 import com.codebean.UserService.service.ValidationService;
+import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class AuthController {
         this.validator.validate(dto, "FVUSR01001x", request);
 
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "Password do not match", "FVUSR01001x", request);
+            throw new ApiException(HttpStatus.BAD_REQUEST, Constants.CONFIRM_PASSWORD_NOT_MATCH, "FVUSR01001x", request);
         }
 
         // convert dto to model cara 1
@@ -67,7 +68,16 @@ public class AuthController {
 
         return this.authUserDetailService.loginUser(userLoginReq, request);
 
+    }
 
+    @PostMapping("/v1/refreshToken")
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        try {
+//            belum di buat
+            return null;
+        } catch (Exception e) {
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "FVUSR01001x", request);
+        }
     }
 
 }

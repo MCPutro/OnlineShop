@@ -110,10 +110,18 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
             // user profile
             user.setProfile(UserProfile.builder().user(user).build());
 
-            //set default permissions by role
-            List<RolePermissions> listRolePermissions = this.rolePermissionRepository.findAllByRole_NameAndIsActiveIsTrue(user.getRole().getName());
-            Set<Permissions> collect = listRolePermissions.stream().map(RolePermissions::getPermission).collect(Collectors.toSet());
-            user.setPermissions(collect);
+            //set default permissions by role if null
+            if (user.getPermissions() == null || user.getPermissions().isEmpty()) {
+                List<RolePermissions> listRolePermissions = this.rolePermissionRepository.findAllByRole_NameAndIsActiveIsTrue(user.getRole().getName());
+                Set<Permissions> collect = listRolePermissions.stream().map(RolePermissions::getPermission).collect(Collectors.toSet());
+                user.setPermissions(collect);
+            } else {
+                // find role by role id
+                Iterable<Permissions> permissionsById = this.permissionsRepository.findAllById(user.getPermissions().stream().map(Permissions::getID).toList());
+                Set<Permissions> listPermissions = new HashSet<>();
+                permissionsById.forEach(listPermissions::add);
+                user.setPermissions(listPermissions);
+            }
 
             this.userRepository.save(user);
 

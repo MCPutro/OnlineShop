@@ -27,9 +27,11 @@ public class Constants {
     public static final String ACCOUNT_NOT_FOUND = "Account not found";
     public static final String ADDRESS_NOT_FOUND = "Address not found";
 
-    public static final String EMAIL_ADDRESS_ALREADY_EXIST = "Email Address Already Exist";
-    public static final String USERNAME_ALREADY_EXIST = "Username Already Exist";
+    public static final String EMAIL_ADDRESS_ALREADY_EXIST = "Email address already exist";
+    public static final String USERNAME_ALREADY_EXIST = "Username already exist";
 
     public static final String BAD_DATA = "Bad data";
+
+    public static final String CONFIRM_PASSWORD_NOT_MATCH = "Confirm password not match";
 
 }
