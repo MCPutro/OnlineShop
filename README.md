@@ -83,7 +83,7 @@ Online-Shop
     └── .gitignore
 ```
 
-###   
+###     
 
 1. **Proyek Induk (`Online-Shop`)**:
     - Ini adalah proyek utama yang menggabungkan beberapa sub-modul. Ini berisi file `pom.xml` yang mendefinisikan POM
@@ -105,14 +105,29 @@ Online-Shop
     - **WebsiteUI**:
         - Mengelola komponen antarmuka pengguna dari aplikasi.
 
-   
 ### Initial data ada di file [Master.sql](Master.sql) dan [Product.sql](Product.sql)
 
 ### User & Password
+
+Admin
 > Username : admin123
-> 
+>
 > Password : 12345678
 
+Customer
+> Username : customer001
+>
+> Password : 12345678
 
 ### Postman Collection
-untuk testing pake Postman/insomnia bisa coba import file [CodeBean.postman_collection.json](CodeBean.postman_collection.json)
+
+untuk testing pake Postman/Insomnia bisa coba import
+file [CodeBean.postman_collection.json](CodeBean.postman_collection.json)
+
+### Permission
+
+- hak akses untuk suatu api, setiap user memiliki relasi many to many dengan permission, relasi nya bisa di table
+  UserPermissions.
+- untuk list permission ada di table Permissions.
+- table DefaultRolePermission itu berisikan permission untuk role, yang akan digunakan sebagai default permission saat
+  membuat/mendaftarkan user baru.
