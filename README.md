@@ -106,7 +106,7 @@ Online-Shop
         - Mengelola komponen antarmuka pengguna dari aplikasi.
 
    
-### Initial data ada di file Master.sql dan Product.sql 
+### Initial data ada di file [Master.sql](Master.sql) dan [Product.sql](Product.sql)
 
 ### User & Password
 > Username : admin123
