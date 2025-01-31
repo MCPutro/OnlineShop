@@ -24,5 +24,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.name = :categoryName")
     List<Product> findProductsByCategoryName(@Param("categoryName") String categoryName);
 
+    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.id = :categoryId")
+    List<Product> findProductsByCategoryId(@Param("categoryId") String categoryId);
+
     List<Product> findAllByNameContainingIgnoreCase(String name);
 }

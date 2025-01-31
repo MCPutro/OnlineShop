@@ -31,8 +31,8 @@ public class UserController {
     @Autowired
     private ValidationService validationService;
 
-    @PreAuthorize("hasAuthority('SHOWUSERDETAIL')")
-    @PostMapping(path = "/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ADDUSER')")
+    @PostMapping(path = "/user-create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> createUser(@RequestBody UserCreateReqDto dto, HttpServletRequest request) {
         try {
             this.validationService.validate(dto, "asdad", request);
@@ -43,7 +43,7 @@ public class UserController {
             return  this.userService.save(user, request);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            return Response.badRequest(e.getMessage(), "FVUSR010001", request);
         }
 
     }

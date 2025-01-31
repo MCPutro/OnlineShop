@@ -39,9 +39,13 @@ public class CategoryController {
         return this.categoryService.save(category, request);
     }
 
-    @GetMapping(path = "/category")
+    @GetMapping(path = "/all-category")
     public ResponseEntity<?> getAllCategory(HttpServletRequest request) {
-//        return this.categoryService.findAll(null, request);
+        return this.categoryService.findAll(null, request);
+    }
+
+    @GetMapping(path = "/category")
+    public ResponseEntity<?> getAllCategoryActive(HttpServletRequest request) {
         return this.categoryService.findAllByStatus(true, request);
     }
 

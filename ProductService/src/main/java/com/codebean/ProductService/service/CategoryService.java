@@ -10,9 +10,14 @@ Version 1.0
 */
 
 import com.codebean.ProductService.core.iService;
+import com.codebean.ProductService.dto.CategoryDto;
+import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Category;
 import com.codebean.ProductService.repository.CategoryRepository;
+import com.codebean.ProductService.util.Constants;
 import jakarta.servlet.http.HttpServletRequest;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Pageable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,21 +33,26 @@ import java.util.Optional;
 public class CategoryService implements iService<Category> {
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private CategoryRepository categoryRepository;
+
+    private List<CategoryDto> categoryDtos = new ArrayList<>();
 
     @Override
     public ResponseEntity<Object> save(Category category, HttpServletRequest request) {
         try {
             Optional<Category> optionalCategory = this.categoryRepository.findFirstByName(category.getName());
             if (optionalCategory.isPresent()) {
-                return new ResponseEntity<>("sudah terdaftar", HttpStatus.BAD_REQUEST);
+                return Response.badRequest(Constants.CATEGORY_ALREADY_EXIST, "adasdas", request);
             }
 
             this.categoryRepository.save(category);
 
-            return new ResponseEntity<>(category, HttpStatus.CREATED);
+            return Response.created(Constants.CATEGORY_CREATED_SUCCESSFULLY, this.modelMapper.map(category, CategoryDto.class), request);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return Response.internalServerError(e.getMessage(), "asdasd", request);
         }
     }
 
@@ -51,23 +62,23 @@ public class CategoryService implements iService<Category> {
         try {
             Optional<Category> optionalCategoryByName = this.categoryRepository.findFirstByName(category.getName());
             if (optionalCategoryByName.isPresent()) {
-                return new ResponseEntity<>("Category sudah ada", HttpStatus.NOT_FOUND);
+                return Response.badRequest(Constants.CATEGORY_ALREADY_EXIST, "adasdas", request);
             }
 
             Optional<Category> optionalCategoryById = this.categoryRepository.findById(id);
             if (optionalCategoryById.isEmpty()) {
-                return new ResponseEntity<>("gak ketemu", HttpStatus.NOT_FOUND);
+                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "adasdas", request);
             }
 
             optionalCategoryById.ifPresent(data -> {
                 data.setName(category.getName());
             });
 
-            return new ResponseEntity<>("berhasil", HttpStatus.OK);
+            return Response.success(Constants.CATEGORY_UPDATED_SUCCESSFULLY, this.modelMapper.map(category, CategoryDto.class), request);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return Response.internalServerError(e.getMessage(), "asdasd", request);
         }
     }
 
@@ -79,9 +90,13 @@ public class CategoryService implements iService<Category> {
             optionalCategory.ifPresent(category -> {
                 category.setIsActive(false);
             });
-            return null;
+
+            if (!optionalCategory.isPresent()) {
+                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "adasdas", request);
+            }
+            return Response.success(Constants.CATEGORY_DELETED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return Response.internalServerError(e.getMessage(), "asdasd", request);
         }
 
     }
@@ -90,14 +105,23 @@ public class CategoryService implements iService<Category> {
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         Iterable<Category> all = this.categoryRepository.findAll();
-        return new ResponseEntity<>(all, HttpStatus.OK);
+
+        this.categoryDtos.clear();
+
+        all.forEach(category -> categoryDtos.add(this.modelMapper.map(category, CategoryDto.class)));
+
+        return Response.success(Constants.SUCCESS, categoryDtos, request);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
         Optional<Category> optionalCategory = this.categoryRepository.findById(id);
-        return new ResponseEntity<>(optionalCategory.orElse(null), HttpStatus.OK);
+        if (!optionalCategory.isPresent()) {
+            return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "adasdas", request);
+        }
+
+        return Response.success(Constants.SUCCESS, this.modelMapper.map(optionalCategory.get(), CategoryDto.class), request);
     }
 
     @Override
@@ -109,6 +133,11 @@ public class CategoryService implements iService<Category> {
     public ResponseEntity<Object> findAllByStatus(Boolean status, HttpServletRequest request) {
         status = status == null ? Boolean.TRUE : status;
         List<Category> listActiveCategory = this.categoryRepository.findAllByIsActive(status);
-        return new ResponseEntity<>(listActiveCategory, HttpStatus.OK);
+        return Response.success(Constants.SUCCESS, this.listCategoryModelToDto(listActiveCategory), request);
+    }
+
+    public List<CategoryDto> listCategoryModelToDto(List<Category> category) {
+        return this.modelMapper.map(category, new TypeToken<List<CategoryDto>>() {
+        }.getType());
     }
 }
