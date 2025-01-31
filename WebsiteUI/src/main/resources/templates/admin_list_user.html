@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700}">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+<div class="site-wrap">
+    <!-- Header Admin-->
+    <header class="site-navbar" role="banner">
+        <div class="site-navbar-top">
+            <div class="container">
+                <div class="row align-items-center">
+
+                    <div class="col-12 mb-3 mb-md-0 col-md-3 order-1 order-md-1 text-md-left text-center">
+                        <div class="site-logo">
+                            <a href="index.html" class="js-logo-clone">Shoppers</a>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-6 order-2 order-md-2 site-search-icon text-center border-0">
+                        <h3 class="h2 text-black">User Management</h3>
+                    </div>
+
+
+                    <div class="col-6 col-md-3 order-3 order-md-3 text-right">
+                        <div class="site-top-icons">
+                            <ul>
+                                <!-- jika belum login-->
+                                <li><a href="#"><strong>LOGIN</strong></a></li>
+                                <!-- jika sudah login-->
+                                <li><a href="#"><span class="icon icon-person"></span></a></li>
+                                <li><a href="#"><span class="icon icon-sign-out"></span></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <nav class="site-navigation text-right text-md-center" role="navigation">
+            <div class="container">
+                <ul class="site-menu js-clone-nav d-none d-md-block">
+                    <li class=""><a href="coba_admin_dashboard.html">Dashboard</a></li>
+                    <li class=""><a href="admin_list_product_category.html">Product</a></li>
+                    <li class="active"><a href="admin_list_user.html">User</a></li>
+                    <li class=""><a href="#">Transaction</a></li>
+                    <li class=""><a href="#">Report</a></li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <br>
+    <!--Isi content-->
+    <div class="site-section-sm mb-5">
+        <div class="container">
+            <div class="row align-items-center mb-3">
+                <div class="col-12 mb-3 mb-md-0 col-md-3 order-1 order-md-1 text-left ">
+                    <div class="site-logo">
+                        <a href="/admin/user-new" class="btn btn-primary">Add Account</a>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-9 order-2 order-md-2 site-search-icon border-0 ">
+                    <!--<form action="" class="site-block-top-search">-->
+                    <!--    <span class="icon icon-search2"></span>-->
+                    <!--    <input type="text" class="form-control border-0" placeholder="Search">-->
+                    <!--</form>-->
+                    <form class="form-inline site-search-icon center" action="/action_page.php">
+                        <!--                        <span class="icon icon-search2"></span>-->
+                        <input type="Search" name="search" class="form-control border col-6 col-md-6 rounded-0"
+                               placeholder="Search" required>
+                        <select id="filter" name="filterBy"
+                                class="form-control col-3 col-md-3 border border-left-0 rounded-0">
+                            <option value="username">Username</option>
+                            <option value="email">Email</option>
+                            <option value="role">Role</option>
+                            <!--<option value="audi">Audi</option>-->
+                        </select>
+                        <button type="submit" class="btn btn-outline-info ml-3 ">Apply</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <table class="table table-hover">
+                <thead>
+                <tr class="text-primary">
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col" class="text-center text-md-center">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-black align-content-center a" th:each="usr, seq : ${listUser}">
+                    <th scope="row" th:text="${seq.count}"></th>
+                    <td><a th:href="@{/admin/user-view/{id}(id=${usr.getId()})}" th:text="${usr.getUsername()}"></a></td>
+                    <td th:text="${usr.getEmail()}"></td>
+                    <td th:text="${usr.getRole()}"></td>
+                    <td class="text-center text-md-center">
+                        <span class="badge badge-secondary col-5 p-2" th:if="${usr.getIsActive() == false}">Inactive</span>
+                        <span class="badge badge-success col-5 p-2"      th:if="${usr.getIsActive() == true}">Active</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--Footer-->
+    <footer class="site-footer border-top">
+        <div class="container">
+
+            <div class="row pt-5 mt-5 text-center">
+                <div class="col-md-12">
+                    <p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        Copyright &copy;<script data-cfasync="false"
+                                                src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+                        <script>document.write(new Date().getFullYear());</script>
+                        All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i>
+                        by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

@@ -61,12 +61,12 @@ public class User implements UserDetails {
     @JoinColumn(name = "RoleId", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_User_Role"))
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
 //    @JsonManagedReference
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
     private UserProfile profile;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // cascade di sini maksud nya akan melakukan update data di table user address juga
 //    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // cascade di sini maksud nya akan melakukan update data di table user address juga
     private List<UserAddress> addresses; // Daftar alamat yang dimiliki user, 1 user bisa punya banyak alamat, lihat dari sisi class user
 
     @Column(name = "CreatedBy", updatable = false, nullable = false)

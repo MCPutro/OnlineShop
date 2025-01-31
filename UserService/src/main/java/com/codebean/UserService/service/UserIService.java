@@ -9,14 +9,12 @@ Created on 10 Jan 2025 12:37
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.UserAddressReqDto;
+import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.PermissionDto;
 import com.codebean.UserService.dto.UserProfileDto;
 import com.codebean.UserService.dto.UserDetailDto;
-import com.codebean.UserService.dto.response.UserAddressRespDto;
 import com.codebean.UserService.dto.response.UserRegRespDto;
 import com.codebean.UserService.handler.Response;
-import com.codebean.UserService.handler.ResponseHandler;
 import com.codebean.UserService.model.*;
 import com.codebean.UserService.repository.*;
 import com.codebean.UserService.utils.Constants;
@@ -44,14 +42,18 @@ import java.util.stream.Collectors;
  */
 
 @Service
-public class UserService implements com.codebean.UserService.core.Service<User> {
+public class UserIService implements iService<User> {
 
+    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
     private UserAddressRepository userAddressRepository;
 
+    @Autowired
     private UserProfileRepository userProfileRepository;
 
     @Autowired
@@ -63,20 +65,13 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     @Autowired
     private ModelMapper modelMapper;
 
-    private List<String> listError;
+    private final List<String> listError;
 
 //    @Autowired
 //    private TransactionOperations transactionOperations;
 
-    @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserAddressRepository userAddressRepository, UserProfileRepository userProfileRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.userAddressRepository = userAddressRepository;
-        this.userProfileRepository = userProfileRepository;
-
+    public UserIService() {
         this.listError = new ArrayList<>();
-
     }
 
     @Override
@@ -107,7 +102,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 optionalRole.ifPresent(user::setRole);
             }
 
-            // user profile
+            // build user profile
             user.setProfile(UserProfile.builder().user(user).build());
 
             //set default permissions by role if null
@@ -205,7 +200,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
 
         List<UserDetailDto> listUserDetailDTO = new ArrayList<>();
         iterableUser.forEach(user -> {
-            listUserDetailDTO.add(this.userModelToDTO(user));
+            listUserDetailDTO.add(this.modelUserToDto(user));
 
         });
         return Response.success(Constants.SUCCESS, listUserDetailDTO, request);
@@ -251,7 +246,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
                 List<UserAddress> listActiveUserAddress = this.userAddressRepository.findAllByUserAndIsActive(user, addressStatus);
                 user.setAddresses(listActiveUserAddress);
 
-                UserDetailDto userDetailDTO = this.userModelToDTO(user);
+                UserDetailDto userDetailDTO = this.modelUserToDto(user);
 
                 return Response.success(Constants.SUCCESS, userDetailDTO, request);
             }
@@ -282,7 +277,7 @@ public class UserService implements com.codebean.UserService.core.Service<User> 
     }
 
 
-    public UserDetailDto userModelToDTO(User user) {
+    public UserDetailDto modelUserToDto(User user) {
 
         UserDetailDto userDetailDTO = this.modelMapper.map(user, UserDetailDto.class);
 

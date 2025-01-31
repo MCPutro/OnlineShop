@@ -40,7 +40,7 @@ public class AuthUserDetailService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private UserIService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

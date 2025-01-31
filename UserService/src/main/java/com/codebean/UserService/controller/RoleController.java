@@ -9,7 +9,7 @@ Created on 29 Jan 2025 16:17
 Version 1.0
 */
 
-import com.codebean.UserService.service.PermissionService;
+import com.codebean.UserService.service.PermissionIService;
 import com.codebean.UserService.service.RoleService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class RoleController {
     private RoleService roleService;
 
     @Autowired
-    private PermissionService permissionService;
+    private PermissionIService permissionService;
 
     @GetMapping("/roles")
     public ResponseEntity<?> getAllRoles(HttpServletRequest request) {

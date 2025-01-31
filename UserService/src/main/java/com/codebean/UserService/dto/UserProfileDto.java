@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -35,7 +36,7 @@ public class UserProfileDto {
     private String lastName;
 
     @NotNull(message = "cannot be null")
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")

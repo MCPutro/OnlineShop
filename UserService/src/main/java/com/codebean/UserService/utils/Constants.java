@@ -18,6 +18,8 @@ public class Constants {
     public static final String UPDATES_SUCCESS = "Updates Success";
     public static final String ADDRESS_SUCCESSFULLY_ADDED = "Address successfully added";
     public static final String ADDRESS_UPDATED_SUCCESSFULLY = "Address successfully updated";
+    public static final String ADDRESS_DELETED_SUCCESSFULLY = "Address successfully deleted";
+    public static final String ADDRESS_NOT_FOUND = "Address not found";
 
     public static final String INVALID_USERNAME_OR_PASSWORD = "Invalid username or password";
     public static final String INVALID_ROLE = "Invalid role";
@@ -25,7 +27,7 @@ public class Constants {
 
     public static final String ACCOUNT_IS_NOT_ACTIVE = "Account is not active";
     public static final String ACCOUNT_NOT_FOUND = "Account not found";
-    public static final String ADDRESS_NOT_FOUND = "Address not found";
+
 
     public static final String EMAIL_ADDRESS_ALREADY_EXIST = "Email address already exist";
     public static final String USERNAME_ALREADY_EXIST = "Username already exist";

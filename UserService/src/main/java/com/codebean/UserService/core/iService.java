@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.awt.print.Pageable;
 
-public interface Service<T> {
+public interface iService<T> {
     public ResponseEntity<Object> save(T t, HttpServletRequest request);//001-010
     public ResponseEntity<Object> update(Long id,T t, HttpServletRequest request);//011-020
     public ResponseEntity<Object> delete(Long id, HttpServletRequest request);//021-030

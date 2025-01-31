@@ -15,6 +15,7 @@ import com.codebean.ProductService.handler.ResponseHandler;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -49,6 +50,18 @@ public class ErrorController {
                 this.errorList, // Object obj,
                 exception.getErrorCode(),// Object errorCode,
                 exception.getRequest()// HttpServletRequest request
+        );
+    }
+
+    // Menangani AccessDeniedException ketika pengguna tidak memiliki izin
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDenied(AccessDeniedException exception) {
+        return new ResponseHandler().handleResponse(
+                null, // String message,
+                HttpStatus.FORBIDDEN,// HttpStatus status,
+                exception.getMessage(), // Object data,
+                "FORBIDDEN",// Object errorCode,
+                null// HttpServletRequest request
         );
     }
 }

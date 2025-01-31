@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,6 +30,7 @@ public class CategoryController {
     @Autowired
     private ValidationService validationService;
 
+    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYEDIT')")
     @PostMapping(path = "/category")
     public ResponseEntity<?> addCategory(@RequestBody CategoryAddDto dto, HttpServletRequest request) {
         this.validationService.validate(dto, "CTG010010", request);
@@ -39,26 +41,31 @@ public class CategoryController {
         return this.categoryService.save(category, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYVIEW')")
     @GetMapping(path = "/all-category")
     public ResponseEntity<?> getAllCategory(HttpServletRequest request) {
         return this.categoryService.findAll(null, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYACTIVEVIEW')")
     @GetMapping(path = "/category")
     public ResponseEntity<?> getAllCategoryActive(HttpServletRequest request) {
         return this.categoryService.findAllByStatus(true, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYVIEW')")
     @GetMapping(path = "/category/{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable Long categoryId, HttpServletRequest request) {
         return this.categoryService.findById(categoryId, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYEDIT')")
     @DeleteMapping(path = "/category/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId, HttpServletRequest request) {
         return this.categoryService.delete(categoryId, request);
     }
 
+    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYEDIT')")
     @PatchMapping(path = "/category/{categoryId}")
     public ResponseEntity<Object> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryAddDto dto, HttpServletRequest request) {
         this.validationService.validate(dto, "CTG010010", request);

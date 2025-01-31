@@ -9,6 +9,7 @@ Created on 29 Jan 2025 18:47
 Version 1.0
 */
 
+import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.PermissionDto;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Permissions;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PermissionService implements com.codebean.UserService.core.Service<Permissions> {
+public class PermissionIService implements iService<Permissions> {
 
     @Autowired
     private PermissionsRepository permissionsRepository;

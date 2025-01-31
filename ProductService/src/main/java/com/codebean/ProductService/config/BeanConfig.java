@@ -9,6 +9,7 @@ Created on 20 Jan 2025 13:10
 Version 1.0
 */
 
+import com.codebean.sharemodule.Jwt.JwtUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,5 +26,10 @@ public class BeanConfig {
     @Bean
     public AuditorAware<String> auditorProvider() {
         return new AuditorAwareConfig();
+    }
+
+    @Bean
+    public JwtUtil jwtUtil() {
+        return new JwtUtil();
     }
 }

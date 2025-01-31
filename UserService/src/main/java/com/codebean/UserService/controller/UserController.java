@@ -7,8 +7,8 @@ import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
-import com.codebean.UserService.service.UserAddressService;
-import com.codebean.UserService.service.UserService;
+import com.codebean.UserService.service.UserAddressIService;
+import com.codebean.UserService.service.UserIService;
 import com.codebean.UserService.service.ValidationService;
 import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserIService userService;
 
     @Autowired
-    private UserAddressService userAddressService;
+    private UserAddressIService userAddressService;
 
     @Autowired
     private ValidationService validationService;

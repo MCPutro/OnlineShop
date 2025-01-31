@@ -9,8 +9,7 @@ Created on 20 Jan 2025 11:39
 Version 1.0
 */
 
-import com.codebean.UserService.core.Service;
-import com.codebean.UserService.dto.request.UserAddressReqDto;
+import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.response.UserAddressRespDto;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.User;
@@ -37,7 +36,7 @@ import java.util.Optional;
  */
 
 @org.springframework.stereotype.Service
-public class UserAddressService implements Service<UserAddress> {
+public class UserAddressIService implements iService<UserAddress> {
 
     @Autowired
     private UserRepository userRepository;
@@ -85,7 +84,7 @@ public class UserAddressService implements Service<UserAddress> {
             }
             return Response.success(Constants.ADDRESS_UPDATED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
-            return new ResponseEntity<>("bad request", HttpStatus.NOT_FOUND);
+            return Response.internalServerError(e.getMessage(), "asd", request);
         }
     }
 
@@ -95,10 +94,10 @@ public class UserAddressService implements Service<UserAddress> {
         try {
             Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findById(addressId);
             optionalUserAddress.ifPresent(userAddress -> userAddress.setIsActive(false));
-            return new ResponseEntity<>("Adddress berhasil di hapus", HttpStatus.OK);
+            return Response.success(Constants.ADDRESS_DELETED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Adddress gagal di hapus", HttpStatus.OK);
+            return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "1235", request);
         }
 
     }

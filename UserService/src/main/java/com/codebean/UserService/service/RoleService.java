@@ -9,10 +9,10 @@ Created on 29 Jan 2025 15:52
 Version 1.0
 */
 
+import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.PermissionDto;
 import com.codebean.UserService.dto.response.RolePermissionRespDto;
 import com.codebean.UserService.handler.Response;
-import com.codebean.UserService.model.Permissions;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.RolePermissions;
 import com.codebean.UserService.repository.RolePermissionRepository;
@@ -27,10 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Pageable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
-public class RoleService implements com.codebean.UserService.core.Service<Role> {
+public class RoleService implements iService<Role> {
 
     @Autowired
     private RoleRepository roleRepository;

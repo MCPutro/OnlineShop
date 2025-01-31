@@ -15,7 +15,6 @@ import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.service.AuthUserDetailService;
-import com.codebean.UserService.service.UserService;
 import com.codebean.UserService.service.ValidationService;
 import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
