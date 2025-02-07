@@ -9,18 +9,14 @@ Created on 24 Jan 2025 01:11
 Version 1.0
 */
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.List;
+import lombok.*;
 
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLoginRespDto {
+public class UserLoginResp {
     private Long id;
     private String username;
     private String email;

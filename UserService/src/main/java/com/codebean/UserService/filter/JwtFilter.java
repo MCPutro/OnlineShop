@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.UserService.service.AuthUserDetailService;
+import com.codebean.UserService.utils.Constants;
 import com.codebean.sharemodule.Jwt.JwtConstants;
 import com.codebean.sharemodule.Jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -53,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
                             );
 
                     // menambahkan userid ke request
-                    request.setAttribute("userId", jwtClaims.get(JwtConstants.USERID).toString());
+                    request.setAttribute(Constants.USER_ID, jwtClaims.get(JwtConstants.USERID).toString());
 
                     // Menambahkan detail request ke objek Authentication
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

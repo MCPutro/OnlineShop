@@ -9,38 +9,30 @@ Created on 10 Jan 2025 07:33
 Version 1.0
 */
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Setter
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "Users")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails {
-
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long ID;
 
-    @Column(name = "Username", unique = true, nullable = false)
+    @Column(name = "Username", unique = true, nullable = false, updatable = false)
     private String username;
 
     @Column(name = "Password", nullable = false)
@@ -52,82 +44,50 @@ public class User implements UserDetails {
     @Column(name = "PhoneNumber")
     private String phoneNumber;
 
-    //    @Column(name = "IsActive", nullable = false)
-//    @ColumnDefault("1")
     @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isActive = true;
+
+    @Column(name = "IsDelete", columnDefinition = "bit default 0 not null") //ONLY_SQL_SERVER
+    private Boolean isDelete = false;
 
     @ManyToOne
     @JoinColumn(name = "RoleId", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_User_Role"))
     private Role role;
 
-//    @JsonManagedReference
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
-    private UserProfile profile;
+    @Column(name = "Name")
+    private String name;
 
-//    @JsonManagedReference
+    @Column(name = "DateOfBirth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "Gender")
+    private String gender;
+
+    @Column(name = "ProfilePicture")
+    private String profilePicture;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // cascade di sini maksud nya akan melakukan update data di table user address juga
     private List<UserAddress> addresses; // Daftar alamat yang dimiliki user, 1 user bisa punya banyak alamat, lihat dari sisi class user
 
-    @Column(name = "CreatedBy", updatable = false, nullable = false)
     @CreatedBy
+    @Column(name = "CreatedBy", updatable = false, nullable = false)
     private String createdBy;
 
-    @Column(name = "CreatedDate", updatable = false, nullable = false)
     @CreatedDate
+    @Column(name = "CreatedDate", updatable = false, nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "UpdatedBy", insertable = false)
     @LastModifiedBy
+    @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
-    @Column(name = "UpdatedDate")
     @LastModifiedDate
+    @Column(name = "UpdatedDate")
     private LocalDateTime updatedDate;
 
-    @ManyToMany
-    @JoinTable(
-            name = "UserPermissions",
-//            uniqueConstraints = {@UniqueConstraint(name = "uniq_user_access",columnNames = {"UserId","AccessId"})},
-            joinColumns = @JoinColumn(name = "UserId"),
-            inverseJoinColumns = @JoinColumn(name = "AccessId")
-            , uniqueConstraints = {@UniqueConstraint(name = "Uniq_User_Permissions", columnNames = {"UserId", "AccessId"})}
-    )
-    private Set<Permissions> permissions;
-
     public void addAddress(UserAddress address) {
-        addresses.add(address);
+        this.addresses.add(address);
         address.setUser(this);
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Permissions> listPermission1 = this.permissions;
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Permissions permission : listPermission1) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(permission.getName()));
-        }
-        return grantedAuthorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
     }
 
 }

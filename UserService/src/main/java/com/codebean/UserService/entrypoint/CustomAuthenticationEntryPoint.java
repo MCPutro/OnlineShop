@@ -27,8 +27,10 @@ import java.util.Map;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
     @Autowired
-    ObjectMapper mapper ;
+    private ObjectMapper mapper ;
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 //        // Menyediakan respons 401 Unauthorized dengan pesan JSON
@@ -40,9 +42,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setHeader("Content-Type", "application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         Map<String, Object> data = new HashMap<>();
-        data.put("status", false);
+        data.put("success", false);
+        data.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         data.put("timestamp", LocalDateTime.now());
-        data.put("error", authException.getMessage());
+        data.put("error_detail", authException.getMessage());
+        data.put("error_code", "FVAUTH401");
 //		data.put("error", "Lakukan Otentikasi Terlebih Dahulu !!");
         response.getOutputStream().println(mapper.writeValueAsString(data));
     }

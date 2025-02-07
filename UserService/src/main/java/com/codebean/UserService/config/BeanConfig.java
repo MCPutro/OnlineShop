@@ -22,22 +22,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BeanConfig {
 
     @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
-    @Bean
     public AuditorAware<String> auditorProvider() {
         return new AuditorAwareConfig();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(10);
+    public JwtUtil jwtUtil(){
+        return new JwtUtil();
     }
 
     @Bean
-    public JwtUtil jwtUtil(){
-        return new JwtUtil();
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder(10);
     }
 }

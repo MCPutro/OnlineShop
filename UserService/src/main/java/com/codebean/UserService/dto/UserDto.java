@@ -9,27 +9,39 @@ Created on 13 Jan 2025 10:49
 Version 1.0
 */
 
-import com.codebean.UserService.dto.request.UserAddressReqDto;
-import com.codebean.UserService.dto.response.UserAddressRespDto;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDetailDto {
-    private Long id;
+public class UserDto {
+    private Long ID;
+
     private String username;
+
     private String email;
+
     private String phoneNumber;
-    private String role;
+
     private Boolean isActive;
-    private UserProfileDto profile;
-    private List<UserAddressRespDto> addresses;
-    private Set<PermissionDto> permissions;
+
+    private Boolean isDelete;
+
+    private String role;
+
+    private String name;
+
+    private LocalDate dateOfBirth;
+
+    private String gender;
+
+    private String profilePicture;
+
+    private List<UserAddressDto> addresses;
+
 }

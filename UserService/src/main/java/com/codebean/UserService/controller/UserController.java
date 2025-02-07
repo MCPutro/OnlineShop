@@ -1,18 +1,35 @@
 package com.codebean.UserService.controller;
 
-import com.codebean.UserService.dto.request.UserAddressReqDto;
-import com.codebean.UserService.dto.request.UserCreateReqDto;
-import com.codebean.UserService.dto.request.UserUpdateReqDto;
+/*
+IntelliJ IDEA 2024.2.4 (Community Edition)
+Build #IC-242.23726.103, built on October 23, 2024
+@Author mcputro a.k.a. Mu'ti Cahyono Putro
+Created on 06 Feb 2025 17:12
+@Last Modified 06 Feb 2025 17:12
+Version 1.0
+*/
+
+/**
+ * Platform Code : USR
+ * Modul Code : CTRL01
+ * FV = Failed Validation
+ * FE = Failed Error
+ * ex = FVUSRCTRL01001 -> [FV] [USR] [CTRL01] 001 -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
+ */
+
+import com.codebean.UserService.dto.request.UserRegister;
+import com.codebean.UserService.dto.request.UserUpdate;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
-import com.codebean.UserService.model.UserAddress;
-import com.codebean.UserService.service.UserAddressIService;
-import com.codebean.UserService.service.UserIService;
-import com.codebean.UserService.service.ValidationService;
+import com.codebean.UserService.service.UserService;
+import com.codebean.UserService.service.ValidateService;
 import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,145 +40,127 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserIService userService;
+    private UserService userService;
 
     @Autowired
-    private UserAddressIService userAddressService;
+    private ValidateService validateService;
 
-    @Autowired
-    private ValidationService validationService;
-
-    @PreAuthorize("hasAuthority('ADDUSER')")
-    @PostMapping(path = "/user-create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> createUser(@RequestBody UserCreateReqDto dto, HttpServletRequest request) {
-        try {
-            this.validationService.validate(dto, "asdad", request);
-
-            User user = this.userService.dtoUserToModel(dto);
-            user.setRole(new Role(dto.getRole()));
-
-            return  this.userService.save(user, request);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.badRequest(e.getMessage(), "FVUSR010001", request);
+    @PreAuthorize("hasAuthority('MANAGE_USER')")
+    @PostMapping(path = "/user-create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> createUser(@RequestBody UserRegister userRegister,
+                                        HttpServletRequest request) {
+        this.validateService.validate(userRegister, "FVUSRCTRL01001", request);
+        if (!userRegister.getPassword().equals(userRegister.getConfirmPassword())) {
+            return Response.badRequest(Constants.CONFIRM_PASSWORD_NOT_MATCH, "FVUSRCTRL01002", request);
         }
-
+        User user = new User();
+        BeanUtils.copyProperties(userRegister, user);
+        user.setRole(new Role(userRegister.getRole()));
+        return this.userService.save(user, request);
     }
 
-    @PreAuthorize("hasAuthority('SHOWUSERS')") //done
-    @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
-        return this.userService.findAll(null, request);
-    }
 
-    @PreAuthorize("hasAuthority('SHOWUSERDETAIL')") //done
-    @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
+
+    @PreAuthorize("hasAuthority('VIEW_USER')")
+    @GetMapping(path = "/user/{userId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getUserById(@PathVariable(value = "userId") Long userId,
+                                         HttpServletRequest request) {
         return this.userService.findById(userId, request);
     }
 
-    @PreAuthorize("hasAuthority('PROFILE')") //done
-    @GetMapping(path = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getUserByToken(HttpServletRequest request) {
+
+
+
+    @GetMapping(path = "/user",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getUserByToken(HttpServletRequest request) {
         try {
-            // get user id from jwt token
-            Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
-
-            return this.userService.findByIdWithAddressStatus(userId, true, request);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.badRequest(e.getMessage(), "FVUSR010001", request);
-        }
-    }
-
-    @PreAuthorize("hasAuthority('PROFILE')") //done
-    @PatchMapping(path = "/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateUserProfileByToken(@RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
-        try {
-            // validate dto
-            this.validationService.validate(dto, "FVUSR020001", request);
-
             // get userid from token
             Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
 
-            // call service
-            return this.userService.update(userId, this.userService.dtoUserToModel(dto), request);
+            return this.userService.findById(userId, request);
         } catch (Exception e) {
-            return Response.badRequest(e.getMessage(), "FVUSR020001", request);
+            e.printStackTrace();
+            System.out.println("ERROR : " + e.getMessage());
+            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_GET, "FEUSRCTRL01021", request);
         }
     }
 
-    @PreAuthorize("hasAuthority('EDITUSERDETAIL')") //done
-    @PatchMapping(path = "/user/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateUserProfile(@PathVariable(value = "userId") Long userId, @RequestBody UserUpdateReqDto dto, HttpServletRequest request) {
-        this.validationService.validate(dto, "FVUSR01002", request);
-        User user = this.userService.dtoUserToModel(dto);
-        return this.userService.update(userId, user, request);
+
+
+
+    @PreAuthorize("hasAuthority('VIEW_USER')")
+    @GetMapping(path = "/users",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getAllUsers(
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+            HttpServletRequest request
+    ) {
+        Pageable Pageable = PageRequest.of(page, sizePerPage);
+        return this.userService.findAll(Pageable, request);
     }
 
-    @DeleteMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> deleteUserById(@PathVariable(value = "userId") Long userId, HttpServletRequest request) {
-        return this.userService.delete(userId, request);
-    }
 
-    @PreAuthorize("hasAuthority('PROFILE')") // done
-    @PostMapping(path = "/user/address", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addUserAddressByToken(@RequestBody UserAddressReqDto dto, HttpServletRequest request) {
+
+
+    @PatchMapping(path = "/user",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> updateUserProfileByToken(@RequestBody UserUpdate dto,
+                                                      HttpServletRequest request
+    ) {
         // validate dto
-        this.validationService.validate(dto, "FVUSR01002", request);
+        this.validateService.validate(dto, "FVUSRCTRL01051", request);
 
-        // get userid from token
-        Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
+        try {
+            // get userid from token
+            Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
 
-        UserAddress address = userAddressService.addressDTOtoUserAddressModel(dto);
+            User user = new User();
+            BeanUtils.copyProperties(dto, user);
 
-        return this.userAddressService.addAddress(userId, address, request);
+            return this.userService.update(userId, user, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR : " + e.getMessage());
+            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_UPDATE, "FEUSRCTRL01051", request);
+        }
     }
 
-    @PreAuthorize("hasAuthority('EDITUSERDETAIL')") //done
-    @PostMapping(path = "/user/{userId}/address", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addUserAddress(@PathVariable(value = "userId") Long userId, @RequestBody UserAddressReqDto dto, HttpServletRequest request) {
-        this.validationService.validate(dto, "FVUSR01002", request);
-        UserAddress address = userAddressService.addressDTOtoUserAddressModel(dto);
-        return this.userAddressService.addAddress(userId, address, request);
-    }
 
-    @PreAuthorize("hasAuthority('PROFILE')") // done
-    @PatchMapping(path = "/user/address/{addressId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateUserAddressByToken(@PathVariable(value = "addressId") Long addressId, @RequestBody UserAddressReqDto dto, HttpServletRequest request) {
+
+    @PreAuthorize("hasAnyAuthority('MANAGE_USER')")
+    @PatchMapping(path = "/user/{userId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> updateUserProfileByUserId(@PathVariable(value = "userId") Long userId,
+                                                       @RequestBody UserUpdate dto,
+                                                       HttpServletRequest request
+    ) {
         // validate dto
-        this.validationService.validate(dto, "FVUSR01002", request);
+        this.validateService.validate(dto, "FVUSRCTRL01061", request);
+        try {
+            User user = new User();
+            BeanUtils.copyProperties(dto, user);
 
-        // get user id from token
-        Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
-
-        UserAddress address = userAddressService.addressDTOtoUserAddressModel(dto);
-        address.setID(addressId);
-
-        return this.userAddressService.update(userId, address, request);
+            return this.userService.update(userId, user, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR : " + e.getMessage());
+            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_UPDATE, "FEUSRCTRL01061", request);
+        }
     }
 
-    @PreAuthorize("hasAnyAuthority('EDITUSERDETAIL')")//cek
-    @PatchMapping(path = "/user/{userId}/address/{addressId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateUserAddress(@PathVariable(value = "userId") Long userId, @PathVariable(value = "addressId") Long addressId, @RequestBody UserAddressReqDto dto, HttpServletRequest request) {
-        this.validationService.validate(dto, "FVUSR01002", request);
-        UserAddress address = userAddressService.addressDTOtoUserAddressModel(dto);
-        address.setID(addressId);
-        return this.userAddressService.update(userId, address, request);
-    }
 
-    @PreAuthorize("hasAnyAuthority('BLMDIBUAT')")
-    @DeleteMapping(path = "/user/{userId}/address/{addressId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteUserAddress(@PathVariable(value = "userId") Long userId, @PathVariable(value = "addressId") Long addressId, HttpServletRequest request) {
-        return this.userAddressService.delete(addressId, request);
-    }
-
-    @PreAuthorize("hasAnyAuthority('BLMDIBUAT')")
-    @DeleteMapping(path = "/user/address/{addressId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteUserAddressByToken(@PathVariable(value = "addressId") Long addressId, HttpServletRequest request) {
-        // get user id from token
-
-        return null;
-    }
-
+    //fitur search belum
 }

@@ -19,12 +19,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Set;
 
 @Setter
 @Getter
 @Entity
-@Table(name = "Role")
+@Table(name = "Roles")
 @EntityListeners(AuditingEntityListener.class)
 public class Role {
 
@@ -37,22 +37,39 @@ public class Role {
     private String name;
 
     @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
-    private Boolean isActive;
+    private Boolean isActive = true;
 
-    @Column(name = "CreatedBy", updatable = false, nullable = false)
+//    // cara many 2 many
+//    @ManyToMany
+//    @JoinTable(
+//            name = "RolePermissions",
+//            joinColumns = @JoinColumn(name = "RoleId"),
+//            inverseJoinColumns = @JoinColumn(name = "PermissionId")
+//            , uniqueConstraints = {@UniqueConstraint(name = "Uniq_Role_Permissions", columnNames = {"RoleId", "PermissionId"})}
+//    )
+//    private Set<Permission> permissions;
+
+    //cara manual
+    @OneToMany(mappedBy = "role")
+    private Set<RolePermission> permissions;
+
+    @Transient
+    private Set<Long> permissionIds; // temporary permission id
+
     @CreatedBy
+    @Column(name = "CreatedBy", updatable = false, nullable = false)
     private String createdBy;
 
-    @Column(name = "CreatedDate", updatable = false, nullable = false)
     @CreatedDate
+    @Column(name = "CreatedDate", updatable = false, nullable = false)
     private LocalDateTime createdDate;
 
     @LastModifiedBy
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
-    @Column(name = "UpdatedDate", insertable = false)
     @LastModifiedDate
+    @Column(name = "UpdatedDate", insertable = false)
     private LocalDateTime updatedDate;
 
     public Role() {

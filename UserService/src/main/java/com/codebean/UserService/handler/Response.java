@@ -13,8 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
-
 public class Response {
     public static ResponseEntity<Object> success(String message, Object data,  HttpServletRequest request) {
         return new ResponseHandler().handleResponse(message, HttpStatus.OK, data, null, request);
@@ -25,7 +23,7 @@ public class Response {
     }
 
     public static ResponseEntity<Object> unauthorized(Object data, Object errorCode, HttpServletRequest request) {
-        return new ResponseHandler().handleResponse(null, HttpStatus.UNAUTHORIZED, Collections.singletonList(data), errorCode, request);
+        return new ResponseHandler().handleResponse(null, HttpStatus.UNAUTHORIZED, data, errorCode, request);
     }
 
     public static ResponseEntity<Object> badRequest( Object data, Object errorCode,HttpServletRequest request) {

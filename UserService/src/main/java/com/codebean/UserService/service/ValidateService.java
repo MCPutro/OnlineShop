@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 @Service
-public class ValidationService {
+public class ValidateService {
 
     @Autowired
     private Validator validator;

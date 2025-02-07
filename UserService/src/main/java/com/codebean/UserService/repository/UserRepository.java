@@ -10,24 +10,26 @@ Version 1.0
 */
 
 import com.codebean.UserService.model.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+    List<User> findAllByEmailOrUsername(String email, String username);
 
-    boolean existsByEmail(String email);
+    Optional<User> findFirstByIDAndIsDelete(Long id, boolean isDelete);
 
-    boolean existsByUsername(String username);
+    List<User> findAllByIsDelete(Boolean isDelete);
 
-    List<User> findAllByRole_Name(String role);
+    Page<User> findAllByIsDelete(Pageable pageable, Boolean isDelete);
+    Page<User> findAllByUsernameContainingIgnoreCaseAndIsDelete(Pageable pageable, String username, Boolean isDelete);
 
-    List<User> findAllByRole_NameAndIsActive(String roleName, Boolean isActive);
-
-    Optional<User> findFirstByIDAndIsActive(Long id, Boolean isActive);
+    Page<User> findAllByEmailContainingIgnoreCaseAndIsDelete(Pageable pageable, String email, Boolean isDelete);
 
     Optional<User> findFirstByUsername(String username);
 }

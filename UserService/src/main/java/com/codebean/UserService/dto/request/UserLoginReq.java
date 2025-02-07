@@ -19,7 +19,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLoginDto {
+public class UserLoginReq {
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")

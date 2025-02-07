@@ -1,5 +1,14 @@
 package com.codebean.UserService.config;
 
+/*
+IntelliJ IDEA 2024.2.4 (Community Edition)
+Build #IC-242.23726.103, built on October 23, 2024
+@Author mcputro a.k.a. Mu'ti Cahyono Putro
+Created on 23 Jan 2025 18:37
+@Last Modified 23 Jan 2025 18:37
+Version 1.0
+*/
+
 import com.codebean.UserService.entrypoint.CustomAuthenticationEntryPoint;
 import com.codebean.UserService.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +22,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/*
-IntelliJ IDEA 2024.2.4 (Community Edition)
-Build #IC-242.23726.103, built on October 23, 2024
-@Author mcputro a.k.a. Mu'ti Cahyono Putro
-Created on 23 Jan 2025 18:37
-@Last Modified 23 Jan 2025 18:37
-Version 1.0
-*/
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

@@ -4,43 +4,39 @@ package com.codebean.UserService.dto.request;
 IntelliJ IDEA 2024.2.4 (Community Edition)
 Build #IC-242.23726.103, built on October 23, 2024
 @Author mcputro a.k.a. Mu'ti Cahyono Putro
-Created on 16 Jan 2025 19:28
-@Last Modified 16 Jan 2025 19:28
+Created on 07 Feb 2025 23:56
+@Last Modified 07 Feb 2025 23:56
 Version 1.0
 */
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class UserAddressReqDto {
+public class CustomerRegister {
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
-    @JsonProperty("address_name")
-    private String name;
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._]{7,19}$", message = "It must start with a letter, consist of 8-20 characters, and the only allowed symbols are . and _")
+    private String username;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
-    private String address;
+    @Size(min = 8, max = 50, message = "must contain 8-50 character")
+    private String password;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
-    private String country;
+    private String confirmPassword;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
-    private String postalCode;
+    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", message = "Format not valid.")
+    private String email;
 }

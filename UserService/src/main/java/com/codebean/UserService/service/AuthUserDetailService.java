@@ -8,31 +8,44 @@ Created on 23 Jan 2025 17:35
 @Last Modified 23 Jan 2025 17:35
 Version 1.0
 */
+/**
+ * Platform Code : AUT
+ * Modul Code : 05
+ * FV = Failed Validation
+ * FE = Failed Error
+ * ex = FVAUT05001 -> [FV] [AUT] [05] 001 -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
+ */
 
-import com.codebean.UserService.dto.response.UserLoginRespDto;
+import com.codebean.sharemodule.Jwt.JwtUtil;
+import com.codebean.UserService.dto.response.UserLoginResp;
 import com.codebean.UserService.handler.Response;
-import com.codebean.UserService.model.Permissions;
+import com.codebean.UserService.model.Role;
+import com.codebean.UserService.model.RolePermission;
 import com.codebean.UserService.model.User;
+import com.codebean.UserService.repository.RolePermissionRepository;
 import com.codebean.UserService.repository.UserRepository;
 import com.codebean.UserService.utils.Constants;
-import com.codebean.sharemodule.Jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
-
+import java.util.Set;
 
 @Service
 public class AuthUserDetailService implements UserDetailsService {
-
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -40,61 +53,70 @@ public class AuthUserDetailService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserIService userService;
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<Object> registerUser(User user, HttpServletRequest request) {
-        String encode = this.passwordEncoder.encode(user.getUsername() + user.getPassword());
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
 
-        user.setPassword(encode);
-
+    @Transactional
+    public ResponseEntity<?> registerUser(User user, HttpServletRequest request) {
         return this.userService.save(user, request);
     }
 
     @Transactional
-    public ResponseEntity<Object> loginUser(User user, HttpServletRequest request) {
+    public ResponseEntity<?> login(User user, HttpServletRequest request) {
         try {
-            //find user by username
-            Optional<User> optionalUserByUsername = this.userRepository.findFirstByUsername(user.getUsername());
-            if (!optionalUserByUsername.isPresent()) {
-                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FEAUT0010", request);
+            Optional<User> optionalUser = this.userRepository.findFirstByUsername(user.getUsername());
+            if (!optionalUser.isPresent()) {
+                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FVAUT05001", request);
             }
 
-            User userDB = optionalUserByUsername.get();
+            //get user data from db
+            User userDB = optionalUser.get();
 
-            if (!this.passwordEncoder.matches((user.getUsername() + user.getPassword()), userDB.getPassword())) {
-                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FEAUT0010", request);
+            // matching password
+            if (!this.passwordEncoder.matches((user.getUsername() + "." + user.getPassword()), userDB.getPassword())) {
+                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FVAUT05001", request);
             }
 
+            //check if user is not active
             if (!userDB.getIsActive()) {
-                return Response.unauthorized(Constants.ACCOUNT_IS_NOT_ACTIVE, "FEAUT0020", request);
+                return Response.unauthorized(Constants.ACCOUNT_IS_NOT_ACTIVE, "FVAUT05003", request);
             }
 
+            List<String> activePermissions = this.getActivePermissionsByRole(userDB.getRole());
+
+            //generate token jwt
             String token = this.jwtUtil.generateToken(userDB.getUsername(), userDB.getID(),
-                    userDB.getPermissions().stream()
-                            .map(Permissions::getName).toList()
+                    activePermissions
             );
 
-            UserLoginRespDto userLoginRespDto = new UserLoginRespDto();
-            BeanUtils.copyProperties(userDB, userLoginRespDto);
-            userLoginRespDto.setToken(token);
-            userLoginRespDto.setId(userDB.getID());
-            userLoginRespDto.setRole(userDB.getRole().getName());
+            //build response message
+            UserLoginResp userLoginResp = new UserLoginResp();
+            BeanUtils.copyProperties(userDB, userLoginResp);
+            userLoginResp.setToken(token);
+            userLoginResp.setId(userDB.getID());
+            userLoginResp.setRole(userDB.getRole().getName());
 
-            return Response.success(Constants.LOGIN_SUCCESS, userLoginRespDto, request);
+            return Response.success(Constants.LOGIN_SUCCESS, userLoginResp, request);
         } catch (Exception e) {
-
-            return Response.internalServerError(e.getMessage(), "FEAUT0030", request);
+            return Response.internalServerError(Constants.LOGIN_FAIL, "FEAUT05003", request);
         }
+    }
 
-
+    @Transactional(propagation = Propagation.MANDATORY)
+    protected List<String> getActivePermissionsByRole(Role role) {
+        List<RolePermission> listActiveRolePermission = this.rolePermissionRepository.findByRoleAndIsActive(role, true);
+        return listActiveRolePermission.stream().map(rolePermission -> rolePermission.getPermission().getName()).toList();
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         Optional<User> optionalUser = this.userRepository.findFirstByUsername(username);
         if (!optionalUser.isPresent()) {
             throw new UsernameNotFoundException("User not found");
@@ -102,10 +124,16 @@ public class AuthUserDetailService implements UserDetailsService {
 
         User userDB = optionalUser.get();
 
+        List<String> activePermissionsByRole = this.getActivePermissionsByRole(userDB.getRole());
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        for (String permission : activePermissionsByRole) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(permission));
+        }
+
         return new org.springframework.security.core.userdetails.User(
                 userDB.getUsername(),
                 userDB.getPassword(),
-                userDB.getAuthorities()
+                grantedAuthorities
         );
     }
 }

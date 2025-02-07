@@ -59,6 +59,7 @@ public class JwtUtil {
 //            System.out.println("Duration: " + (expirationInSeconds + 3));
         } catch (Exception ex) {
             ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 

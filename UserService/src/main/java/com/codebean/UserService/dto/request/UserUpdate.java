@@ -9,29 +9,17 @@ Created on 16 Jan 2025 11:04
 Version 1.0
 */
 
-import com.codebean.UserService.dto.UserProfileDto;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdateReqDto {
-
-//    @NotNull(message = "cannot be null")
-//    @JsonProperty("id")
-//    private Long ID;
-
-    @NotEmpty(message = "cannot be empty")
-    @NotBlank(message = "cannot be blank")
-    @NotNull(message = "cannot be null")
-//    @Size(min = 8, max = 20, message = "must contain 8-20 character")
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._]{7,19}$", message = "harus di awali dengan huruf, terdiri dari 8-20 karakter, simbol yang diperboleh kan hanya . dan _ ")
-    private String username;
-
+public class UserUpdate {
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
@@ -44,7 +32,22 @@ public class UserUpdateReqDto {
     @NotNull(message = "cannot be null")
     private String phoneNumber;
 
-    @Valid
-    private UserProfileDto profile;
+    @NotEmpty(message = "cannot be empty")
+    @NotBlank(message = "cannot be blank")
+    @NotNull(message = "cannot be null")
+    private String name;
+
+    @NotNull(message = "cannot be null")
+    private LocalDate dateOfBirth;
+
+    @NotEmpty(message = "cannot be empty")
+    @NotBlank(message = "cannot be blank")
+    @NotNull(message = "cannot be null")
+    private String gender;
+
+//    @NotEmpty(message = "cannot be empty")
+//    @NotBlank(message = "cannot be blank")
+//    @NotNull(message = "cannot be null")
+//    private String profilePicture;
 
 }

@@ -9,13 +9,22 @@ Created on 24 Jan 2025 19:41
 Version 1.0
 */
 
-import com.codebean.UserService.model.RolePermissions;
-import org.springframework.data.repository.CrudRepository;
+import com.codebean.UserService.model.Permission;
+import com.codebean.UserService.model.Role;
+import com.codebean.UserService.model.RolePermission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-public interface RolePermissionRepository extends CrudRepository<RolePermissions, Long> {
-    List<RolePermissions> findAllByRole_NameAndIsActiveIsTrue(String roleName);
+@Repository
+public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
 
-    List<RolePermissions> findAllByRole_IsActiveAndIsActive(Boolean roleIsActive, Boolean permissionIsActive);
+    Optional<RolePermission> findByRoleAndPermission(Role role, Permission permission);
+
+    List<RolePermission> findByRoleAndPermission_IDNotIn(Role role, Collection<Long> permissionIDS);
+
+    List<RolePermission> findByRoleAndIsActive(Role role, Boolean isActive);
 }

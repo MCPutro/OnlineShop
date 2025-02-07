@@ -4,8 +4,8 @@ package com.codebean.UserService.model;
 IntelliJ IDEA 2024.2.4 (Community Edition)
 Build #IC-242.23726.103, built on October 23, 2024
 @Author mcputro a.k.a. Mu'ti Cahyono Putro
-Created on 10 Jan 2025 11:01
-@Last Modified 10 Jan 2025 11:01
+Created on 07 Feb 2025 23:03
+@Last Modified 07 Feb 2025 23:03
 Version 1.0
 */
 
@@ -19,17 +19,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Setter
 @Getter
 @Entity
-@Table(name = "Permissions")
+@Table(name = "Modules")
 @EntityListeners(AuditingEntityListener.class)
-public class Permissions {
-
+public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -38,25 +35,33 @@ public class Permissions {
     @Column(name = "Name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "Path", nullable = false,unique = true)
+    private String path;
+
     @Column(name = "Description")
     private String description;
 
-    @ManyToMany(mappedBy = "permissions")
-    private Set<User> users;
+    @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
+    private Boolean isActive = true;
 
-    @Column(name = "CreatedBy", updatable = false, nullable = false)
+    @OneToMany(mappedBy = "module") // Relasi ke Permission
+    private Set<Permission> permissions;
+
     @CreatedBy
+    @Column(name = "CreatedBy", updatable = false, nullable = false)
     private String createdBy;
 
-    @Column(name = "CreatedDate", updatable = false, nullable = false)
     @CreatedDate
+    @Column(name = "CreatedDate", updatable = false, nullable = false)
     private LocalDateTime createdDate;
 
     @LastModifiedBy
     @Column(name = "UpdatedBy", insertable = false)
     private String updatedBy;
 
-    @Column(name = "UpdatedDate", insertable = false)
+
     @LastModifiedDate
+    @Column(name = "UpdatedDate", insertable = false)
     private LocalDateTime updatedDate;
 }
+
