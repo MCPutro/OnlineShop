@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -37,7 +38,7 @@ public class Category {
     private String name;
 
     @ManyToMany(mappedBy = "categories")
-    private List<Product> productList;
+    private Set<Product> products;
 
     @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isActive = true;

@@ -9,6 +9,14 @@ Created on 20 Jan 2025 13:08
 Version 1.0
 */
 
+/**
+ * Platform Code : CTG
+ * Modul Code : 06
+ * FV = Failed Validation
+ * FE = Failed Error
+ * ex = FVCTG06001 -> [FV] [CTG] [06] 001 -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
+ */
+
 import com.codebean.ProductService.core.iService;
 import com.codebean.ProductService.dto.CategoryDto;
 import com.codebean.ProductService.handler.Response;
@@ -19,12 +27,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,21 +46,22 @@ public class CategoryService implements iService<Category> {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private List<CategoryDto> categoryDtos = new ArrayList<>();
+    private final List<CategoryDto> categoryDto = new ArrayList<>();
 
     @Override
+    @Transactional
     public ResponseEntity<Object> save(Category category, HttpServletRequest request) {
         try {
             Optional<Category> optionalCategory = this.categoryRepository.findFirstByName(category.getName());
             if (optionalCategory.isPresent()) {
-                return Response.badRequest(Constants.CATEGORY_ALREADY_EXIST, "adasdas", request);
+                return Response.badRequest(Constants.CATEGORY_ALREADY_EXIST, "FVCTG06001", request);
             }
 
             this.categoryRepository.save(category);
 
             return Response.created(Constants.CATEGORY_CREATED_SUCCESSFULLY, this.modelMapper.map(category, CategoryDto.class), request);
         } catch (Exception e) {
-            return Response.internalServerError(e.getMessage(), "asdasd", request);
+            return Response.internalServerError(e.getMessage(), "FECTG06001", request);
         }
     }
 
@@ -62,12 +71,12 @@ public class CategoryService implements iService<Category> {
         try {
             Optional<Category> optionalCategoryByName = this.categoryRepository.findFirstByName(category.getName());
             if (optionalCategoryByName.isPresent()) {
-                return Response.badRequest(Constants.CATEGORY_ALREADY_EXIST, "adasdas", request);
+                return Response.badRequest(Constants.CATEGORY_ALREADY_EXIST, "FVCTG06011", request);
             }
 
             Optional<Category> optionalCategoryById = this.categoryRepository.findById(id);
             if (optionalCategoryById.isEmpty()) {
-                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "adasdas", request);
+                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "FVCTG06012", request);
             }
 
             optionalCategoryById.ifPresent(data -> {
@@ -78,7 +87,7 @@ public class CategoryService implements iService<Category> {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(e.getMessage(), "asdasd", request);
+            return Response.internalServerError(e.getMessage(), "FECTG06011", request);
         }
     }
 
@@ -87,16 +96,17 @@ public class CategoryService implements iService<Category> {
     public ResponseEntity<Object> delete(Long id, HttpServletRequest request) {
         try {
             Optional<Category> optionalCategory = this.categoryRepository.findById(id);
+            if (!optionalCategory.isPresent()) {
+                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "FVCTG06021", request);
+            }
+
             optionalCategory.ifPresent(category -> {
                 category.setIsActive(false);
             });
 
-            if (!optionalCategory.isPresent()) {
-                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "adasdas", request);
-            }
             return Response.success(Constants.CATEGORY_DELETED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
-            return Response.internalServerError(e.getMessage(), "asdasd", request);
+            return Response.internalServerError(e.getMessage(), "FECTG06021", request);
         }
 
     }
@@ -104,37 +114,75 @@ public class CategoryService implements iService<Category> {
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
-        Iterable<Category> all = this.categoryRepository.findAll();
+        try {
+            Iterable<Category> all = this.categoryRepository.findAll(pageable);
 
-        this.categoryDtos.clear();
+            this.categoryDto.clear();
 
-        all.forEach(category -> categoryDtos.add(this.modelMapper.map(category, CategoryDto.class)));
+            all.forEach(category -> categoryDto.add(this.modelMapper.map(category, CategoryDto.class)));
 
-        return Response.success(Constants.SUCCESS, categoryDtos, request);
+            return Response.success(Constants.SUCCESS, categoryDto, request);
+        } catch (Exception e) {
+            return Response.internalServerError(e.getMessage(), "FECTG06031", request);
+        }
+
     }
 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
-        Optional<Category> optionalCategory = this.categoryRepository.findById(id);
-        if (!optionalCategory.isPresent()) {
-            return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "adasdas", request);
-        }
+        try {
+            Optional<Category> optionalCategory = this.categoryRepository.findById(id);
+            if (!optionalCategory.isPresent()) {
+                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "FVCTG06041", request);
+            }
 
-        return Response.success(Constants.SUCCESS, this.modelMapper.map(optionalCategory.get(), CategoryDto.class), request);
+            return Response.success(Constants.SUCCESS, this.modelMapper.map(optionalCategory.get(), CategoryDto.class), request);
+        } catch (Exception e) {
+            return Response.internalServerError(e.getMessage(), "FECTG06041", request);
+        }
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<Object> findByParam(Pageable pageable, String columnName, String value, HttpServletRequest request) {
-        return null;
+        try {
+            Page<Category> pageCategories;
+            switch (columnName.toLowerCase()) {
+                case "status":
+                    if (value.equalsIgnoreCase("active")) {
+                        pageCategories = this.categoryRepository.findAllByIsActive(true, pageable);
+                    } else if (value.equalsIgnoreCase("inactive")) {
+                        pageCategories = this.categoryRepository.findAllByIsActive(false, pageable);
+                    } else {
+                        return Response.badRequest(Constants.INPUT_ACTIVE_OR_INACTIVE, "FVCTG06051", request);
+                    }
+                    break;
+                case "name":
+                    pageCategories = this.categoryRepository.findFirstByName(value, pageable);
+                    break;
+                default:
+                    pageCategories = this.categoryRepository.findAll(pageable);
+                    break;
+            }
+            List<Category> categoryList = pageCategories.getContent();
+            if (categoryList.isEmpty()) {
+                return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "FVCTG06055", request);
+            }
+
+            return Response.success(Constants.SUCCESS, this.listCategoryModelToDto(categoryList), request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.CATEGORY_FAILED_TO_GET, "FECTG06051", request);
+        }
+
     }
 
-    @Transactional(readOnly = true)
-    public ResponseEntity<Object> findAllByStatus(Boolean status, HttpServletRequest request) {
-        status = status == null ? Boolean.TRUE : status;
-        List<Category> listActiveCategory = this.categoryRepository.findAllByIsActive(status);
-        return Response.success(Constants.SUCCESS, this.listCategoryModelToDto(listActiveCategory), request);
-    }
+//    @Transactional(readOnly = true)
+//    public ResponseEntity<Object> findAllByStatus(Boolean status, HttpServletRequest request) {
+//        status = status == null ? Boolean.TRUE : status;
+//        List<Category> listActiveCategory = this.categoryRepository.findAllByIsActive(status);
+//        return Response.success(Constants.SUCCESS, this.listCategoryModelToDto(listActiveCategory), request);
+//    }
 
     public List<CategoryDto> listCategoryModelToDto(List<Category> category) {
         return this.modelMapper.map(category, new TypeToken<List<CategoryDto>>() {

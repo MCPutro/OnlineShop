@@ -10,6 +10,9 @@ Version 1.0
 */
 
 import com.codebean.ProductService.model.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,11 +20,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends CrudRepository<Category, Long> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findFirstByName(String name);
 
+    Page<Category> findFirstByName(String name, Pageable pageable);
+
     List<Category> findAllByIsActive(Boolean isActive);
+
+    Page<Category> findAllByIsActive(Boolean isActive, Pageable pageable);
 
 //    Optional<Category> findFirstByIdAndIsActive(Long id, Boolean isActive);
 }

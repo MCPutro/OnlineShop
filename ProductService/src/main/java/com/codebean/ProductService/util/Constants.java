@@ -20,11 +20,14 @@ public class Constants {
 
     public static final String BAD_DATA = "Bad data";
 
+    public static final String INPUT_ACTIVE_OR_INACTIVE = "For status search, please input either active or inactive";
+
     public static final String CATEGORY_CREATED_SUCCESSFULLY = "Category created successfully";
     public static final String CATEGORY_UPDATED_SUCCESSFULLY = "Category updated successfully";
     public static final String CATEGORY_DELETED_SUCCESSFULLY = "Category deleted successfully";
     public static final String CATEGORY_ALREADY_EXIST = "Category already exist";
     public static final String CATEGORY_NOT_FOUND = "Category not found";
+    public static final String CATEGORY_FAILED_TO_GET = "Failed to retrieve category";
 
     public static final String PRODUCT_CREATED_SUCCESSFULLY = "Product created successfully";
     public static final String PRODUCT_UPDATED_SUCCESSFULLY = "Product updated successfully";

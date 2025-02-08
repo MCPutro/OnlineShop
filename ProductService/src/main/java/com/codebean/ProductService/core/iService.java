@@ -10,9 +10,8 @@ Version 1.0
 */
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-
-import java.awt.print.Pageable;
 
 public interface iService<T> {
     public ResponseEntity<Object> save(T t, HttpServletRequest request);//001-010

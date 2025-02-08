@@ -21,6 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -33,6 +34,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+
+    @Column(name = "SKU", nullable = false, unique = true)
+    private String sku;
 
     @Column(name = "Name", nullable = false)
     private String name;
@@ -55,12 +59,11 @@ public class Product {
     @ManyToMany
     @JoinTable(
             name = "ProductCategory",
-//            uniqueConstraints = {@UniqueConstraint(name = "uniq_user_access",columnNames = {"UserId","AccessId"})},
             joinColumns = @JoinColumn(name = "ProductId"),
             inverseJoinColumns = @JoinColumn(name = "CategoryId")
             , uniqueConstraints = {@UniqueConstraint(name = "Uniq_Product_Category", columnNames = {"ProductId", "CategoryId"})}
     )
-    private List<Category> categories;
+    private Set<Category> categories;
 
     @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)
