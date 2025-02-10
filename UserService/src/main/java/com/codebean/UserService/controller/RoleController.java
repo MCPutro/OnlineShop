@@ -90,7 +90,7 @@ public class RoleController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> getRoles(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                      @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+                                      @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
                                       HttpServletRequest request) {
         try {
             Pageable Pageable = PageRequest.of(page, sizePerPage);
@@ -138,7 +138,7 @@ public class RoleController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> getActiveRoles(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                            @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+                                            @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
                                             HttpServletRequest request) {
         try {
             Pageable Pageable = PageRequest.of(page, sizePerPage);

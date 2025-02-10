@@ -28,6 +28,7 @@ import com.codebean.UserService.repository.PermissionRepository;
 import com.codebean.UserService.repository.RolePermissionRepository;
 import com.codebean.UserService.repository.RoleRepository;
 import com.codebean.UserService.utils.Constants;
+import com.codebean.UserService.utils.TransformPagination;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -55,6 +56,9 @@ public class RoleService implements iService<Role> {
 
     @Autowired
     private PermissionRepository permissionRepository;
+
+    @Autowired
+    private TransformPagination transformPagination;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -202,7 +206,7 @@ public class RoleService implements iService<Role> {
 
             List<RoleDto> listRoleDto = this.listRoleModelToDto(listRole);
 
-            return Response.success(Constants.SUCCESS, listRoleDto, request);
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(listRoleDto, pageRoles, "id", ""), request);
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
@@ -272,7 +276,7 @@ public class RoleService implements iService<Role> {
 
             List<RoleDto> listRoleDto = this.listRoleModelToDto(listRole);
 
-            return Response.success(Constants.SUCCESS, listRoleDto, request);
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(listRoleDto, page, columnName, value), request);
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();

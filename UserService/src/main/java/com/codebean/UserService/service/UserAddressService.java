@@ -25,6 +25,7 @@ import com.codebean.UserService.model.UserAddress;
 import com.codebean.UserService.repository.UserAddressRepository;
 import com.codebean.UserService.repository.UserRepository;
 import com.codebean.UserService.utils.Constants;
+import com.codebean.UserService.utils.TransformPagination;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -46,6 +47,9 @@ public class UserAddressService implements iService<UserAddress> {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TransformPagination transformPagination;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -149,7 +153,7 @@ public class UserAddressService implements iService<UserAddress> {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> findAll(org.springframework.data.domain.Pageable pageable, HttpServletRequest request) {
+    public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         try {
             //get user id from request
             Long userId = Long.valueOf(request.getAttribute(Constants.USER_ID).toString());
@@ -159,7 +163,7 @@ public class UserAddressService implements iService<UserAddress> {
 
             List<UserAddressDto> userAddressDto = this.listModelToDto(content);
 
-            return Response.success(Constants.SUCCESS, userAddressDto, request);
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(userAddressDto, pageActiveUserAddress, "id", ""), request);
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
             return Response.internalServerError(Constants.ADDRESS_FAILED_TO_GET, "FEADR02031", request);
@@ -180,7 +184,7 @@ public class UserAddressService implements iService<UserAddress> {
 
             UserAddress address = optionalUserAddress.get();
 
-            if(userId != address.getUser().getID()){
+            if (userId != address.getUser().getID()) {
                 return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "FVADR02042", request);
             }
 
@@ -209,7 +213,7 @@ public class UserAddressService implements iService<UserAddress> {
                     page = this.userAddressRepository.findAllByUser_IDAndAddressContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
                     break;
                 case "country":
-                    page = this.userAddressRepository.findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive (userId, value, true, pageable);
+                    page = this.userAddressRepository.findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
                     break;
                 case "postalcode":
                     page = this.userAddressRepository.findAllByUser_IDAndPostalCodeContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
@@ -223,7 +227,7 @@ public class UserAddressService implements iService<UserAddress> {
 
             List<UserAddressDto> userAddressDto = this.listModelToDto(listUserAddress);
 
-            return Response.success(Constants.SUCCESS, userAddressDto, request);
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(userAddressDto, page, columnName, value), request);
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
             return Response.internalServerError(Constants.ADDRESS_FAILED_TO_GET, "FEADR02051", request);

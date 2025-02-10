@@ -25,6 +25,7 @@ import com.codebean.UserService.model.User;
 import com.codebean.UserService.repository.RoleRepository;
 import com.codebean.UserService.repository.UserRepository;
 import com.codebean.UserService.utils.Constants;
+import com.codebean.UserService.utils.TransformPagination;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -50,6 +52,9 @@ public class UserService implements iService<User> {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TransformPagination transformPagination;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -176,7 +181,9 @@ public class UserService implements iService<User> {
                 return userDto;
             }).toList();
 
-            return Response.success(Constants.SUCCESS, listUserDto, request);
+            Map<String, Object> stringObjectMap = this.transformPagination.transformPagination(listUserDto, page, "id", "");
+
+            return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Throwable e) {
             return Response.internalServerError(Constants.FAILED_TO_GET_DATA, "FEUSR01031", request);
         }
@@ -231,7 +238,9 @@ public class UserService implements iService<User> {
                 return userDto;
             }).toList();
 
-            return Response.success(Constants.SUCCESS, listUserDto, request);
+            Map<String, Object> stringObjectMap = this.transformPagination.transformPagination(listUserDto, page, columnName, value);
+
+            return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Exception e) {
             return Response.internalServerError(Constants.FAILED_TO_GET_DATA, "FEUSR01051", request);
         }

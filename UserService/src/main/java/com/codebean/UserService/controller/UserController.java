@@ -101,7 +101,7 @@ public class UserController {
     )
     public ResponseEntity<?> getAllUsers(
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-            @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+            @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
             HttpServletRequest request
     ) {
         Pageable Pageable = PageRequest.of(page, sizePerPage);
