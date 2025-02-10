@@ -25,7 +25,7 @@ public class Response {
     }
 
     public static ResponseEntity<Object> unauthorized(Object data, Object errorCode, HttpServletRequest request) {
-        return new ResponseHandler().handleResponse(null, HttpStatus.UNAUTHORIZED, Collections.singletonList(data), errorCode, request);
+        return new ResponseHandler().handleResponse(null, HttpStatus.UNAUTHORIZED, data, errorCode, request);
     }
 
     public static ResponseEntity<Object> badRequest(Object data, Object errorCode, HttpServletRequest request) {

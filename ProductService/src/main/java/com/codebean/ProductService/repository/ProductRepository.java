@@ -11,42 +11,40 @@ Version 1.0
 
 import com.codebean.ProductService.model.Category;
 import com.codebean.ProductService.model.Product;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.name = :categoryName")
+    Optional<Product> findFirstBySku(String sku);
+
+    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.name LIKE %:categoryName%")
     Page<Product> findProductsByCategoryName(@Param("categoryName") String categoryName, Pageable pageable);
 
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.id = :categoryId")
     Page<Product> findProductsByCategoryId(@Param("categoryId") String categoryId, Pageable pageable);
 
-    List<Product> findAllByNameContainingIgnoreCase(String name);
-
-//    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c IN :categories")
-//    List<Product> findProductsByCategories(@Param("categories") List<Category> categories);
+    Page<Product> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 
     Page<Product> findProductsByCategories(Set<Category> categories, Pageable pageable);
-
-//    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.id IN :categoryIds")
-//    Page<Product> findAllByCategoryIds(@Param("categoryIds") List<Long> categoryIds, Pageable pageable);
-
 
     // search by multiple category id
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.id IN :categoryIds")
     Page<Product> findAllByCategoryIds(@Param("categoryIds") Iterable<Long> categoryIds, Pageable pageable);
 
-    // search by status product
+    // search by product's status
     Page<Product> findAllByIsActive(Boolean isActive, Pageable pageable);
 
     // search by range price
@@ -66,5 +64,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                                @Param("maxPrice") Double maxPrice,
                                                Pageable pageable
     );
+
+    // select dengan lock
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT p FROM Product p WHERE p.id = :productId")
+    Optional<Product> findByIdWithLock(@Param("productId") Long productId);
+
+//    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c IN :categories")
+//    List<Product> findProductsByCategories(@Param("categories") List<Category> categories);
+
+//    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.id IN :categoryIds")
+//    Page<Product> findAllByCategoryIds(@Param("categoryIds") List<Long> categoryIds, Pageable pageable);
 
 }

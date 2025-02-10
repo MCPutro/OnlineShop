@@ -9,6 +9,7 @@ Created on 31 Jan 2025 11:25
 Version 1.0
 */
 
+import com.codebean.ProductService.util.Constants;
 import com.codebean.sharemodule.Jwt.JwtConstants;
 import com.codebean.sharemodule.Jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -44,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getJwtFromRequest(request);
         try {
-            if (token != null ) {
+            if (token != null) {
                 Map<String, Object> jwtClaims = this.jwtUtil.validateToken(token);
                 if (jwtClaims != null && jwtClaims.get(JwtConstants.VALID).equals(true)) {
                     String username = jwtClaims.get(JwtConstants.SUBJECT).toString();
@@ -65,14 +66,14 @@ public class JwtFilter extends OncePerRequestFilter {
                             );
 
                     // menambahkan userid ke request
-                    request.setAttribute("userId", jwtClaims.get(JwtConstants.USERID).toString());
+                    request.setAttribute(Constants.USER_ID, jwtClaims.get(JwtConstants.USERID).toString());
 
                     // Menambahkan detail request ke objek Authentication
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     // Menambahkan authentication ke security context
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                }else{
+                } else {
                     System.out.println("JWT Claim : " + jwtClaims);
                 }
             }

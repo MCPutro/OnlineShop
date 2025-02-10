@@ -19,6 +19,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class Product {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "SKU", nullable = false, unique = true)
+    @Column(name = "SKU", nullable = false, unique = true, updatable = false)
     private String sku;
 
     @Column(name = "Name", nullable = false)
@@ -65,6 +66,9 @@ public class Product {
     )
     private Set<Category> categories;
 
+    @Transient
+    private Set<Long> categoriesIds; // temporary category ids
+
     @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)
     private String createdBy;
@@ -90,7 +94,15 @@ public class Product {
                 ", stock=" + stock +
                 ", isActive=" + isActive +
                 ", description='" + description + '\'' +
-//                ", categories=" + categories +
+                ", categories=" + categoriesIds +
                 '}';
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+    }
+
+    public void addAllCategory(Collection<Category> categories) {
+        this.categories.addAll(categories);
     }
 }

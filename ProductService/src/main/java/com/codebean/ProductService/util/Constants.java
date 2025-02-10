@@ -29,9 +29,17 @@ public class Constants {
     public static final String CATEGORY_NOT_FOUND = "Category not found";
     public static final String CATEGORY_FAILED_TO_GET = "Failed to retrieve category";
 
-    public static final String PRODUCT_CREATED_SUCCESSFULLY = "Product created successfully";
+
+    public static final String PRODUCT_ADDED_SUCCESSFULLY = "Product added successfully";
     public static final String PRODUCT_UPDATED_SUCCESSFULLY = "Product updated successfully";
     public static final String PRODUCT_DELETED_SUCCESSFULLY = "Product deleted successfully";
 
+    public static final String PRODUCT_NOT_FOUND = "Product not found";
+    public static final String PRODUCT_FAILED_TO_ADD = "Product addition failed";
+    public static final String PRODUCT_FAILED_TO_UPDATE = "Product update failed";
+    public static final String PRODUCT_FAILED_TO_DELETE = "Product deletion failed";
+    public static final String PRODUCT_FAILED_TO_GET = "Failed to retrieve product";
+    public static final String PRODUCT_ALREADY_EXIST = "Product already exist";
+    public static final String PRODUCT_INACTIVE = "Product inactive";
 
 }

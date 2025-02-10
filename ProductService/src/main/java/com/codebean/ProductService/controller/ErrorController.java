@@ -9,7 +9,6 @@ Created on 13 Jan 2025 14:01
 Version 1.0
 */
 
-
 import com.codebean.ProductService.exception.ValidateException;
 import com.codebean.ProductService.handler.ResponseHandler;
 import jakarta.validation.ConstraintViolationException;
@@ -28,7 +27,6 @@ public class ErrorController {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> constraintViolationException(ConstraintViolationException exception) {
-//        System.out.println("xxxxxxx -- ConstraintViolationException");
         return new ResponseHandler().handleResponse(
                 exception.getMessage(), // String message,
                 HttpStatus.BAD_REQUEST,// HttpStatus status,
@@ -47,7 +45,7 @@ public class ErrorController {
         return new ResponseHandler().handleResponse(
                 "exception.getMessage()", // String message,
                 HttpStatus.BAD_REQUEST,// HttpStatus status,
-                this.errorList, // Object obj,
+                String.join(", ",this.errorList), // Object data,
                 exception.getErrorCode(),// Object errorCode,
                 exception.getRequest()// HttpServletRequest request
         );

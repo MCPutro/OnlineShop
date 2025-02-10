@@ -42,8 +42,7 @@ import java.util.Optional;
 @Service
 public class CategoryService implements iService<Category> {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private CategoryRepository categoryRepository;
