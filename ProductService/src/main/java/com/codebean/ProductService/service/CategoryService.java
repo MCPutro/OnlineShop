@@ -23,6 +23,7 @@ import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Category;
 import com.codebean.ProductService.repository.CategoryRepository;
 import com.codebean.ProductService.util.Constants;
+import com.codebean.ProductService.util.TransformPagination;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -35,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -47,6 +49,9 @@ public class CategoryService implements iService<Category> {
     private CategoryRepository categoryRepository;
 
     private final List<CategoryDto> categoryDto = new ArrayList<>();
+
+    @Autowired
+    private TransformPagination transformPagination;
 
     @Override
     @Transactional
@@ -115,13 +120,15 @@ public class CategoryService implements iService<Category> {
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         try {
-            Iterable<Category> all = this.categoryRepository.findAll(pageable);
+            Page<Category> pageCategory = this.categoryRepository.findAll(pageable);
 
             this.categoryDto.clear();
 
-            all.forEach(category -> categoryDto.add(this.modelMapper.map(category, CategoryDto.class)));
+            pageCategory.forEach(category -> categoryDto.add(this.modelMapper.map(category, CategoryDto.class)));
 
-            return Response.success(Constants.SUCCESS, categoryDto, request);
+            Map<String, Object> stringObjectMap = transformPagination.transformPagination(this.categoryDto, pageCategory, "id", "");
+
+            return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Exception e) {
             return Response.internalServerError(e.getMessage(), "FECTG06031", request);
         }
@@ -170,7 +177,10 @@ public class CategoryService implements iService<Category> {
                 return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "FVCTG06055", request);
             }
 
-            return Response.success(Constants.SUCCESS, this.listCategoryModelToDto(categoryList), request);
+            List<CategoryDto> listCategoryDto = this.listCategoryModelToDto(categoryList);
+            Map<String, Object> stringObjectMap = transformPagination.transformPagination(listCategoryDto, pageCategories, columnName, value);
+
+            return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Exception e) {
             return Response.internalServerError(Constants.CATEGORY_FAILED_TO_GET, "FECTG06051", request);
         }

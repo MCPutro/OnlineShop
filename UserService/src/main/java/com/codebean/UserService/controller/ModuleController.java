@@ -26,7 +26,7 @@ public class ModuleController {
     @Autowired
     private ModuleService moduleService;
 
-    @GetMapping(path = "/modules", produces = MediaType.APPLICATION_JSON_VALUE)
+        @GetMapping(path = "/modules", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getModules(HttpServletRequest request) {
         return this.moduleService.findAllModules(request);
     }
@@ -41,13 +41,13 @@ public class ModuleController {
         return this.moduleService.findAllByModuleStatusAndPermissionStatus(true, true, request);
     }
 
-    @GetMapping(path = "/modules/id/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getModuleByRoleId(@PathVariable(name = "roleId") Long roleId, HttpServletRequest request) {
+    @GetMapping(path = "/module/roleId/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getModuleByRoleId(@PathVariable(value = "roleId") Long roleId, HttpServletRequest request) {
         return this.moduleService.findByRoleId(roleId, request);
     }
 
-    @GetMapping(path = "/modules/name/{roleName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getModuleByRoleName(@PathVariable(name = "roleName") String roleName, HttpServletRequest request) {
+    @GetMapping(path = "/module/roleName/{roleName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getModuleByRoleName(@PathVariable(value = "roleName") String roleName, HttpServletRequest request) {
         return this.moduleService.findByRoleName(roleName, request);
     }
 

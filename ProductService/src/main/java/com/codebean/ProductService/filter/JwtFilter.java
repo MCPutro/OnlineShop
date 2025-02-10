@@ -53,8 +53,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     for (String permission : s) {
                         grantedAuthorities.add(new SimpleGrantedAuthority(permission));
                     }
-                    System.out.println(">>"+username);
-                    System.out.println(">>"+s);
+//                    System.out.println(">>"+username);
+//                    System.out.println(">>"+s);
 
 //                    final UserDetails userDetails = this.authUserDetailService.loadUserByUsername(jwtClaims.get(JwtConstants.SUBJECT).toString());
                     final UsernamePasswordAuthenticationToken authentication =

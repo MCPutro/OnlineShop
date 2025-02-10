@@ -46,7 +46,7 @@ public class CategoryController {
     @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT')")
     @GetMapping(path = "/all-category")
     public ResponseEntity<?> getAllCategory(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                            @RequestParam(value = "sizePerPage", required = false, defaultValue = "100") Integer sizePerPage,
+                                            @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
                                             HttpServletRequest request
     ) {
         Pageable Pageable = PageRequest.of(page, sizePerPage);
@@ -56,7 +56,7 @@ public class CategoryController {
     @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT','SHOP')")
     @GetMapping(path = "/category")
     public ResponseEntity<?> getAllCategoryActive(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                  @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+                                                  @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
                                                   HttpServletRequest request
     ) {
         Pageable Pageable = PageRequest.of(page, sizePerPage);
@@ -65,13 +65,13 @@ public class CategoryController {
 
     @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT')")
     @GetMapping(path = "/category/{categoryId}")
-    public ResponseEntity<?> getCategoryById(@PathVariable Long categoryId, HttpServletRequest request) {
+    public ResponseEntity<?> getCategoryById(@PathVariable(value = "categoryId") Long categoryId, HttpServletRequest request) {
         return this.categoryService.findById(categoryId, request);
     }
 
     @PreAuthorize("hasAnyAuthority('MANAGE_PRODUCT')")
     @DeleteMapping(path = "/category/{categoryId}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId, HttpServletRequest request) {
+    public ResponseEntity<?> deleteCategory(@PathVariable(value = "categoryId") Long categoryId, HttpServletRequest request) {
         return this.categoryService.delete(categoryId, request);
     }
 
