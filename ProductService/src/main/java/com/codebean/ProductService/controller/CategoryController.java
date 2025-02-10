@@ -16,6 +16,8 @@ import com.codebean.ProductService.service.ValidationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class CategoryController {
     @Autowired
     private ValidationService validationService;
 
-    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYEDIT')")
+    @PreAuthorize("hasAnyAuthority('MANAGE_PRODUCT')")
     @PostMapping(path = "/category")
     public ResponseEntity<?> addCategory(@RequestBody CategoryAddDto dto, HttpServletRequest request) {
         this.validationService.validate(dto, "CTG010010", request);
@@ -41,33 +43,44 @@ public class CategoryController {
         return this.categoryService.save(category, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYVIEW')")
+    @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT')")
     @GetMapping(path = "/all-category")
-    public ResponseEntity<?> getAllCategory(HttpServletRequest request) {
-        return this.categoryService.findAll(null, request);
+    public ResponseEntity<?> getAllCategory(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                            @RequestParam(value = "sizePerPage", required = false, defaultValue = "100") Integer sizePerPage,
+                                            HttpServletRequest request
+    ) {
+        Pageable Pageable = PageRequest.of(page, sizePerPage);
+        return this.categoryService.findAll(Pageable, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYACTIVEVIEW')")
+    @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT','SHOP')")
     @GetMapping(path = "/category")
-    public ResponseEntity<?> getAllCategoryActive(HttpServletRequest request) {
-        return this.categoryService.findAllByStatus(true, request);
+    public ResponseEntity<?> getAllCategoryActive(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                  @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+                                                  HttpServletRequest request
+    ) {
+        Pageable Pageable = PageRequest.of(page, sizePerPage);
+        return this.categoryService.findByParam(Pageable, "status", "active", request);
     }
 
-    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYVIEW')")
+    @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT')")
     @GetMapping(path = "/category/{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable Long categoryId, HttpServletRequest request) {
         return this.categoryService.findById(categoryId, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYEDIT')")
+    @PreAuthorize("hasAnyAuthority('MANAGE_PRODUCT')")
     @DeleteMapping(path = "/category/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId, HttpServletRequest request) {
         return this.categoryService.delete(categoryId, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('PRODUCTCATEGORYEDIT')")
+    @PreAuthorize("hasAnyAuthority('MANAGE_PRODUCT')")
     @PatchMapping(path = "/category/{categoryId}")
-    public ResponseEntity<Object> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryAddDto dto, HttpServletRequest request) {
+    public ResponseEntity<Object> updateCategory(@PathVariable Long categoryId,
+                                                 @RequestBody CategoryAddDto dto,
+                                                 HttpServletRequest request
+    ) {
         this.validationService.validate(dto, "CTG010010", request);
 
         Category category = new Category();
@@ -75,4 +88,6 @@ public class CategoryController {
 
         return this.categoryService.update(categoryId, category, request);
     }
+
+    // fungsi search belum ada
 }
