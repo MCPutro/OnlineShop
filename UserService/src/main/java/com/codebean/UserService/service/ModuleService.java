@@ -30,9 +30,12 @@ import com.codebean.UserService.repository.RoleRepository;
 import com.codebean.UserService.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -50,16 +53,79 @@ public class ModuleService {
 
     private final ModelMapper modelMapper = new ModelMapper();
 
-    public ResponseEntity<Object> findByRoleId(Long roleId, HttpServletRequest request)  {
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findAllModules(HttpServletRequest request) {
+        try {
+            List<Module> modules = moduleRepository.findAll();
+
+            List<ModuleDto> moduleDto = this.listModelModulesToDto(modules);
+
+            return Response.success(Constants.SUCCESS, moduleDto, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04001", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findAllModulesByStatus(Boolean status, HttpServletRequest request) {
+        try {
+            if (status == null) {
+                status = Boolean.TRUE;
+            }
+
+            List<Module> listActiveModules = this.moduleRepository.findAllByIsActive(status);
+
+            List<ModuleDto> moduleDto = this.listModelModulesToDto(listActiveModules);
+
+            return Response.success(Constants.SUCCESS, moduleDto, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04011", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findAllByModuleStatusAndPermissionStatus(Boolean moduleStatus, Boolean permissionStatus, HttpServletRequest request) {
+        try {
+            if (moduleStatus == null || permissionStatus == null) {
+                return Response.badRequest(Constants.MODULE_FAILED_TO_GET, "FVMDL04021", request);
+            }
+
+            List<Module> allByModuleStatusAndPermissionsStatus = this.moduleRepository.findAllByModuleStatusAndPermissionsStatus(moduleStatus, permissionStatus);
+
+            // filter status permission sesuai dengan permissionStatus
+            allByModuleStatusAndPermissionsStatus.stream().forEach(module -> {
+                List<Permission> list = module.getPermissions().stream().filter(permission -> permission.getIsActive().equals(permissionStatus)).toList();
+                module.setPermissions(list);
+            });
+
+//            List<Module> temp = new ArrayList<>();
+//            for (Module module : allByModuleStatusAndPermissionsStatus) {
+//                List<Permission> list = module.getPermissions().stream().filter(permission -> permission.getIsActive().equals(permissionStatus)).toList();
+//                module.setPermissions(list);
+//                temp.add(module);
+//            }
+//            allByModuleStatusAndPermissionsStatus.clear();
+//            allByModuleStatusAndPermissionsStatus.addAll(temp);
+
+            List<ModuleDto> listModuleDto = this.listModelModulesToDto(allByModuleStatusAndPermissionsStatus);
+
+            return Response.success(Constants.SUCCESS, listModuleDto, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04021", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findByRoleId(Long roleId, HttpServletRequest request) {
         try {
             if (roleId == null) {
-                return Response.badRequest(Constants.BAD_DATA, "FVMDL04001", request);
+                return Response.badRequest(Constants.BAD_DATA, "FVMDL04031", request);
             }
 
             Optional<Role> optionalRole = this.roleRepository.findById(roleId);
 
             if (!optionalRole.isPresent()) {
-                return Response.badRequest(Constants.BAD_DATA, "FVMDL04002", request);
+                return Response.badRequest(Constants.BAD_DATA, "FVMDL04032", request);
             }
 
             return this.findByRole(optionalRole.get(), request);
@@ -67,70 +133,87 @@ public class ModuleService {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_DELETE, "FEMDL04001", request);
+            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04031", request);
         }
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findByRoleName(String roleName, HttpServletRequest request) {
+        try {
+            if (roleName == null) {
+                return Response.badRequest(Constants.BAD_DATA, "FVMDL04031", request);
+            }
+
+            Optional<Role> optionalRole = this.roleRepository.findFirstByName(roleName);
+
+            if (!optionalRole.isPresent()) {
+                return Response.badRequest(Constants.BAD_DATA, "FVMDL04032", request);
+            }
+
+            return this.findByRole(optionalRole.get(), request);
+
+        } catch (Exception e) {
+            // NEED SAVE TO LOG
+            e.printStackTrace();
+            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04031", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public ResponseEntity<Object> findByRole(Role role, HttpServletRequest request) {
         try {
             if (role == null) {
-                return Response.badRequest(Constants.BAD_DATA, "FVMDL04011", request);
+                return Response.badRequest(Constants.BAD_DATA, "FVMDL04041", request);
             }
 
-//            List<RolePermission> listActivePermissionByRole = this.rolePermissionRepository.findByRoleAndIsActive(role, true);
-//
-//            Map<Long, ModuleDto> mapModuleDto = new HashMap<>();
-//
-//            for (RolePermission rolePermission : listActivePermissionByRole) {
-//                Permission permission = rolePermission.getPermission();
-//                Module module = permission.getModule();
-//
-//                ModuleDto moduleDto = mapModuleDto.get(module.getID());
-//
-//                if (moduleDto == null) {
-//                    moduleDto = new ModuleDto(module.getID(), module.getName(), module.getPath(), module.getDescription(), module.getIsActive());
-//                    PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
-//                    moduleDto.addPermission(permissionDto);
-//                    mapModuleDto.put(module.getID(), moduleDto);
-//                } else {
-//                    PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
-//                    mapModuleDto.get(module.getID()).addPermission(permissionDto);
-//                }
-//            }
-
             List<ModuleDto> activeModulesByRole = this.getActiveModulesByRole(role);
+
+            if (activeModulesByRole == null) {
+                return Response.badRequest(Constants.MODULE_FAILED_TO_GET, "FVMDL04042", request);
+            }
 
             return Response.success(Constants.SUCCESS, activeModulesByRole, request);
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_DELETE, "FEMDL04011", request);
+            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04041", request);
         }
     }
 
-
+    @Transactional(readOnly = true, propagation = Propagation.MANDATORY)
     public List<ModuleDto> getActiveModulesByRole(Role role) {
-        List<RolePermission> listActivePermissionByRole = this.rolePermissionRepository.findByRoleAndIsActive(role, true);
+        try {
+            List<RolePermission> listActivePermissionByRole = this.rolePermissionRepository.findByRoleAndIsActive(role, true);
 
-        Map<Long, ModuleDto> mapModuleDto = new HashMap<>();
+            Map<Long, ModuleDto> mapModuleDto = new HashMap<>();
 
-        for (RolePermission rolePermission : listActivePermissionByRole) {
-            Permission permission = rolePermission.getPermission();
-            Module module = permission.getModule();
+            for (RolePermission rolePermission : listActivePermissionByRole) {
+                Permission permission = rolePermission.getPermission();
+                Module module = permission.getModule();
 
-            ModuleDto moduleDto = mapModuleDto.get(module.getID());
+                ModuleDto moduleDto = mapModuleDto.get(module.getID());
 
-            if (moduleDto == null) {
-                moduleDto = new ModuleDto(module.getID(), module.getName(), module.getPath(), module.getDescription(), module.getIsActive());
-                PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
-                moduleDto.addPermission(permissionDto);
-                mapModuleDto.put(module.getID(), moduleDto);
-            } else {
-                PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
-                mapModuleDto.get(module.getID()).addPermission(permissionDto);
+                if (moduleDto == null) {
+                    moduleDto = new ModuleDto(module.getID(), module.getName(), module.getPath(), module.getDescription(), module.getIsActive());
+                    PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
+                    moduleDto.addPermission(permissionDto);
+                    mapModuleDto.put(module.getID(), moduleDto);
+                } else {
+                    PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
+                    mapModuleDto.get(module.getID()).addPermission(permissionDto);
+                }
             }
-        }
 
-        return mapModuleDto.values().stream().toList();
+            return mapModuleDto.values().stream().toList();
+        } catch (Exception e) {
+            // NEED SAVE TO LOG
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private List<ModuleDto> listModelModulesToDto(List<Module> modules) {
+        return this.modelMapper.map(modules, new TypeToken<List<ModuleDto>>() {
+        }.getType());
     }
 }

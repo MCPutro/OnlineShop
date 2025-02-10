@@ -96,4 +96,6 @@ public class Constants {
     public static final String ROLE_FAILED_TO_GET = "Role retrieval failed";
     public static final String ROLE_ALREADY_EXISTS = "Role already exists";
 
+    // module
+    public static final String MODULE_FAILED_TO_GET = "Module retrieval failed";
 }

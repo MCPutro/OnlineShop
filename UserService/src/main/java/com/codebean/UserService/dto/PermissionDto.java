@@ -9,13 +9,11 @@ Created on 28 Jan 2025 10:16
 Version 1.0
 */
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class PermissionDto {

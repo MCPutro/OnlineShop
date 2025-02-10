@@ -19,6 +19,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -45,7 +46,7 @@ public class Module {
     private Boolean isActive = true;
 
     @OneToMany(mappedBy = "module") // Relasi ke Permission
-    private Set<Permission> permissions;
+    private List<Permission> permissions;
 
     @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)

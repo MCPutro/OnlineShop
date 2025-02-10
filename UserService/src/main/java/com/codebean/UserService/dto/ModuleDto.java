@@ -11,7 +11,9 @@ Version 1.0
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,7 +23,7 @@ public class ModuleDto {
     private String path;
     private String description;
     private Boolean isActive;
-    private Set<PermissionDto> permissions;
+    private List<PermissionDto> permissions;
 
     public ModuleDto() {
     }
@@ -32,7 +34,7 @@ public class ModuleDto {
         this.path = path;
         this.description = description;
         this.isActive = isActive;
-        this.permissions = new HashSet<>();
+        this.permissions = new ArrayList<>();
     }
 
     public void addPermission(PermissionDto permission) {
