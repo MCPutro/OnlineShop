@@ -67,7 +67,7 @@ public class Product {
     private Set<Category> categories;
 
     @Transient
-    private Set<Long> categoriesIds; // temporary category ids
+    private Set<Long> categoryIds; // temporary category ids
 
     @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)
@@ -94,7 +94,7 @@ public class Product {
                 ", stock=" + stock +
                 ", isActive=" + isActive +
                 ", description='" + description + '\'' +
-                ", categories=" + categoriesIds +
+                ", categories=" + categoryIds +
                 '}';
     }
 

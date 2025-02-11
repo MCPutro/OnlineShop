@@ -110,12 +110,6 @@ public class RoleService implements iService<Role> {
                 return Response.badRequest(Constants.BAD_DATA, "FVROL03011", request);
             }
 
-            //check role name
-            Optional<Role> optionalRoleByName = this.roleRepository.findFirstByName(role.getName());
-            if (optionalRoleByName.isPresent()) {
-                return Response.badRequest(Constants.ROLE_ALREADY_EXISTS, "FVROL03012", request);
-            }
-
             //find by id
             Optional<Role> optionalRoleById = this.roleRepository.findById(id);
             if (!optionalRoleById.isPresent()) {
@@ -123,6 +117,15 @@ public class RoleService implements iService<Role> {
             }
 
             Role roleDB = optionalRoleById.get();
+
+            boolean roleNameIsSame = roleDB.getName().equals(role.getName());
+            if (!roleNameIsSame) {
+                //check role name
+                Optional<Role> optionalRoleByName = this.roleRepository.findFirstByName(role.getName());
+                if (optionalRoleByName.isPresent()) {
+                    return Response.badRequest(Constants.ROLE_ALREADY_EXISTS, "FVROL03012", request);
+                }
+            }
 
             // set active permission
             List<RolePermission> rolePermissions = new ArrayList<>();
@@ -159,9 +162,11 @@ public class RoleService implements iService<Role> {
             this.rolePermissionRepository.saveAll(rolePermissions);
 
             // update role
-            optionalRoleById.ifPresent(rl -> {
-                rl.setName(role.getName());
-            });
+            if (!roleNameIsSame) {
+                optionalRoleById.ifPresent(rl -> {
+                    rl.setName(role.getName());
+                });
+            }
 
             return Response.success(Constants.ROLE_UPDATED_SUCCESSFULLY, null, request);
         } catch (Exception e) {

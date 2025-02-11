@@ -10,10 +10,7 @@ Version 1.0
 */
 
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.Set;
@@ -35,10 +32,11 @@ public class ProductAdd {
     private Double price;
 
     @NotNull(message = "cannot be null")
+    @Min(value = 1, message = "minimum stock is 1")
     private Integer stock;
 
-    @NotNull(message = "cannot be null")
-    private Boolean isActive;
+//    @NotNull(message = "cannot be null")
+//    private Boolean isActive;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")

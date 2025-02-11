@@ -14,6 +14,7 @@
         <module>UserService</module>
         <module>ProductService</module>
         <module>ShareModule</module>
+        <module>TransactionService</module>
         <module>WebsiteUI</module>
     </modules>
 </project>

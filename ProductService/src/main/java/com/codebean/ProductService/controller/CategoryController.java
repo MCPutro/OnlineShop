@@ -81,7 +81,7 @@ public class CategoryController {
                                                  @RequestBody CategoryAddDto dto,
                                                  HttpServletRequest request
     ) {
-        this.validationService.validate(dto, "CTG010010", request);
+        this.validationService.validate(dto, "CTG010011", request);
 
         Category category = new Category();
         BeanUtils.copyProperties(dto, category);

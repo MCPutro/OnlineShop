@@ -71,7 +71,7 @@ public class ProductService implements iService<Product> {
             }
 
             // find category
-            List<Category> listCategoryByIds = this.categoryRepository.findAllById(product.getCategoriesIds());
+            List<Category> listCategoryByIds = this.categoryRepository.findAllById(product.getCategoryIds());
 
             // update product category
             product.setCategories(new HashSet<>(listCategoryByIds));
@@ -199,6 +199,15 @@ public class ProductService implements iService<Product> {
                     break;
                 case "categoryname":
                     pageProduct = this.productRepository.findProductsByCategoryName(value, pageable);
+                    break;
+                case "status":
+                    if (value.equalsIgnoreCase("active")) {
+                        pageProduct = this.productRepository.findAllByIsActive(true, pageable);
+                    } else if (value.equalsIgnoreCase("inactive")) {
+                        pageProduct = this.productRepository.findAllByIsActive(false, pageable);
+                    } else {
+                        return Response.badRequest(Constants.INPUT_ACTIVE_OR_INACTIVE, "FVPDT07051", request);
+                    }
                     break;
                 default:
                     pageProduct = this.productRepository.findAll(pageable);
