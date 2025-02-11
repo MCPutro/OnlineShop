@@ -4,15 +4,12 @@ package com.codebean.transactionservice.model;
 IntelliJ IDEA 2024.2.4 (Community Edition)
 Build #IC-242.23726.103, built on October 23, 2024
 @Author mcputro a.k.a. Mu'ti Cahyono Putro
-Created on 11 Feb 2025 01:31
-@Last Modified 11 Feb 2025 01:31
+Created on 12 Feb 2025 00:27
+@Last Modified 12 Feb 2025 00:27
 Version 1.0
 */
 
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -21,29 +18,31 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
 @Entity
-@Table( name = "Carts")
+@Table(name = "OrderItems")
 @EntityListeners(AuditingEntityListener.class)
-public class Cart {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "UserId", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "OrderId", nullable = false)
+    private Order order;
 
-    @Column(name = "ProductId", nullable = false)
-    private Long productId;
+    @Column(name = "ProductId")
+    private Long ProductId;
 
-    @Column(name = "Quantity", nullable = false)
-    private Integer quantity;
+    @Column(name = "ProductPrice")
+    private Double ProductPrice;
 
-    @Column(name = "IsCheckedOut")
-    private Boolean isCheckedOut;
+    @Column(name = "Quantity")
+    private Integer Quantity;
+
+    @Column(name = "SubTotalPrice")
+    private Double subTotalPrice;
 
     @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)

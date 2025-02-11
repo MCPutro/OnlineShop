@@ -4,11 +4,10 @@ package com.codebean.transactionservice.model;
 IntelliJ IDEA 2024.2.4 (Community Edition)
 Build #IC-242.23726.103, built on October 23, 2024
 @Author mcputro a.k.a. Mu'ti Cahyono Putro
-Created on 11 Feb 2025 01:31
-@Last Modified 11 Feb 2025 01:31
+Created on 12 Feb 2025 00:23
+@Last Modified 12 Feb 2025 00:23
 Version 1.0
 */
-
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,14 +18,16 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
 @Entity
-@Table( name = "Carts")
+@Table(name = "Orders")
 @EntityListeners(AuditingEntityListener.class)
-public class Cart {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +37,20 @@ public class Cart {
     @Column(name = "UserId", nullable = false)
     private Long userId;
 
-    @Column(name = "ProductId", nullable = false)
-    private Long productId;
+    @Column(name = "AddressId", nullable = false)
+    private Long addressId;
 
-    @Column(name = "Quantity", nullable = false)
-    private Integer quantity;
+    @Column(name = "TotalPrice", nullable = false)
+    private Double totalPrice;
 
-    @Column(name = "IsCheckedOut")
-    private Boolean isCheckedOut;
+    @Column(name = "OrderDate", nullable = false)
+    private LocalDate orderDate;
+
+    @Column(name = "OrderStatus", nullable = false)
+    private String orderStatus;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
 
     @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)
