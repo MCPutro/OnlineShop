@@ -30,6 +30,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findFirstBySku(String sku);
 
+    Optional<Product> findByIdAndIsActive(Long id, Boolean isActive);
+
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.name LIKE %:categoryName%")
     Page<Product> findProductsByCategoryName(@Param("categoryName") String categoryName, Pageable pageable);
 

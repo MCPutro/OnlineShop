@@ -100,19 +100,24 @@ public class ProductService implements iService<Product> {
                 return Response.badRequest(Constants.PRODUCT_NOT_FOUND, "FVPDT07012", request);
             }
 
-            Product productDB = optionalProduct.get();
-            if (productDB.getIsActive()) {
-                //productDB.setSku(product.getSku());
-                productDB.setName(product.getName());
-                productDB.setDescription(product.getDescription());
-                productDB.setStock(product.getStock());
-                productDB.setPrice(product.getPrice());
-                productDB.setCategories(product.getCategories());
+            // update category
+            List<Category> listCategory = this.categoryRepository.findAllById(product.getCategoryIds());
 
-                return Response.success(Constants.PRODUCT_UPDATED_SUCCESSFULLY, null, request);
-            } else {
-                return Response.badRequest(Constants.PRODUCT_INACTIVE, "FVPDT07013", request);
-            }
+            Product productDB = optionalProduct.get();
+//            if (productDB.getIsActive()) {
+            //productDB.setSku(product.getSku());
+            productDB.setName(product.getName());
+            productDB.setDescription(product.getDescription());
+            productDB.setStock(product.getStock());
+            productDB.setPrice(product.getPrice());
+            productDB.setIsActive(product.getIsActive());
+            productDB.setCategories(product.getCategories());
+            productDB.setCategories(new HashSet<>(listCategory));
+
+            return Response.success(Constants.PRODUCT_UPDATED_SUCCESSFULLY, null, request);
+//            } else {
+//                return Response.badRequest(Constants.PRODUCT_INACTIVE, "FVPDT07013", request);
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,6 +230,26 @@ public class ProductService implements iService<Product> {
         } catch (Exception e) {
             e.printStackTrace();
             return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07051", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findByIdAndStatus(Long id, Boolean isActive, HttpServletRequest request) {
+        try {
+            if (id == null || isActive == null) {
+                return Response.badRequest(Constants.BAD_DATA, "FVPDT07061", request);
+            }
+
+            Optional<Product> optionalProduct = this.productRepository.findByIdAndIsActive(id, isActive);
+            if (!optionalProduct.isPresent()) {
+                return Response.badRequest(Constants.PRODUCT_NOT_FOUND, "FVPDT07062", request);
+            }
+
+            ProductDto productDto = this.modelMapper.map(optionalProduct.get(), ProductDto.class);
+            return Response.success(Constants.SUCCESS, productDto, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07061", request);
         }
     }
 

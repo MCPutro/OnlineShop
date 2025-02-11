@@ -38,7 +38,7 @@ class ProductServiceTest {
         product.setDescription("Product 001");
         product.setStock(100);
         product.setPrice(500.0);
-        product.setCategoriesIds(new HashSet<>(Arrays.asList(1L, 3L, 4L)));
+        product.setCategoryIds(new HashSet<>(Arrays.asList(1L, 3L, 4L)));
 
         System.out.println(product);
 
@@ -57,7 +57,7 @@ class ProductServiceTest {
         product.setDescription("Product 001xx");
         product.setStock(999);
         product.setPrice(999.0);
-        product.setCategoriesIds(new HashSet<>(Arrays.asList(5L, 9L)));
+        product.setCategoryIds(new HashSet<>(Arrays.asList(5L, 9L)));
 
         HttpServletRequest request = new MockHttpServletRequest();
 

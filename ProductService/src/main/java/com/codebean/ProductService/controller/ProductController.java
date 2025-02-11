@@ -18,6 +18,7 @@ Version 1.0
  */
 
 import com.codebean.ProductService.dto.request.ProductAdd;
+import com.codebean.ProductService.dto.request.ProductUpdate;
 import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Product;
 import com.codebean.ProductService.service.ProductService;
@@ -26,6 +27,7 @@ import com.codebean.ProductService.util.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,10 +65,65 @@ public class ProductController {
 
     @PreAuthorize("hasAuthority('VIEW_PRODUCT')")
     @GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllProducts(@RequestHeader
-            HttpServletRequest request) {
-//        this.productService.findAll(request)
-        return null;
+    public ResponseEntity<?> getAllProducts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                            @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+                                            HttpServletRequest request
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, sizePerPage);
+        return this.productService.findAll(pageRequest, request);
+    }
+
+    @PreAuthorize("hasAuthority('VIEW_PRODUCT')")
+    @GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProductById(@PathVariable(value = "productId") Long productId, HttpServletRequest request) {
+        return this.productService.findById(productId, request);
+    }
+
+//    @PreAuthorize("hasAuthority('SHOP')")
+    @GetMapping(path = "/shop/products")
+    public ResponseEntity<?> getAllActiveProducts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                  @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+                                                  HttpServletRequest request
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, sizePerPage);
+        return this.productService.findByParam(pageRequest, "status", "active", request);
+    }
+
+//    @PreAuthorize("hasAuthority('SHOP')")
+    @GetMapping(path = "/shop/product/{productId}")
+    public ResponseEntity<?> getAllActiveProducts(@PathVariable(value = "productId") Long productId,
+                                                  HttpServletRequest request
+    ) {
+        return this.productService.findByIdAndStatus(productId, true, request);
+    }
+
+    @PreAuthorize("hasAuthority('MANAGE_PRODUCT')")
+    @PatchMapping(path = "/product/{productId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateProductById(@PathVariable(value = "productId") Long productId,
+                                               @RequestBody ProductUpdate dto,
+                                               HttpServletRequest request
+    ) {
+        this.validationService.validate(dto, "FVPDTCTRL07061", request);
+        try {
+            Product updateProduct = new Product();
+            BeanUtils.copyProperties(dto, updateProduct);
+
+            return this.productService.update(productId, updateProduct, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_ADD, "FEPDTCTRL07061", request);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('MANAGE_PRODUCT')")
+    @DeleteMapping(path = "/product/{productId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteProductById(@PathVariable(value = "productId") Long productId,
+                                               HttpServletRequest request
+    ) {
+        return this.productService.delete(productId, request);
     }
 
 
