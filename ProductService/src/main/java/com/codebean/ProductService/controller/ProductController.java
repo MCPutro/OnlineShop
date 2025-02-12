@@ -34,6 +34,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 public class ProductController {
@@ -63,6 +65,7 @@ public class ProductController {
         }
     }
 
+
     @PreAuthorize("hasAuthority('VIEW_PRODUCT')")
     @GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllProducts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
@@ -73,13 +76,15 @@ public class ProductController {
         return this.productService.findAll(pageRequest, request);
     }
 
+
     @PreAuthorize("hasAuthority('VIEW_PRODUCT')")
     @GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProductById(@PathVariable(value = "productId") Long productId, HttpServletRequest request) {
         return this.productService.findById(productId, request);
     }
 
-//    @PreAuthorize("hasAuthority('SHOP')")
+
+    //    @PreAuthorize("hasAuthority('SHOP')")
     @GetMapping(path = "/shop/products")
     public ResponseEntity<?> getAllActiveProducts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
@@ -89,13 +94,15 @@ public class ProductController {
         return this.productService.findByParam(pageRequest, "status", "active", request);
     }
 
-//    @PreAuthorize("hasAuthority('SHOP')")
+
+    //    @PreAuthorize("hasAuthority('SHOP')")
     @GetMapping(path = "/shop/product/{productId}")
-    public ResponseEntity<?> getAllActiveProducts(@PathVariable(value = "productId") Long productId,
-                                                  HttpServletRequest request
+    public ResponseEntity<?> getAllActiveProductById(@PathVariable(value = "productId") Long productId,
+                                                     HttpServletRequest request
     ) {
         return this.productService.findByIdAndStatus(productId, true, request);
     }
+
 
     @PreAuthorize("hasAuthority('MANAGE_PRODUCT')")
     @PatchMapping(path = "/product/{productId}",
@@ -117,6 +124,7 @@ public class ProductController {
         }
     }
 
+
     @PreAuthorize("hasAuthority('MANAGE_PRODUCT')")
     @DeleteMapping(path = "/product/{productId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -126,5 +134,13 @@ public class ProductController {
         return this.productService.delete(productId, request);
     }
 
+
+
+    @GetMapping(path = "/shop/product/ids")
+    public ResponseEntity<?> getAllActiveProductByIds(@RequestParam(value = "productId") List<Long> productIds,
+                                                      HttpServletRequest request
+    ) {
+        return this.productService.findByIdsAndStatus(productIds, true, request);
+    }
 
 }

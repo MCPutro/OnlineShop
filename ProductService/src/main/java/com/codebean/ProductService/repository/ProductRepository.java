@@ -72,6 +72,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.id = :productId")
     Optional<Product> findByIdWithLock(@Param("productId") Long productId);
 
+    @Query("SELECT p FROM Product p WHERE p.id in :ids AND p.isActive = :status")
+    List<Product> findProductsByIdsAndStatus(@Param("ids") Iterable<Long> ids, @Param("status") Boolean status);
+
 //    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c IN :categories")
 //    List<Product> findProductsByCategories(@Param("categories") List<Category> categories);
 

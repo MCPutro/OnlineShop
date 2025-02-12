@@ -253,6 +253,25 @@ public class ProductService implements iService<Product> {
         }
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findByIdsAndStatus(List<Long> ids, Boolean isActive, HttpServletRequest request) {
+        try {
+            if (ids == null || isActive == null) {
+                return Response.badRequest(Constants.BAD_DATA, "FVPDT07071", request);
+            }
+
+            List<Product> products = this.productRepository.findProductsByIdsAndStatus(ids, isActive);
+            if (products.isEmpty()) {
+                return Response.badRequest(Constants.PRODUCT_NOT_FOUND, "FVPDT07072", request);
+            }
+
+            return Response.success(Constants.SUCCESS, this.listModelProductDto(products), request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07071", request);
+        }
+    }
+
     private List<ProductDto> listModelProductDto(List<Product> products) {
         return this.modelMapper.map(products, new TypeToken<List<ProductDto>>() {
         }.getType());
