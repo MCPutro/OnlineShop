@@ -13,6 +13,7 @@ Version 1.0
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -24,7 +25,8 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Entity
-@Table( name = "Carts")
+@ToString
+@Table(name = "Carts", indexes = {@Index(name = "IDX_Cart_UserId", columnList = "UserId")})
 @EntityListeners(AuditingEntityListener.class)
 public class Cart {
 
@@ -42,8 +44,11 @@ public class Cart {
     @Column(name = "Quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "IsCheckedOut")
-    private Boolean isCheckedOut;
+    @Column(name = "Price", nullable = false)
+    private Double price;
+
+    @Column(name = "IsAvailable", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
+    private Boolean isAvailable = true;
 
     @CreatedBy
     @Column(name = "CreatedBy", updatable = false, nullable = false)

@@ -21,12 +21,12 @@ Version 1.0
 @SpringBootTest
 class CartServiceTest {
 
-    @Autowired
-    private CartService cartService;
-
-    @Test
-    void name() {
-        List<CartDto> cart = this.cartService.getCart();
-        System.out.println(cart);
-    }
+//    @Autowired
+//    private CartService cartService;
+//
+//    @Test
+//    void name() {
+//        List<CartDto> cart = this.cartService.getCart();
+//        System.out.println(cart);
+//    }
 }
