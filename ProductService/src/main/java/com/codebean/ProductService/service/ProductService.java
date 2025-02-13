@@ -19,6 +19,7 @@ Version 1.0
 
 import com.codebean.ProductService.core.iService;
 import com.codebean.ProductService.dto.request.ProductDto;
+import com.codebean.ProductService.dto.request.ProductStock;
 import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Category;
 import com.codebean.ProductService.model.Product;
@@ -275,5 +276,21 @@ public class ProductService implements iService<Product> {
     private List<ProductDto> listModelProductDto(List<Product> products) {
         return this.modelMapper.map(products, new TypeToken<List<ProductDto>>() {
         }.getType());
+    }
+
+    // untuk proses checkout
+    @Transactional
+    public void deductStock(List<ProductStock> stockRequests, HttpServletRequest request) {
+        for (ProductStock productStock : stockRequests) {
+            Product product = productRepository.findByIdWithLock(productStock.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            if (product.getStock() < productStock.getQuantity()) {
+                throw new RuntimeException("Insufficient stock for product ID: " + productStock.getProductId());
+            }
+
+            product.setStock(product.getStock() - productStock.getQuantity());
+            productRepository.save(product);
+        }
     }
 }

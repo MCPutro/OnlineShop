@@ -10,11 +10,11 @@ Version 1.0
 */
 
 /**
- * Platform Code : TRX
+ * Platform Code : CRT
  * Modul Code : 08
  * FV = Failed Validation
  * FE = Failed Error
- * ex = FVTRX08001 -> [FV] [TRX] [08] [001] -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
+ * ex = FVCRT08001 -> [FV] [CRT] [08] [001] -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
  */
 
 
@@ -29,6 +29,7 @@ import com.codebean.transactionservice.model.Cart;
 import com.codebean.transactionservice.repository.CartRepository;
 import com.codebean.transactionservice.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TransactionService {
+public class CartService {
 
     @Autowired
     private CartRepository cartRepository;
@@ -54,10 +55,10 @@ public class TransactionService {
     private final List<CartDto> listCartDto = new ArrayList<>();
 
     @Transactional
-    public ResponseEntity<Object> addItemToCart(Cart cart, HttpServletRequest request) {
+    public ResponseEntity<Object> save(Cart cart, HttpServletRequest request) {
         try {
             if (cart == null) {
-                return Response.badRequest(Constants.BAD_DATA, "FVTRX08001", request);
+                return Response.badRequest(Constants.BAD_DATA, "FVCRT08001", request);
             }
 
             String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -73,7 +74,7 @@ public class TransactionService {
                 productDto = productById.getData();
             } catch (Exception e) {
                 e.printStackTrace();
-                return Response.badRequest(Constants.FAILED_TO_GET_USER_OR_PRODUCT, "FVTRX08002", request);
+                return Response.badRequest(Constants.FAILED_TO_GET_USER_OR_PRODUCT, "FVCRT08002", request);
             }
 
             // find by user id and product id
@@ -93,7 +94,7 @@ public class TransactionService {
             return Response.success(Constants.SUCCESS, null, request);
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(Constants.CART_ADD_ITEM_FAILED, "FETRX08001", request);
+            return Response.internalServerError(Constants.CART_ADD_ITEM_FAILED, "FECRT08001", request);
         }
     }
 
@@ -101,12 +102,12 @@ public class TransactionService {
 //    public ResponseEntity<Object> updateQuantity(Long userId, Long cartId, Integer quantity, HttpServletRequest request) {
 //        try {
 //            if (userId == null || cartId == null || quantity == null) {
-//                return Response.badRequest(Constants.BAD_DATA, "FVTRX08021", request);
+//                return Response.badRequest(Constants.BAD_DATA, "FVCRT08021", request);
 //            }
 //
 //            Optional<Cart> optionalCart = this.cartRepository.findFirstByIdAndUserId(cartId, userId);
 //            if (!optionalCart.isPresent()) {
-//                return Response.badRequest(Constants.BAD_DATA, "FVTRX08022", request);
+//                return Response.badRequest(Constants.BAD_DATA, "FVCRT08022", request);
 //            }
 //
 //            Cart cart = optionalCart.get();
@@ -115,7 +116,7 @@ public class TransactionService {
 //            return Response.success(Constants.SUCCESS, null, request);
 //        } catch (Exception e) {
 //            e.printStackTrace();
-//            return Response.internalServerError(Constants.CART_ADD_ITEM_FAILED, "FETRX08011", request);
+//            return Response.internalServerError(Constants.CART_ADD_ITEM_FAILED, "FECRT08011", request);
 //        }
 //    }
 
@@ -123,7 +124,7 @@ public class TransactionService {
     public ResponseEntity<Object> addQuantity(Long cartId, Integer quantity, HttpServletRequest request) {
         try {
             if (cartId == null || quantity == null) {
-                return Response.badRequest(Constants.BAD_DATA, "FVTRX08021", request);
+                return Response.badRequest(Constants.BAD_DATA, "FVCRT08021", request);
             }
 
             // get user id from token
@@ -131,7 +132,7 @@ public class TransactionService {
 
             Optional<Cart> optionalCart = this.cartRepository.findFirstByIdAndUserId(cartId, userId);
             if (!optionalCart.isPresent()) {
-                return Response.badRequest(Constants.BAD_DATA, "FVTRX08022", request);
+                return Response.badRequest(Constants.BAD_DATA, "FVCRT08022", request);
             }
 
             Cart cart = optionalCart.get();
@@ -143,11 +144,11 @@ public class TransactionService {
                 productDto = productById.getData();
             } catch (Exception e) {
                 e.printStackTrace();
-                return Response.badRequest(Constants.FAILED_TO_GET_USER_OR_PRODUCT, "FETRX08023", request);
+                return Response.badRequest(Constants.FAILED_TO_GET_USER_OR_PRODUCT, "FECRT08023", request);
             }
 
             if (quantity + cart.getQuantity() > productDto.getPrice()) {
-                return Response.badRequest(Constants.INSUFFICIENT_STOCK, "FETRX08024", request);
+                return Response.badRequest(Constants.INSUFFICIENT_STOCK, "FECRT08024", request);
             }
 
             cart.setQuantity(cart.getQuantity() + quantity);
@@ -155,15 +156,15 @@ public class TransactionService {
             return Response.success(Constants.SUCCESS, null, request);
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(Constants.CART_ADD_ITEM_FAILED, "FETRX08011", request);
+            return Response.internalServerError(Constants.CART_ADD_ITEM_FAILED, "FECRT08011", request);
         }
     }
 
     @Transactional
-    public ResponseEntity<Object> removeItemFromCart(Long cartId, HttpServletRequest request) {
+    public ResponseEntity<Object> delete(Long cartId, HttpServletRequest request) {
         try {
             if (cartId == null) {
-                return Response.badRequest(Constants.BAD_DATA, "FVTRX08021", request);
+                return Response.badRequest(Constants.BAD_DATA, "FVCRT08021", request);
             }
 
             // get user id from token
@@ -171,7 +172,7 @@ public class TransactionService {
 
             Optional<Cart> optionalCart = this.cartRepository.findFirstByIdAndUserId(cartId, userId);
             if (!optionalCart.isPresent()) {
-                return Response.badRequest(Constants.CART_NOT_FOUND, "FVTRX08022", request);
+                return Response.badRequest(Constants.CART_NOT_FOUND, "FVCRT08022", request);
             }
 
             this.cartRepository.delete(optionalCart.get());
@@ -179,13 +180,13 @@ public class TransactionService {
             return Response.success(Constants.SUCCESS, null, request);
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(Constants.CART_REMOVE_ITEM_FAILED, "FETRX08021", request);
+            return Response.internalServerError(Constants.CART_REMOVE_ITEM_FAILED, "FECRT08021", request);
         }
     }
 
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Object> getCart(HttpServletRequest request) {
+    public ResponseEntity<Object> findAll(HttpServletRequest request) {
         try {
             this.listCartDto.clear();
 
@@ -203,14 +204,15 @@ public class TransactionService {
                     productDto = productById.getData();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return Response.internalServerError(Constants.FAILED_TO_GET_PRODUCT, "FVTRX08031", request);
+                    return Response.internalServerError(Constants.FAILED_TO_GET_PRODUCT, "FVCRT08031", request);
                 }
 
                 CartDto cartDto = new CartDto();
-                cartDto.setId(cart.getId());
-                cartDto.setUserId(cart.getUserId());
-                cartDto.setProductId(cart.getProductId());
-                cartDto.setQuantity(cart.getQuantity());
+                BeanUtils.copyProperties(cart, cartDto);
+//                cartDto.setId(cart.getId());
+//                cartDto.setUserId(cart.getUserId());
+//                cartDto.setProductId(cart.getProductId());
+//                cartDto.setQuantity(cart.getQuantity());
                 cartDto.setProductName(productDto.getName());
                 cartDto.setPrice(productDto.getPrice());
 
@@ -226,7 +228,7 @@ public class TransactionService {
 //            return null;
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(Constants.CART_FAILED_TO_GET, "FETRX08031", request);
+            return Response.internalServerError(Constants.CART_FAILED_TO_GET, "FECRT08031", request);
         }
     }
 

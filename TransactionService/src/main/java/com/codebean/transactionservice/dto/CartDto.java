@@ -19,4 +19,5 @@ public class CartDto {
     private String productName;
     private Integer quantity;
     private Double price;
+    private Boolean isAvailable;
 }

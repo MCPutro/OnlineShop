@@ -11,9 +11,8 @@ Version 1.0
 
 import com.codebean.transactionservice.dto.request.CartAddDto;
 import com.codebean.transactionservice.model.Cart;
-import com.codebean.transactionservice.service.TransactionService;
+import com.codebean.transactionservice.service.CartService;
 import com.codebean.transactionservice.service.ValidationService;
-import com.codebean.transactionservice.utils.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
-public class TransactionController {
+public class CartController {
 
     @Autowired
-    private TransactionService transactionService;
+    private CartService cartService;
 
     @Autowired
     private ValidationService validationService;
@@ -41,17 +40,17 @@ public class TransactionController {
         Cart cart = new Cart();
         BeanUtils.copyProperties(dto, cart);
 
-        return this.transactionService.addItemToCart(cart, request);
+        return this.cartService.save(cart, request);
     }
 
-    @GetMapping(path = "/cart/{cartId}/{qty}",
+    @PatchMapping(path = "/cart/{cartId}/{qty}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> addQtyCart(@PathVariable(value = "cartId") Long cartId,
                                         @PathVariable(value = "qty") Integer qty,
                                         HttpServletRequest request
     ) {
-        return this.transactionService.addQuantity(cartId, qty, request);
+        return this.cartService.addQuantity(cartId, qty, request);
     }
 
 
@@ -59,11 +58,11 @@ public class TransactionController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> removeCart(@PathVariable(value = "cartId") Long cartId, HttpServletRequest request) {
-        return this.transactionService.removeItemFromCart(cartId, request);
+        return this.cartService.delete(cartId, request);
     }
 
     @GetMapping(path = "/cart", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCart(HttpServletRequest request) {
-        return this.transactionService.getCart(request);
+        return this.cartService.findAll(request);
     }
 }

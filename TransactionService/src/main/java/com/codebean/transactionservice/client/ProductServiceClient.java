@@ -11,12 +11,10 @@ Version 1.0
 
 import com.codebean.transactionservice.dto.client.product.ProductDto;
 import com.codebean.transactionservice.dto.client.ResponseClient;
+import com.codebean.transactionservice.dto.client.product.ProductStock;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +26,8 @@ public interface ProductServiceClient {
 
     @GetMapping("/api/v1/shop/product/ids")
     ResponseClient<List<ProductDto>> getAllProductByIds(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam(value = "productId") List<Long> productIds);
+
+    @PostMapping("/api/v1/shop/deduct")
+    void deductProducts(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody List<ProductStock> productIds);
+
 }

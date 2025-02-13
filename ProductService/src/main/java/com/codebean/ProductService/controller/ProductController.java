@@ -18,6 +18,7 @@ Version 1.0
  */
 
 import com.codebean.ProductService.dto.request.ProductAdd;
+import com.codebean.ProductService.dto.request.ProductStock;
 import com.codebean.ProductService.dto.request.ProductUpdate;
 import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Product;
@@ -141,6 +142,18 @@ public class ProductController {
                                                       HttpServletRequest request
     ) {
         return this.productService.findByIdsAndStatus(productIds, true, request);
+    }
+
+
+    @PostMapping("/shop/deduct")
+    public ResponseEntity<?> deductStock(@RequestBody List<ProductStock> stockRequests, HttpServletRequest request) {
+        try {
+            productService.deductStock(stockRequests, request);
+            return ResponseEntity.ok("Stock deducted successfully");
+        } catch (RuntimeException e) {
+            return Response.badRequest(e.getMessage(), "FVSTOCK001", request);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
 }

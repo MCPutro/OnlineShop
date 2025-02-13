@@ -40,7 +40,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(
                                 "/auth/**"
-                                ,"/all-product/**"
                         ).permitAll() // Endpoint yang tidak memerlukan autentikasi
 
                         .anyRequest().authenticated() // Semua request lainnya memerlukan autentikasi
