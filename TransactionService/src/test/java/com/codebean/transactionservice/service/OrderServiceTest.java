@@ -3,7 +3,10 @@ package com.codebean.transactionservice.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 /*
 IntelliJ IDEA 2024.2.4 (Community Edition)
 Build #IC-242.23726.103, built on October 23, 2024
@@ -43,4 +46,28 @@ class OrderServiceTest {
 //        ResponseEntity<Object> objectResponseEntity = this.transactionService.cobaRollback2();
 //        System.out.println(objectResponseEntity.getBody());
 //    }
+
+    @Test
+    void findAll() {
+        Pageable pageable = PageRequest.of(0, 10);
+        ResponseEntity<Object> all = this.transactionService.findAll(pageable, new MockHttpServletRequest());
+
+        System.out.println(all.getBody());
+    }
+
+    @Test
+    void findById() {
+        Pageable pageable = PageRequest.of(0, 10);
+        ResponseEntity<Object> all = this.transactionService.findById(60L, new MockHttpServletRequest());
+
+        System.out.println(all.getBody());
+    }
+
+    @Test
+    void findByParam() {
+        Pageable pageable = PageRequest.of(0, 10);
+        ResponseEntity<Object> all = this.transactionService.findByParam(pageable, "userid", "2", new MockHttpServletRequest());
+
+        System.out.println(all.getBody());
+    }
 }

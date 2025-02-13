@@ -10,9 +10,19 @@ Version 1.0
 */
 
 import com.codebean.transactionservice.model.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
+
+    Page<Order> findAllByUserId(Long userId, Pageable pageable);
+    
+    Optional<Order> findFirstByIdAndUserId(Long id, Long userId);
+
 }

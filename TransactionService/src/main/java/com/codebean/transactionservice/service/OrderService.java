@@ -19,6 +19,7 @@ Version 1.0
 
 
 import com.codebean.transactionservice.client.ProductServiceClient;
+import com.codebean.transactionservice.dto.OrderDto;
 import com.codebean.transactionservice.dto.client.product.ProductStock;
 import com.codebean.transactionservice.dto.request.OrderAdd;
 import com.codebean.transactionservice.handler.Response;
@@ -29,9 +30,14 @@ import com.codebean.transactionservice.repository.CartRepository;
 import com.codebean.transactionservice.repository.OrderItemRepository;
 import com.codebean.transactionservice.repository.OrderRepository;
 import com.codebean.transactionservice.utils.Constants;
+import com.codebean.transactionservice.utils.TransformPagination;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -57,7 +64,12 @@ public class OrderService {
     @Autowired
     private ProductServiceClient productServiceClient;
 
+    @Autowired
+    private TransformPagination transformPagination;
+
     private final List<ProductStock> productStockList = new ArrayList<>();
+
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Transactional
     public ResponseEntity<Object> createOrder(Long userId, OrderAdd orderAdd, HttpServletRequest request) {
@@ -126,6 +138,89 @@ public class OrderService {
             e.printStackTrace();
             return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_CREATE, "FETRX09001", request);
         }
+    }
+
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
+        try {
+            Page<Order> pageOrders = this.orderRepository.findAll(pageable);
+
+            List<Order> content = pageOrders.getContent();
+
+            List<OrderDto> ordersDto = this.listModelOrderToDto(content);
+
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(ordersDto, pageOrders, "id", ""), request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09031", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
+        try {
+            if (id == null) {
+                return Response.badRequest(Constants.BAD_DATA, "FVTRX09041", request);
+            }
+
+            Optional<Order> optionalOrder = this.orderRepository.findById(id);
+
+            Order order = optionalOrder.get();
+            OrderDto map = this.modelMapper.map(order, OrderDto.class);
+
+            return Response.success(Constants.SUCCESS, map, request);
+
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09041", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> findByParam(Pageable pageable, String columnName, String value, HttpServletRequest request) {
+        try {
+            Page<Order> page;
+            switch (columnName.toLowerCase()) {
+                case "status":
+                    page = this.orderRepository.findAllByUserId(Long.parseLong(value), pageable);
+                    break;
+                case "userid":
+                    page = this.orderRepository.findAllByUserId(Long.parseLong(value), pageable);
+                    break;
+                default:
+                    page = this.orderRepository.findAll(pageable);
+                    break;
+            }
+
+            List<Order> listOrder = page.getContent();
+            if (listOrder.isEmpty()) {
+                return Response.badRequest(Constants.BAD_DATA, "FVTRX09051", request);
+            }
+
+            List<OrderDto> ordersDto = this.listModelOrderToDto(listOrder);
+
+            return Response.success(Constants.SUCCESS, ordersDto, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09051", request);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> findByIdAndUserId(Long id, HttpServletRequest request) {
+        try{
+            // get userid from token
+            Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
+
+            Optional<Order> optionalOrder = this.orderRepository.findFirstByIdAndUserId(id, userId);
+            OrderDto map = this.modelMapper.map(optionalOrder.get(), OrderDto.class);
+            return Response.success(Constants.SUCCESS, map, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09061", request);
+        }
+    }
+
+    private List<OrderDto> listModelOrderToDto(List<Order> orders) {
+        return this.modelMapper.map(orders, new TypeToken<List<OrderDto>>() {
+        }.getType());
     }
 
 //    @Transactional
