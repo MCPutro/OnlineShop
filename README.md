@@ -1,6 +1,6 @@
 # Online Shop
 
-### Struktur Projek
+### Gambaran Struktur Projek
 
 ```
 Online-Shop
@@ -55,6 +55,22 @@ Online-Shop
 │
 ├── TransactionService (Belum di buat)
 │   ├── pom.xml
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── com.codebean.transactionservice
+│   │   │   │       ├── client
+│   │   │   │       ├── dto
+│   │   │   │       ├── model
+│   │   │   │       ├── repository
+│   │   │   │       ├── controller
+│   │   │   │       ├── config
+│   │   │   │       ├── filter
+│   │   │   │       └── service
+│   │   │   └── resources
+│   │   │       └── application.properties
+│   │   └── test
+│   └── .gitignore
 │
 └── WebsiteUI
     ├── pom.xml
@@ -97,7 +113,7 @@ Online-Shop
         - Mengelola operasi terkait produk dan kategory produk.
 
     - **TransactionService** (8083):
-        - Mengelola operasi terkait cart, order/transaksi, invoice.
+        - Mengelola operasi terkait cart, order/transaksi.
 
     - **ShareModule**:
         - berisi utilitas atau komponen yang digunakan bersama di seluruh layanan lainnya. Seperti Jwt
@@ -105,12 +121,12 @@ Online-Shop
     - **WebsiteUI**:
         - Mengelola komponen antarmuka pengguna dari aplikasi.
 
-### Initial data ada di file [Master.sql](Master.sql) dan [Product.sql](Product.sql)
+### Initial data ada di folder [InitDatabse/Migrate](InitDatabase/Migrate)
 
 ### User & Password
 
 Admin
-> Username : admin123
+> Username : admin001
 >
 > Password : 12345678
 
@@ -122,12 +138,11 @@ Customer
 ### Postman Collection
 
 untuk testing pake Postman/Insomnia bisa coba import
-file [CodeBean.postman_collection.json](CodeBean.postman_collection.json)
+file [CodeBean-onlineshop.postman_collection.json](CodeBean-onlineshop.postman_collection.json)
 
 ### Permission
 
-- hak akses untuk suatu api, setiap user memiliki relasi many to many dengan permission, relasi nya bisa di table
-  UserPermissions.
+- hak akses untuk suatu menu, setiap user memiliki relasi 1 to 1 dengan role, 
+- role memiliki relasi many to many permissions, relasi dapt di lihat pada table RolePermission.
 - untuk list permission ada di table Permissions.
-- table DefaultRolePermission itu berisikan permission untuk role, yang akan digunakan sebagai default permission saat
-  membuat/mendaftarkan user baru.
+- setaip permission di kelompokan dan module/menu

@@ -1,0 +1,4947 @@
+{
+	"info": {
+		"_postman_id": "9dd10d65-1fa7-4d82-8938-461ed9d49225",
+		"name": "CodeBean-onlineshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27412179"
+	},
+	"item": [
+		{
+			"name": "UserService",
+			"item": [
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "auth",
+							"item": [
+								{
+									"name": "login",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"admin001\",\r\n    \"password\": \"12345678\"\r\n}   ",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/auth/v1/login",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"auth",
+												"v1",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "customer register",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"customer002\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"email\": \"customer@com.002\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/auth/v1/register/customer",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"auth",
+												"v1",
+												"register",
+												"customer"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"username\": \"customer002\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"email\": \"customer@com.002\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/auth/v1/register/customer",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"auth",
+														"v1",
+														"register",
+														"customer"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 07 Feb 2025 14:02:38 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Account created successfully\",\n    \"status\": 201,\n    \"timestamp\": \"2025-02-07T21:02:38.4504824\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "private",
+							"item": [
+								{
+									"name": "user-create [MANAGE_USER]",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSIsInVzZXJJZCI6NywiaWF0IjoxNzM4OTM1MjIxLCJleHAiOjE3Mzg5NzEyMjF9.xeiWP-QH8tpQzvGYWN9EC5w_-Bp3lNYdh_LuFSm-RIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"admin001\",\r\n    \"email\": \"admin@001.com\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"role\": \"Admin\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user-create",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user-create"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"username\": \"a123123123321\",\r\n    \"email\": \"haha@hihi.com\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"role\": \"admin\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user-create",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user-create"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 11:28:18 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Account created successfully\",\n    \"status\": 201,\n    \"timestamp\": \"2025-02-06T18:28:18.3477535\"\n}"
+										},
+										{
+											"name": "error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"username\": \"a123123123321\",\r\n    \"email\": \"haha@hihi.com\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"123456782\",\r\n    \"role\": \"admin\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user-create",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user-create"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 12:06:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user-create\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Confirm password does not match\",\n    \"error_code\": \"FVUSRCTRL01002\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T19:06:15.762526\"\n}"
+										},
+										{
+											"name": "error username already user",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"username\": \"a123123123321\",\r\n    \"email\": \"haha@hihi.com2\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"role\": \"admin\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user-create",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user-create"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 12:06:37 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user-create\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Username already exists\",\n    \"error_code\": \"FVUSR01002\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T19:06:37.5710223\"\n}"
+										},
+										{
+											"name": "error email already use",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"username\": \"a123123123321\",\r\n    \"email\": \"haha@hihi.com\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"role\": \"admin\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user-create",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user-create"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 12:07:02 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user-create\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Email address already exists\",\n    \"error_code\": \"FVUSR01002\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T19:07:02.3170477\"\n}"
+										}
+									]
+								},
+								{
+									"name": "get user by id [VIEW_USER]",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/3",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"3"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/22",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"22"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 12:27:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user/22\",\n    \"method\": \"GET\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Account not found\",\n    \"error_code\": \"FVUSR01041\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T19:27:15.9612739\"\n}"
+										},
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/3",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"3"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 13:55:49 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": {\n        \"username\": \"a1231231233212\",\n        \"email\": \"haha@hihi.com2\",\n        \"phoneNumber\": null,\n        \"isActive\": true,\n        \"isDelete\": false,\n        \"role\": \"admin\",\n        \"name\": null,\n        \"dateOfBirth\": null,\n        \"gender\": null,\n        \"profilePicture\": null,\n        \"addresses\": [],\n        \"id\": 3\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T20:55:49.5150545\"\n}"
+										}
+									]
+								},
+								{
+									"name": "get user by token",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MzM4OTg0LCJleHAiOjE3MzkzNzQ5ODR9.yguo9SCNTQF9Tw9Iw_lXnMc7Sbt-VvM_2tJg1h593cE",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/2",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"2"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 12:27:02 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": {\n        \"username\": \"a1231231233211\",\n        \"password\": \"a1231231233211.12345678\",\n        \"email\": \"haha@hihi.com1\",\n        \"phoneNumber\": null,\n        \"isActive\": true,\n        \"isDelete\": false,\n        \"role\": \"admin\",\n        \"name\": null,\n        \"dateOfBirth\": null,\n        \"gender\": null,\n        \"profilePicture\": null,\n        \"addresses\": [],\n        \"id\": 2\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T19:27:02.3391387\"\n}"
+										},
+										{
+											"name": "error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/22",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"22"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 12:27:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user/22\",\n    \"method\": \"GET\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Account not found\",\n    \"error_code\": \"FVUSR01041\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T19:27:15.9612739\"\n}"
+										}
+									]
+								},
+								{
+									"name": "get all user [VIEW_USER]",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIiwidXNlcklkIjo3LCJpYXQiOjE3Mzg5MjQ0NjcsImV4cCI6MTczODk2MDQ2N30.1HZ2I_1uFfSGHMyDuKO0MXcIb9ao_ptVPtuxDg0siXA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/users",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"users"
+											],
+											"query": [
+												{
+													"key": "sizePerPage",
+													"value": "2",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/api/v1/users",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"users"
+													],
+													"query": [
+														{
+															"key": "sizePerPage",
+															"value": "2",
+															"disabled": true
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 13:35:27 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": [\n        {\n            \"username\": \"a123123123321\",\n            \"email\": \"haha@hihi.com\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 1\n        },\n        {\n            \"username\": \"a1231231233211\",\n            \"email\": \"haha@hihi.com1\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 2\n        },\n        {\n            \"username\": \"a1231231233212\",\n            \"email\": \"haha@hihi.com2\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 3\n        },\n        {\n            \"username\": \"a1231231233213\",\n            \"email\": \"haha@hihi.co4\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 4\n        },\n        {\n            \"username\": \"a12312312332123\",\n            \"email\": \"haha@hihi.co24\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin.super\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 5\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T20:35:27.1495536\"\n}"
+										}
+									]
+								},
+								{
+									"name": "update profile by token",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"email@gmail.com\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\": \"email@gmail.com\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 14:08:44 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Updates successful\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T21:08:44.1772809\"\n}"
+										},
+										{
+											"name": "error",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\": \"email@gmail.com\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user"
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 14:16:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user\",\n    \"method\": \"PATCH\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Failed to retrieve account\",\n    \"error_code\": \"FEUSRCTRL01051\",\n    \"status\": 500,\n    \"timestamp\": \"2025-02-06T21:16:15.5899294\"\n}"
+										},
+										{
+											"name": "error",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\": \"emai\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 14:43:27 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user\",\n    \"method\": \"PATCH\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"invalid email - Format not valid.\",\n    \"error_code\": \"FVUSRCTRL01051\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T21:43:27.7408593\"\n}"
+										}
+									]
+								},
+								{
+									"name": "update profile by user id [MANAGE_USER]",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"email@gmail.com2\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"1"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\": \"email@gmail.com\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/1",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"1"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 14:08:44 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Updates successful\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T21:08:44.1772809\"\n}"
+										},
+										{
+											"name": "error",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"email\": \"email@gmail.com2\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/1",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"1"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Thu, 06 Feb 2025 14:25:07 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user/1\",\n    \"method\": \"PATCH\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Email address already exists\",\n    \"error_code\": \"FVUSR01012\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T21:25:07.5018641\"\n}"
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "address",
+					"item": [
+						{
+							"name": "add address by token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"address_name\": \"lapangan bola\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"country\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/user/address",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"address"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"address_name\": \"lapangan\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"country\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 14:58:09 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Address added successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T21:58:09.6042529\"\n}"
+								},
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"address_name\": \"\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"country\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 14:59:12 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/user/address\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"invalid name - cannot be blank, invalid name - cannot be empty\",\n    \"error_code\": \"FVUSRCTRL01071\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T21:59:12.4746419\"\n}"
+								}
+							]
+						},
+						{
+							"name": "get lilst address by token",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/user/address",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"address"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 15:38:42 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"name\": \"lapangan\",\n            \"address\": \"di lapangan bola\",\n            \"country\": \"disono\",\n            \"postalCode\": \"32145ad\",\n            \"isActive\": true,\n            \"id\": 1\n        },\n        {\n            \"name\": \"lapangan bola bulu\",\n            \"address\": \"di lapangan bola  bulu\",\n            \"country\": \"disono  bulu\",\n            \"postalCode\": \"32145ad  bulu\",\n            \"isActive\": true,\n            \"id\": 2\n        },\n        {\n            \"name\": \"lapangan bola kecil\",\n            \"address\": \"di lapangan bola\",\n            \"country\": \"disono\",\n            \"postalCode\": \"32145ad\",\n            \"isActive\": true,\n            \"id\": 3\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T22:38:42.6083628\"\n}"
+								}
+							]
+						},
+						{
+							"name": "get address by token",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/user/address/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"address",
+										"3"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address/1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address",
+												"1"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 15:39:34 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"name\": \"lapangan\",\n        \"address\": \"di lapangan bola\",\n        \"country\": \"disono\",\n        \"postalCode\": \"32145ad\",\n        \"isActive\": true,\n        \"id\": 1\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T22:39:34.1892172\"\n}"
+								},
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address/12",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address",
+												"12"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 15:39:44 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/user/address/12\",\n    \"method\": \"GET\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Address not found\",\n    \"error_code\": \"FVADR02041\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T22:39:44.3391972\"\n}"
+								}
+							]
+						},
+						{
+							"name": "update address by token",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"address_name\": \"lapangan bola bulu\",\r\n    \"address\": \"di lapangan bola  bulu\",\r\n    \"country\": \"disono  bulu\",\r\n    \"postalCode\": \"32145ad  bulu\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/user/address/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"address",
+										"2"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"address_name\": \"lapangan\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"country\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 14:58:09 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Address added successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T21:58:09.6042529\"\n}"
+								},
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"address_name\": \"\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"country\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 14:59:12 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/user/address\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"invalid name - cannot be blank, invalid name - cannot be empty\",\n    \"error_code\": \"FVUSRCTRL01071\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T21:59:12.4746419\"\n}"
+								}
+							]
+						},
+						{
+							"name": "delete address by token",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/user/address/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"address",
+										"2"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address/4",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address",
+												"4"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 15:32:43 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/user/address/4\",\n    \"method\": \"DELETE\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Address not found\",\n    \"error_code\": \"FVADR02023\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T22:32:43.7399162\"\n}"
+								},
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/address/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"address",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 15:32:59 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Address deleted successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T22:32:59.6436855\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "role",
+					"item": [
+						{
+							"name": "create new role [MANAGE_ROLE]",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roleName\": \"tukang berantem\",\r\n    \"permissionIds\": [\r\n        1,\r\n        2,\r\n        3\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/role-create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"role-create"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"roleName\": \"tukang berantem\",\r\n    \"permissionIds\": [\r\n        1,\r\n        2,\r\n        3\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/role-create",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"role-create"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 15:54:13 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/role-create\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Bad data\",\n    \"error_code\": \"FVROL03001\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T22:54:13.5836694\"\n}"
+								},
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"roleName\": \"tukang berantem\",\r\n    \"permissionIds\": [\r\n        1,\r\n        2,\r\n        3\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/role-create",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"role-create"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 15:56:35 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Role added successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T22:56:34.9683489\"\n}"
+								}
+							]
+						},
+						{
+							"name": "update role [MANAGE_ROLE]",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roleName\": \"tukang cuci kaki\",\r\n    \"permissionIds\": [\r\n        6,\r\n        3\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/role/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"role",
+										"9"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"roleName\": \"tukang cuci kaki\",\r\n    \"permissionIds\": [\r\n        6,\r\n        3\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/role/9",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"role",
+												"9"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 06 Feb 2025 16:02:22 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Role updated successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T23:02:22.6929658\"\n}"
+								},
+								{
+									"name": "error udah ada",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"roleName\": \"admin.super.duper\",\r\n    \"permissionIds\": [\r\n        1,\r\n        2,\r\n        7\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/role/5",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"role",
+												"5"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 07 Feb 2025 13:19:45 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/role/5\",\n    \"method\": \"PATCH\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Role already exists\",\n    \"error_code\": \"FVROL03012\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-07T20:19:45.1784935\"\n}"
+								}
+							]
+						},
+						{
+							"name": "get all role [VIEW_ROLE]",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/roles",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"roles"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/roles",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"roles"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 07 Feb 2025 02:09:47 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"name\": \"admin\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_USER\",\n                    \"description\": \"View user\",\n                    \"isActive\": true,\n                    \"id\": 1\n                }\n            ],\n            \"id\": 5\n        },\n        {\n            \"name\": \"admin2\",\n            \"isActive\": false,\n            \"permissions\": [\n                {\n                    \"name\": \"MANAGE_USER\",\n                    \"description\": \"Add/Edit user\",\n                    \"isActive\": true,\n                    \"id\": 2\n                }\n            ],\n            \"id\": 6\n        },\n        {\n            \"name\": \"admin.super\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product\",\n                    \"isActive\": true,\n                    \"id\": 3\n                },\n                {\n                    \"name\": \"MANAGE_PRODUCT\",\n                    \"description\": \"Add/Edit product\",\n                    \"isActive\": true,\n                    \"id\": 4\n                }\n            ],\n            \"id\": 7\n        },\n        {\n            \"name\": \"tukang cuci kaki\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product\",\n                    \"isActive\": true,\n                    \"id\": 3\n                },\n                {\n                    \"name\": \"MANAGE_TRX\",\n                    \"description\": \"Add/Edit trx\",\n                    \"isActive\": true,\n                    \"id\": 6\n                }\n            ],\n            \"id\": 9\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-07T09:09:47.8259188\"\n}"
+								},
+								{
+									"name": "error forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/roles",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"roles"
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 07 Feb 2025 12:53:51 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"\",\n    \"method\": \"\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Access Denied\",\n    \"error_code\": \"FORBIDDEN\",\n    \"status\": 403,\n    \"timestamp\": \"2025-02-07T19:53:51.4501455\"\n}"
+								}
+							]
+						},
+						{
+							"name": "get role by id [VIEW_ROLE]",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/role/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"role",
+										"9"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/role/9",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"role",
+												"9"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 07 Feb 2025 02:17:06 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"name\": \"tukang cuci kaki\",\n        \"isActive\": false,\n        \"permissions\": [\n            {\n                \"name\": \"VIEW_PRODUCT\",\n                \"description\": \"View product\",\n                \"isActive\": true,\n                \"id\": 3\n            },\n            {\n                \"name\": \"MANAGE_TRX\",\n                \"description\": \"Add/Edit trx\",\n                \"isActive\": true,\n                \"id\": 6\n            }\n        ],\n        \"id\": 9\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-07T09:17:06.7286396\"\n}"
+								}
+							]
+						},
+						{
+							"name": "delete role [MANAGE_ROLE]",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/role/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"role",
+										"9"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/role/9",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"role",
+												"9"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 07 Feb 2025 02:14:51 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Role deleted successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-07T09:14:51.2271752\"\n}"
+								}
+							]
+						},
+						{
+							"name": "get role active only [VIEW_ROLE | MANAGE_USER]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/roles/active",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"roles",
+										"active"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/roles/active",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"roles",
+												"active"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 07 Feb 2025 13:27:50 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"name\": \"admin.super.duper\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"MANAGE_ROLE\",\n                    \"description\": \"Add/Edit Role\",\n                    \"isActive\": true,\n                    \"id\": 8\n                },\n                {\n                    \"name\": \"VIEW_USER\",\n                    \"description\": \"View user\",\n                    \"isActive\": true,\n                    \"id\": 1\n                },\n                {\n                    \"name\": \"MANAGE_USER\",\n                    \"description\": \"Add/Edit user\",\n                    \"isActive\": true,\n                    \"id\": 2\n                },\n                {\n                    \"name\": \"VIEW_ROLE\",\n                    \"description\": \"View Role list\",\n                    \"isActive\": true,\n                    \"id\": 7\n                }\n            ],\n            \"id\": 5\n        },\n        {\n            \"name\": \"Customer\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product\",\n                    \"isActive\": true,\n                    \"id\": 3\n                }\n            ],\n            \"id\": 10\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-07T20:27:50.9250923\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "module & permission",
+					"item": [
+						{
+							"name": "find all module",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/modules",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"modules"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/modules",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"modules"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:03:59 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"name\": \"user management\",\n            \"path\": \"/user-manegement\",\n            \"description\": \"user management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_USER\",\n                    \"description\": \"View user\",\n                    \"isActive\": true,\n                    \"id\": 1\n                },\n                {\n                    \"name\": \"MANAGE_USER\",\n                    \"description\": \"Add/Edit user\",\n                    \"isActive\": true,\n                    \"id\": 2\n                }\n            ],\n            \"id\": 1\n        },\n        {\n            \"name\": \"product management\",\n            \"path\": \"/product-manegement\",\n            \"description\": \"product management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product & category\",\n                    \"isActive\": true,\n                    \"id\": 3\n                },\n                {\n                    \"name\": \"MANAGE_PRODUCT\",\n                    \"description\": \"Add/Edit product & category\",\n                    \"isActive\": true,\n                    \"id\": 4\n                }\n            ],\n            \"id\": 2\n        },\n        {\n            \"name\": \"transaction management\",\n            \"path\": \"/trx-manegement\",\n            \"description\": \"trx management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_TRX\",\n                    \"description\": \"View transactions\",\n                    \"isActive\": true,\n                    \"id\": 5\n                },\n                {\n                    \"name\": \"MANAGE_TRX\",\n                    \"description\": \"Add/Edit transactions\",\n                    \"isActive\": true,\n                    \"id\": 6\n                }\n            ],\n            \"id\": 3\n        },\n        {\n            \"name\": \"role management\",\n            \"path\": \"/role-manegement\",\n            \"description\": \"role management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_ROLE\",\n                    \"description\": \"View Role list\",\n                    \"isActive\": true,\n                    \"id\": 7\n                },\n                {\n                    \"name\": \"MANAGE_ROLE\",\n                    \"description\": \"Add/Edit Role\",\n                    \"isActive\": true,\n                    \"id\": 8\n                }\n            ],\n            \"id\": 4\n        },\n        {\n            \"name\": \"Shop product\",\n            \"path\": \"/shop\",\n            \"description\": \"Show product to Shop\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"SHOP\",\n                    \"description\": \"Show Product to Customer\",\n                    \"isActive\": true,\n                    \"id\": 9\n                }\n            ],\n            \"id\": 5\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-10T12:03:59.8670207\"\n}"
+								}
+							]
+						},
+						{
+							"name": "find active module and active permission",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/module/active",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"module",
+										"active"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/module/active",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"module",
+												"active"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:07:03 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"name\": \"product management\",\n            \"path\": \"/product-manegement\",\n            \"description\": \"product management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product & category\",\n                    \"isActive\": true,\n                    \"id\": 3\n                },\n                {\n                    \"name\": \"MANAGE_PRODUCT\",\n                    \"description\": \"Add/Edit product & category\",\n                    \"isActive\": true,\n                    \"id\": 4\n                }\n            ],\n            \"id\": 2\n        },\n        {\n            \"name\": \"role management\",\n            \"path\": \"/role-manegement\",\n            \"description\": \"role management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_ROLE\",\n                    \"description\": \"View Role list\",\n                    \"isActive\": true,\n                    \"id\": 7\n                },\n                {\n                    \"name\": \"MANAGE_ROLE\",\n                    \"description\": \"Add/Edit Role\",\n                    \"isActive\": true,\n                    \"id\": 8\n                }\n            ],\n            \"id\": 4\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-10T12:07:03.0216794\"\n}"
+								}
+							]
+						},
+						{
+							"name": "find module by role id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/module/roleId/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"module",
+										"roleId",
+										"1"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/module/roleId/1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"module",
+												"roleId",
+												"1"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:22:52 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"name\": \"product management\",\n            \"path\": \"/product-manegement\",\n            \"description\": \"product management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product & category\",\n                    \"isActive\": true,\n                    \"id\": 3\n                }\n            ],\n            \"id\": 2\n        },\n        {\n            \"name\": \"role management\",\n            \"path\": \"/role-manegement\",\n            \"description\": \"role management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_ROLE\",\n                    \"description\": \"View Role list\",\n                    \"isActive\": true,\n                    \"id\": 7\n                }\n            ],\n            \"id\": 4\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-10T12:22:52.6713788\"\n}"
+								}
+							]
+						},
+						{
+							"name": "find module by role name",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/module/roleName/admin",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"module",
+										"roleName",
+										"admin"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/module/roleName/admin",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"module",
+												"roleName",
+												"admin"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:23:10 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"name\": \"product management\",\n            \"path\": \"/product-manegement\",\n            \"description\": \"product management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product & category\",\n                    \"isActive\": true,\n                    \"id\": 3\n                }\n            ],\n            \"id\": 2\n        },\n        {\n            \"name\": \"role management\",\n            \"path\": \"/role-manegement\",\n            \"description\": \"role management menu\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_ROLE\",\n                    \"description\": \"View Role list\",\n                    \"isActive\": true,\n                    \"id\": 7\n                }\n            ],\n            \"id\": 4\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-10T12:23:10.5837905\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ProductService",
+			"item": [
+				{
+					"name": "Category",
+					"item": [
+						{
+							"name": "Add Category [MANAGE_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTY1MTkzLCJleHAiOjE3MzkyMDExOTN9.a_zV1KsJ3vyu6i_pnbQfVXwwlejkPsKL5hl1jJrxau8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"alat makan\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/api/v1/category",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"category"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\" : \"alat makan\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8082/api/v1/category",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"category"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:26:41 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"name\": \"alat makan\",\n        \"isActive\": true,\n        \"id\": 11\n    },\n    \"success\": true,\n    \"message\": \"Category created successfully\",\n    \"status\": 201,\n    \"timestamp\": \"2025-02-10T12:26:40.945656\"\n}"
+								},
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\" : \"alat makan\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8082/api/v1/category",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"category"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:27:25 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/category\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Category already exist\",\n    \"error_code\": \"FVCTG06001\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-10T12:27:25.6171285\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Active Category [VIEW_PRODUCT | SHOP]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTY1MTkzLCJleHAiOjE3MzkyMDExOTN9.a_zV1KsJ3vyu6i_pnbQfVXwwlejkPsKL5hl1jJrxau8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/category?page=0&sizePerPage=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"category"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "sizePerPage",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/category?page=0&sizePerPage=10",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"category"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "sizePerPage",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:44:59 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"sort-by\": \"id\",\n        \"current-page\": 0,\n        \"column-name\": \"status\",\n        \"total-page\": 2,\n        \"sort\": \"asc\",\n        \"size-per-page\": 10,\n        \"value\": \"active\",\n        \"content\": [\n            {\n                \"name\": \"Electronics\",\n                \"isActive\": true,\n                \"id\": 1\n            },\n            {\n                \"name\": \"Home Appliances\",\n                \"isActive\": true,\n                \"id\": 2\n            },\n            {\n                \"name\": \"Books\",\n                \"isActive\": true,\n                \"id\": 3\n            },\n            {\n                \"name\": \"Fashion\",\n                \"isActive\": true,\n                \"id\": 4\n            },\n            {\n                \"name\": \"Sports & Outdoors\",\n                \"isActive\": true,\n                \"id\": 5\n            },\n            {\n                \"name\": \"Beauty & Health\",\n                \"isActive\": true,\n                \"id\": 6\n            },\n            {\n                \"name\": \"Toys & Games\",\n                \"isActive\": true,\n                \"id\": 7\n            },\n            {\n                \"name\": \"Groceries\",\n                \"isActive\": true,\n                \"id\": 8\n            },\n            {\n                \"name\": \"Automotive\",\n                \"isActive\": true,\n                \"id\": 9\n            },\n            {\n                \"name\": \"Furniture\",\n                \"isActive\": true,\n                \"id\": 10\n            }\n        ],\n        \"total-data\": 11\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-10T12:44:59.7736249\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Get All Category [VIEW_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTY1MTkzLCJleHAiOjE3MzkyMDExOTN9.a_zV1KsJ3vyu6i_pnbQfVXwwlejkPsKL5hl1jJrxau8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/all-category",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"all-category"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": "100",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/all-category",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"all-category"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0",
+													"disabled": true
+												},
+												{
+													"key": "sizePerPage",
+													"value": "100",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 05:54:58 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"sort-by\": \"id\",\n        \"current-page\": 0,\n        \"column-name\": \"id\",\n        \"total-page\": 1,\n        \"sort\": \"asc\",\n        \"size-per-page\": 100,\n        \"value\": \"\",\n        \"content\": [\n            {\n                \"name\": \"Electronics\",\n                \"isActive\": true,\n                \"id\": 1\n            },\n            {\n                \"name\": \"Home Appliances\",\n                \"isActive\": true,\n                \"id\": 2\n            },\n            {\n                \"name\": \"Books\",\n                \"isActive\": true,\n                \"id\": 3\n            },\n            {\n                \"name\": \"Fashion\",\n                \"isActive\": true,\n                \"id\": 4\n            },\n            {\n                \"name\": \"Sports & Outdoors\",\n                \"isActive\": true,\n                \"id\": 5\n            },\n            {\n                \"name\": \"Beauty & Health\",\n                \"isActive\": true,\n                \"id\": 6\n            },\n            {\n                \"name\": \"Toys & Games\",\n                \"isActive\": true,\n                \"id\": 7\n            },\n            {\n                \"name\": \"Groceries\",\n                \"isActive\": true,\n                \"id\": 8\n            },\n            {\n                \"name\": \"Automotive\",\n                \"isActive\": true,\n                \"id\": 9\n            },\n            {\n                \"name\": \"Furniture\",\n                \"isActive\": true,\n                \"id\": 10\n            },\n            {\n                \"name\": \"alat makan\",\n                \"isActive\": true,\n                \"id\": 11\n            }\n        ],\n        \"total-data\": 11\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-10T12:54:58.3403916\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Category By Id [VIEW_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTY1MTkzLCJleHAiOjE3MzkyMDExOTN9.a_zV1KsJ3vyu6i_pnbQfVXwwlejkPsKL5hl1jJrxau8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/category/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"category",
+										"2"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/category/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"category",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 31 Jan 2025 04:15:15 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"name\": \"mainan anak2\",\n        \"isActive\": false,\n        \"id\": 2\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-01-31T11:15:15.8309503\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Update Category [MANAGE_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTY1MTkzLCJleHAiOjE3MzkyMDExOTN9.a_zV1KsJ3vyu6i_pnbQfVXwwlejkPsKL5hl1jJrxau8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"mainan anak2 kecil 1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/api/v1/category/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"category",
+										"2"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update Category",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\" : \"mainan anak2 kecil 1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8082/api/v1/category/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"category",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 10 Feb 2025 06:11:23 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"name\": \"mainan anak2 kecil 1\",\n        \"isActive\": true,\n        \"id\": null\n    },\n    \"success\": true,\n    \"message\": \"Category updated successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-10T13:11:23.2328678\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete Category [MANAGE_PRODUCT]",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/category/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"category",
+										"2"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/category/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"category",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 31 Jan 2025 04:21:19 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Category deleted successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-01-31T11:21:19.4933485\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Product",
+					"item": [
+						{
+							"name": "Add Product [MANAGE_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTkxOTQ1LCJleHAiOjE3MzkyMjc5NDV9.h5AWYOxdBTMnCPYTS_th8OQLJE16aGQhOPU3RHdaQIM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"sku\": \"sku-001-postman\",\r\n    \"name\": \"postman product\",\r\n    \"price\": 1000.0,\r\n    \"stock\": 0,\r\n    \"description\": \"product percobaan postman\",\r\n    \"categoryIds\": [\r\n        1,\r\n        6\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/api/v1/product",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Product [VIEW_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTI4NzAwOCwiZXhwIjoxNzM5MzIzMDA4fQ.kJkdhMfHkMkuuau3EQSvbQs4qQINvmtkiUipHZFo33A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/products?page=0&sizePerPage=20",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"products"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "sizePerPage",
+											"value": "20"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/products?page=0&sizePerPage=20",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"products"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "sizePerPage",
+													"value": "20"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Feb 2025 15:22:25 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"sort-by\": \"id\",\n        \"current-page\": 0,\n        \"column-name\": \"id\",\n        \"total-page\": 6,\n        \"sort\": \"asc\",\n        \"size-per-page\": 20,\n        \"value\": \"\",\n        \"content\": [\n            {\n                \"id\": 1,\n                \"sku\": \"SKU10000\",\n                \"name\": \"Product 1\",\n                \"price\": 507.4801730499037,\n                \"stock\": 68,\n                \"description\": \"Description for Product 1.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"sku\": \"SKU10001\",\n                \"name\": \"Product 2\",\n                \"price\": 80.70389855418007,\n                \"stock\": 44,\n                \"description\": \"Description for Product 2.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Toys & Games\",\n                        \"isActive\": true,\n                        \"id\": 7\n                    }\n                ]\n            },\n            {\n                \"id\": 3,\n                \"sku\": \"SKU10002\",\n                \"name\": \"Product 3\",\n                \"price\": 135.89275476636035,\n                \"stock\": 154,\n                \"description\": \"Description for Product 3.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 4,\n                \"sku\": \"SKU10003\",\n                \"name\": \"Product 4\",\n                \"price\": 44.03588818900921,\n                \"stock\": 159,\n                \"description\": \"Description for Product 4.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"mainan anak2 kecil 1\",\n                        \"isActive\": true,\n                        \"id\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 5,\n                \"sku\": \"SKU10004\",\n                \"name\": \"Product 5\",\n                \"price\": 211.97262290365043,\n                \"stock\": 23,\n                \"description\": \"Description for Product 5.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Sports & Outdoors\",\n                        \"isActive\": true,\n                        \"id\": 5\n                    },\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 6,\n                \"sku\": \"SKU10005\",\n                \"name\": \"Product 6\",\n                \"price\": 502.37494678426987,\n                \"stock\": 101,\n                \"description\": \"Description for Product 6.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Electronics\",\n                        \"isActive\": true,\n                        \"id\": 1\n                    }\n                ]\n            },\n            {\n                \"id\": 7,\n                \"sku\": \"SKU10006\",\n                \"name\": \"Product 7\",\n                \"price\": 186.2315009219404,\n                \"stock\": 80,\n                \"description\": \"Description for Product 7.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Books\",\n                        \"isActive\": true,\n                        \"id\": 3\n                    },\n                    {\n                        \"name\": \"Electronics\",\n                        \"isActive\": true,\n                        \"id\": 1\n                    }\n                ]\n            },\n            {\n                \"id\": 8,\n                \"sku\": \"SKU10007\",\n                \"name\": \"Product 8\",\n                \"price\": 291.0287662390779,\n                \"stock\": 105,\n                \"description\": \"Description for Product 8.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Sports & Outdoors\",\n                        \"isActive\": true,\n                        \"id\": 5\n                    },\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 9,\n                \"sku\": \"SKU10008\",\n                \"name\": \"Product 9\",\n                \"price\": 398.8226895962619,\n                \"stock\": 27,\n                \"description\": \"Description for Product 9.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Sports & Outdoors\",\n                        \"isActive\": true,\n                        \"id\": 5\n                    },\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"Books\",\n                        \"isActive\": true,\n                        \"id\": 3\n                    }\n                ]\n            },\n            {\n                \"id\": 10,\n                \"sku\": \"SKU10009\",\n                \"name\": \"Product 10\",\n                \"price\": 462.4226133350233,\n                \"stock\": 106,\n                \"description\": \"Description for Product 10.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Automotive\",\n                        \"isActive\": true,\n                        \"id\": 9\n                    }\n                ]\n            },\n            {\n                \"id\": 11,\n                \"sku\": \"SKU10010\",\n                \"name\": \"Product 11\",\n                \"price\": 114.48099683907569,\n                \"stock\": 206,\n                \"description\": \"Description for Product 11.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Beauty & Health\",\n                        \"isActive\": true,\n                        \"id\": 6\n                    },\n                    {\n                        \"name\": \"Sports & Outdoors\",\n                        \"isActive\": true,\n                        \"id\": 5\n                    },\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    }\n                ]\n            },\n            {\n                \"id\": 12,\n                \"sku\": \"SKU10011\",\n                \"name\": \"Product 12\",\n                \"price\": 231.21990440049927,\n                \"stock\": 145,\n                \"description\": \"Description for Product 12.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"mainan anak2 kecil 1\",\n                        \"isActive\": true,\n                        \"id\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 13,\n                \"sku\": \"SKU10012\",\n                \"name\": \"Product 13\",\n                \"price\": 174.0849593492742,\n                \"stock\": 37,\n                \"description\": \"Description for Product 13.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Sports & Outdoors\",\n                        \"isActive\": true,\n                        \"id\": 5\n                    },\n                    {\n                        \"name\": \"Toys & Games\",\n                        \"isActive\": true,\n                        \"id\": 7\n                    },\n                    {\n                        \"name\": \"Electronics\",\n                        \"isActive\": true,\n                        \"id\": 1\n                    }\n                ]\n            },\n            {\n                \"id\": 14,\n                \"sku\": \"SKU10013\",\n                \"name\": \"Product 14\",\n                \"price\": 267.33635995132704,\n                \"stock\": 58,\n                \"description\": \"Description for Product 14.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Sports & Outdoors\",\n                        \"isActive\": true,\n                        \"id\": 5\n                    },\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 15,\n                \"sku\": \"SKU10014\",\n                \"name\": \"Product 15\",\n                \"price\": 503.1495973650986,\n                \"stock\": 20,\n                \"description\": \"Description for Product 15.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Automotive\",\n                        \"isActive\": true,\n                        \"id\": 9\n                    },\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 16,\n                \"sku\": \"SKU10015\",\n                \"name\": \"Product 16\",\n                \"price\": 291.2195896971386,\n                \"stock\": 19,\n                \"description\": \"Description for Product 16.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Fashion\",\n                        \"isActive\": true,\n                        \"id\": 4\n                    },\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"mainan anak2 kecil 1\",\n                        \"isActive\": true,\n                        \"id\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 17,\n                \"sku\": \"SKU10016\",\n                \"name\": \"Product 17\",\n                \"price\": 499.894484234822,\n                \"stock\": 57,\n                \"description\": \"Description for Product 17.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Toys & Games\",\n                        \"isActive\": true,\n                        \"id\": 7\n                    },\n                    {\n                        \"name\": \"mainan anak2 kecil 1\",\n                        \"isActive\": true,\n                        \"id\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 18,\n                \"sku\": \"SKU10017\",\n                \"name\": \"Product 18\",\n                \"price\": 304.69119056123134,\n                \"stock\": 159,\n                \"description\": \"Description for Product 18.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    }\n                ]\n            },\n            {\n                \"id\": 19,\n                \"sku\": \"SKU10018\",\n                \"name\": \"Product 19\",\n                \"price\": 154.40436006832513,\n                \"stock\": 47,\n                \"description\": \"Description for Product 19.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"mainan anak2 kecil 1\",\n                        \"isActive\": true,\n                        \"id\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 20,\n                \"sku\": \"SKU10019\",\n                \"name\": \"Product 20\",\n                \"price\": 12.368562317552115,\n                \"stock\": 146,\n                \"description\": \"Description for Product 20.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            }\n        ],\n        \"total-data\": 102\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-11T22:22:25.0562006\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Product By Id [VIEW_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5Mjg3NzExLCJleHAiOjE3MzkzMjM3MTF9.NQ_aCWQ3vQJzsaBIYk-HEOI6lMJnOMQJu62ZuBN6SOQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/product/60",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"60"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/product/11111",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"product",
+												"11111"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Feb 2025 15:40:40 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/product/11111\",\n    \"method\": \"GET\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Product not found\",\n    \"error_code\": \"FVPDT07042\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-11T22:40:40.6205771\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Active Product [SHOP]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5Mjg3NzExLCJleHAiOjE3MzkzMjM3MTF9.NQ_aCWQ3vQJzsaBIYk-HEOI6lMJnOMQJu62ZuBN6SOQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/shop/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"shop",
+										"products"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": "50",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/shop/products?sizePerPage=50",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"shop",
+												"products"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0",
+													"disabled": true
+												},
+												{
+													"key": "sizePerPage",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Feb 2025 15:38:55 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"sort-by\": \"id\",\n        \"current-page\": 0,\n        \"column-name\": \"status\",\n        \"total-page\": 1,\n        \"sort\": \"asc\",\n        \"size-per-page\": 50,\n        \"value\": \"active\",\n        \"content\": [\n            {\n                \"id\": 1,\n                \"sku\": \"SKU10000\",\n                \"name\": \"Product 1\",\n                \"price\": 507.4801730499037,\n                \"stock\": 68,\n                \"description\": \"Description for Product 1.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"sku\": \"SKU10001\",\n                \"name\": \"Product 2\",\n                \"price\": 80.70389855418007,\n                \"stock\": 44,\n                \"description\": \"Description for Product 2.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Toys & Games\",\n                        \"isActive\": true,\n                        \"id\": 7\n                    }\n                ]\n            },\n            {\n                \"id\": 3,\n                \"sku\": \"SKU10002\",\n                \"name\": \"Product 3\",\n                \"price\": 135.89275476636035,\n                \"stock\": 154,\n                \"description\": \"Description for Product 3.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 4,\n                \"sku\": \"SKU10003\",\n                \"name\": \"Product 4\",\n                \"price\": 44.03588818900921,\n                \"stock\": 159,\n                \"description\": \"Description for Product 4.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"mainan anak2 kecil 1\",\n                        \"isActive\": true,\n                        \"id\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 5,\n                \"sku\": \"SKU10004\",\n                \"name\": \"Product 5\",\n                \"price\": 211.97262290365043,\n                \"stock\": 23,\n                \"description\": \"Description for Product 5.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Groceries\",\n                        \"isActive\": true,\n                        \"id\": 8\n                    },\n                    {\n                        \"name\": \"Sports & Outdoors\",\n                        \"isActive\": true,\n                        \"id\": 5\n                    },\n                    {\n                        \"name\": \"Furniture\",\n                        \"isActive\": true,\n                        \"id\": 10\n                    }\n                ]\n            },\n            {\n                \"id\": 6,\n                \"sku\": \"SKU10005\",\n                \"name\": \"Product 6\",\n                \"price\": 502.37494678426987,\n                \"stock\": 101,\n                \"description\": \"Description for Product 6.\",\n                \"isActive\": true,\n                \"categories\": [\n                    {\n                        \"name\": \"Electronics\",\n                        \"isActive\": true,\n                        \"id\": 1\n                    }\n                ]\n            }\n        ],\n        \"total-data\": 6\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-11T22:38:55.3639896\"\n}"
+								}
+							]
+						},
+						{
+							"name": "get active product by id [SHOP]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5Mjg3NzExLCJleHAiOjE3MzkzMjM3MTF9.NQ_aCWQ3vQJzsaBIYk-HEOI6lMJnOMQJu62ZuBN6SOQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/shop/product/62",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"shop",
+										"product",
+										"62"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get active product by ids [SHOP]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MzUyNjA4LCJleHAiOjE3MzkzODg2MDh9.ETt-GRvEV32D67LH0K66ZHnB2jiHCoh1LTKJ_W-fQjA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/shop/product/ids",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"shop",
+										"product",
+										"ids"
+									],
+									"query": [
+										{
+											"key": "productId",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "productId",
+											"value": "2",
+											"disabled": true
+										},
+										{
+											"key": "productId",
+											"value": "3",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/shop/product/ids?productId=2&productId=3",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"shop",
+												"product",
+												"ids"
+											],
+											"query": [
+												{
+													"key": "productId",
+													"value": "1",
+													"disabled": true
+												},
+												{
+													"key": "productId",
+													"value": "2"
+												},
+												{
+													"key": "productId",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 12 Feb 2025 09:32:00 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"id\": 2,\n            \"sku\": \"SKU10001\",\n            \"name\": \"Product 2\",\n            \"price\": 80.70389855418007,\n            \"stock\": 44,\n            \"description\": \"Description for Product 2.\",\n            \"isActive\": true,\n            \"categories\": [\n                {\n                    \"name\": \"Toys & Games\",\n                    \"isActive\": true,\n                    \"id\": 7\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"sku\": \"SKU10002\",\n            \"name\": \"Product 3\",\n            \"price\": 135.89275476636035,\n            \"stock\": 154,\n            \"description\": \"Description for Product 3.\",\n            \"isActive\": true,\n            \"categories\": [\n                {\n                    \"name\": \"Groceries\",\n                    \"isActive\": true,\n                    \"id\": 8\n                },\n                {\n                    \"name\": \"Furniture\",\n                    \"isActive\": true,\n                    \"id\": 10\n                }\n            ]\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-12T16:32:00.3149769\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Update product by id [MANAGE_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MjkxNTMzLCJleHAiOjE3MzkzMjc1MzN9.U_sfzicj1-bHO2AbLmw9fyKznihI2M-mrLOP73DtNfU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"sku\": \"sku-001-postman\",\r\n    \"name\": \"postman product 22\",\r\n    \"price\": 99.0,\r\n    \"stock\": 1,\r\n    \"isActive\": true,\r\n    \"description\": \"product percobaan postman 22\",\r\n    \"categoryIds\": [\r\n        1,\r\n        5,\r\n        7\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8082/api/v1/product/101",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"101"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"sku\": \"sku-001-postman\",\r\n    \"name\": \"postman product 22\",\r\n    \"price\": 99.0,\r\n    \"stock\": 1,\r\n    \"isActive\": true,\r\n    \"description\": \"product percobaan postman 22\",\r\n    \"categoryIds\": [\r\n        1,\r\n        5,\r\n        7\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8082/api/v1/product/101",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"product",
+												"101"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Feb 2025 16:46:55 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Product updated successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-11T23:46:55.7440945\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete product by id [MANAGE_PRODUCT]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MjkxNTMzLCJleHAiOjE3MzkzMjc1MzN9.U_sfzicj1-bHO2AbLmw9fyKznihI2M-mrLOP73DtNfU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/product/101",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"101"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/product/101",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"product",
+												"101"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Feb 2025 16:49:08 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/product/101\",\n    \"method\": \"DELETE\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Product inactive\",\n    \"error_code\": \"FVPDT07023\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-11T23:49:08.3002463\"\n}"
+								},
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8082/api/v1/product/101",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"api",
+												"v1",
+												"product",
+												"101"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Feb 2025 16:49:23 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Product deleted successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-11T23:49:23.494656\"\n}"
+								}
+							]
+						},
+						{
+							"name": "deduct product [BELUM]",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "TransactionService",
+			"item": [
+				{
+					"name": "cart",
+					"item": [
+						{
+							"name": "add item to cart by token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjAwMSIsInBlcm1pc3Npb25zIjoiU0hPUCIsInVzZXJJZCI6MiwiaWF0IjoxNzM5NDM2NTE4LCJleHAiOjE3Mzk0NzI1MTh9.ZFkmMNGGKE-Uw-GCe9ekVeDqlYYVrpMzO8YGeTg_Gto",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productId\": 3,\r\n    \"quantity\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/cart/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"cart",
+										"add"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"productId\": 3,\r\n    \"quantity\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8083/api/v1/cart/add",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8083",
+											"path": [
+												"api",
+												"v1",
+												"cart",
+												"add"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 13 Feb 2025 09:27:51 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-13T16:27:51.4387069\"\n}"
+								}
+							]
+						},
+						{
+							"name": "update qty cart by token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjAwMSIsInBlcm1pc3Npb25zIjoiU0hPUCIsInVzZXJJZCI6MiwiaWF0IjoxNzM5NDE2NjU0LCJleHAiOjE3Mzk0NTI2NTR9.yNzm23MMI9J4ZJhg5PhEOE9_s7nzCf2ocq3pcG4niEs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/cart/9/-1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"cart",
+										"9",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Cart by token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjAwMSIsInBlcm1pc3Npb25zIjoiU0hPUCIsInVzZXJJZCI6MiwiaWF0IjoxNzM5NDE2NjU0LCJleHAiOjE3Mzk0NTI2NTR9.yNzm23MMI9J4ZJhg5PhEOE9_s7nzCf2ocq3pcG4niEs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/cart/8",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"cart",
+										"8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cart by token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjAwMSIsInBlcm1pc3Npb25zIjoiU0hPUCIsInVzZXJJZCI6MiwiaWF0IjoxNzM5NDM2NTE4LCJleHAiOjE3Mzk0NzI1MTh9.ZFkmMNGGKE-Uw-GCe9ekVeDqlYYVrpMzO8YGeTg_Gto",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/cart",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "order",
+					"item": [
+						{
+							"name": "Create order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjAwMSIsInBlcm1pc3Npb25zIjoiU0hPUCIsInVzZXJJZCI6MiwiaWF0IjoxNzM5NDM2NTE4LCJleHAiOjE3Mzk0NzI1MTh9.ZFkmMNGGKE-Uw-GCe9ekVeDqlYYVrpMzO8YGeTg_Gto",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"addressId\": 1,\r\n    \"cartIds\": [\r\n       1\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/order",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"order"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"addressId\": 1,\r\n    \"cartIds\": [\r\n       1\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8083/api/v1/order",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8083",
+											"path": [
+												"api",
+												"v1",
+												"order"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 13 Feb 2025 09:27:21 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"path\": \"/api/v1/order\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Cart not found\",\n    \"error_code\": \"FVTRX09002\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-13T16:27:21.822522\"\n}"
+								}
+							]
+						},
+						{
+							"name": "get all orders [VIEW_TRX]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk0NjQ3NTksImV4cCI6MTczOTUwMDc1OX0.Dri6Wmqjq8Gsz0fpc0lBFi724cjNEKbTYBjoSEuQjO4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/orders",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": "50",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get order by id [VIEW_TRX]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk0NjQ3NTksImV4cCI6MTczOTUwMDc1OX0.Dri6Wmqjq8Gsz0fpc0lBFi724cjNEKbTYBjoSEuQjO4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/order/61",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"order",
+										"61"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": "50",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get my list order by token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk0NjQ3NTksImV4cCI6MTczOTUwMDc1OX0.Dri6Wmqjq8Gsz0fpc0lBFi724cjNEKbTYBjoSEuQjO4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/my/order",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"my",
+										"order"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get my order by token and Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk0NjQ3NTksImV4cCI6MTczOTUwMDc1OX0.Dri6Wmqjq8Gsz0fpc0lBFi724cjNEKbTYBjoSEuQjO4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/my/order/61",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"my",
+										"order",
+										"61"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
