@@ -146,3 +146,31 @@ file [CodeBean-onlineshop.postman_collection.json](CodeBean-onlineshop.postman_c
 - role memiliki relasi many to many permissions, relasi dapt di lihat pada table RolePermission.
 - untuk list permission ada di table Permissions.
 - setaip permission di kelompokan dan module/menu
+
+
+### table session
+```sql
+CREATE TABLE session.SPRING_SESSION (
+                                PRIMARY_ID CHAR(36) NOT NULL,
+                                SESSION_ID CHAR(36) NOT NULL,
+                                CREATION_TIME BIGINT NOT NULL,
+                                LAST_ACCESS_TIME BIGINT NOT NULL,
+                                MAX_INACTIVE_INTERVAL INT NOT NULL,
+                                EXPIRY_TIME BIGINT NOT NULL,
+                                PRINCIPAL_NAME VARCHAR(100),
+                                CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID)
+);
+
+CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON session.SPRING_SESSION (SESSION_ID);
+CREATE INDEX SPRING_SESSION_IX2 ON session.SPRING_SESSION (EXPIRY_TIME);
+CREATE INDEX SPRING_SESSION_IX3 ON session.SPRING_SESSION (PRINCIPAL_NAME);
+
+CREATE TABLE session.SPRING_SESSION_ATTRIBUTES (
+                                           SESSION_PRIMARY_ID CHAR(36) NOT NULL,
+                                           ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
+                                           ATTRIBUTE_BYTES binary NOT NULL,
+                                           CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
+                                           CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES session.SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
+);
+
+```

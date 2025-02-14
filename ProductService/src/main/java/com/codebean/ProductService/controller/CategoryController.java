@@ -53,8 +53,8 @@ public class CategoryController {
         return this.categoryService.findAll(Pageable, request);
     }
 
-    @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT','SHOP')")
-    @GetMapping(path = "/category")
+//    @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT','SHOP')")
+    @GetMapping(path = "/shop/category")
     public ResponseEntity<?> getAllCategoryActive(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
                                                   HttpServletRequest request

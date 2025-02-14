@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.websiteui.dto.*;
+import com.codebean.websiteui.dto.client.user.ModuleDto;
 import com.codebean.websiteui.dto.request.UserCreateReqDto;
 import com.codebean.websiteui.dto.request.UserRegReqDto;
 import com.codebean.websiteui.dto.response.Response;
@@ -41,4 +42,9 @@ public interface UserClient {
 
     @GetMapping("/api/v1/user/{userId}")
     Response<UserDetailDto> getUserDetailById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "userId") Long userId);
+
+    // new
+    @GetMapping("/api/v1/module/roleName/{roleName}")
+    Response<List<ModuleDto>> getModuleByRoleName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable(value = "roleName") String roleName);
+
 }
