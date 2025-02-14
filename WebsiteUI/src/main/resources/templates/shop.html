@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>222Shoppers &mdash; Colorlib e-Commerce Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        figure {
+            min-width: 200px; /* Set your desired minimum width */
+            min-height: 200px; /* Set your desired minimum height */
+        }
+    </style>
+</head>
+<body>
+
+<div class="site-wrap">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+
+    <!--content-->
+    <div class="bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black">Shop</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="float-md-left mb-4"><h2 class="text-black h5">Shop All</h2></div>
+                    <div class="d-flex">
+                        <div class="dropdown mr-1 ml-md-auto">
+                            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
+                                    id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Latest
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                                <a class="dropdown-item" href="#">Men</a>
+                                <a class="dropdown-item" href="#">Women</a>
+                                <a class="dropdown-item" href="#">Children</a>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
+                                    id="dropdownMenuReference" data-toggle="dropdown">Reference
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                <a class="dropdown-item" href="#">Relevance</a>
+                                <a class="dropdown-item" href="#">Name, A to Z</a>
+                                <a class="dropdown-item" href="#">Name, Z to A</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Price, low to high</a>
+                                <a class="dropdown-item" href="#">Price, high to low</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-9 order-2">
+                    <div class="row mb-5">
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html">
+                                        <img src="images/cloth_1.jpg" alt="Image placeholder" class="img-fluid">
+                                    </a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Tank Top</a></h3>
+                                    <p class="mb-0">Finding perfect t-shirt</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img
+                                            src="https://www.searchenginejournal.com/wp-content/uploads/2022/06/image-search-1600-x-840-px-62c6dc4ff1eee-sej.png"
+                                            alt="Image placeholder"
+                                            class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Corater</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/cloth_2.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Polo Shirt</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/cloth_3.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">T-Shirt Mockup</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/shoe_1.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Corater</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/cloth_1.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Tank Top</a></h3>
+                                    <p class="mb-0">Finding perfect t-shirt</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/shoe_1.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Corater</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/cloth_2.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Polo Shirt</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/cloth_3.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">T-Shirt Mockup</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/shoe_1.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Corater</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/cloth_1.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Tank Top</a></h3>
+                                    <p class="mb-0">Finding perfect t-shirt</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div class="block-4 text-center border">
+                                <figure class="block-4-image">
+                                    <a href="shop-single.html"><img src="images/cloth_2.jpg" alt="Image placeholder"
+                                                                    class="img-fluid"></a>
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="shop-single.html">Polo Shirt</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div th:replace="~{fragment/pagination::paginationFragment}"></div>
+
+                </div>
+
+                <div class="col-md-3 order-1 mb-5 mb-md-0">
+                    <div class="border p-4 rounded mb-4">
+                        <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter Products</h3>
+                        <form id="filter-form" method="get">
+                            <div class="mb-4">
+                                <label class="mb-3 h6  text-black d-block ">Category</label>
+                                <label class="d-flex"><input type="checkbox" name="category" class="mr-2 mt-1"
+                                                             value="category1"><span
+                                        class="text-black">Category 1</span></label>
+                                <label class="d-flex"><input type="checkbox" name="category" class="mr-2 mt-1"
+                                                             value="category2"><span
+                                        class="text-black">Category 2</span></label>
+                                <label class="d-flex"><input type="checkbox" name="category" class="mr-2 mt-1"
+                                                             value="category3"><span
+                                        class="text-black">Category 3</span></label>
+                            </div>
+                            <div class="mb-3 mt-3">
+                                <label class="mb-3 h6  text-black d-block">Price Range</label>
+                                <div class="d-flex">
+                                    <input type="number" id="price-min" class="form-control mr-2" placeholder="Min"
+                                           min="0" step="10" name="minPrice">
+                                    <input type="number" id="price-max" class="form-control" placeholder="Max" min="0"
+                                           step="10" name="maxPrice">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-4 mt-md-4 btn-block">Apply Filters</button>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="site-section site-blocks-2">
+                        <div class="row justify-content-center text-center mb-5">
+                            <div class="col-md-7 site-section-heading pt-4">
+                                <h2>Categories</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
+                                <a class="block-2-item" href="#">
+                                    <figure class="image">
+                                        <img src="images/women.jpg" alt="" class="img-fluid">
+                                    </figure>
+                                    <div class="text">
+                                        <span class="text-uppercase">Collections</span>
+                                        <h3>Women</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+                                <a class="block-2-item" href="#">
+                                    <figure class="image">
+                                        <img src="images/children.jpg" alt="" class="img-fluid">
+                                    </figure>
+                                    <div class="text">
+                                        <span class="text-uppercase">Collections</span>
+                                        <h3>Children</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+                                <a class="block-2-item" href="#">
+                                    <figure class="image">
+                                        <img src="images/men.jpg" alt="" class="img-fluid">
+                                    </figure>
+                                    <div class="text">
+                                        <span class="text-uppercase">Collections</span>
+                                        <h3>Men</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div th:replace="~{fragment/footer::footer}"></div>
+</div>
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

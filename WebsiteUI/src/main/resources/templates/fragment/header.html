@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ini header</title>
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-</body>
+<header class="site-navbar" role="banner" th:fragment="header">
+    <div class="site-navbar-top">
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-12 mb-3 mb-md-0 col-md-3 order-1 order-md-1 text-md-left text-center">
+                    <div class="site-logo">
+                        <a th:href="@{/}" class="js-logo-clone">Shoppers</a>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-6 order-2 order-md-2 site-search-icon text-left border rounded"
+                     th:unless="${isManagement}">
+                    <form action="" class="site-block-top-search">
+                        <span class="icon icon-search2"></span>
+                        <input type="text" class="form-control border-0" placeholder="Search">
+                    </form>
+                </div>
+
+                <div class="col-6 col-md-6 order-2 order-md-2 site-search-icon text-center border-0"
+                     th:if="${isManagement}">
+                    <h3 class="h2 text-black" th:text="${isManagement}"></h3>
+                </div>
+
+                <div th:replace="~{fragment/login_logout::login_logout}"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment/menu::menuFragment}" th:if=""></div>
+
+</header>
 </html>

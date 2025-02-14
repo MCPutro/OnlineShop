@@ -23,6 +23,6 @@ public class ModuleDto {
     private String name;
     private String description;
     private String path;
-    private Boolean isActive;
+//    private Boolean isActive;
     private List<PermissionDto> permissions;
 }

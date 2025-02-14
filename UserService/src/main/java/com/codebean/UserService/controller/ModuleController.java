@@ -46,7 +46,7 @@ public class ModuleController {
         return this.moduleService.findByRoleId(roleId, request);
     }
 
-    @GetMapping(path = "/module/roleName/{roleName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/module/roleName/{roleName}")
     public ResponseEntity<?> getModuleByRoleName(@PathVariable(value = "roleName") String roleName, HttpServletRequest request) {
         return this.moduleService.findByRoleName(roleName, request);
     }

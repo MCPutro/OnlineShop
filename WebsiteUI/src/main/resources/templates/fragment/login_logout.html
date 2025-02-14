@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div class="col-6 col-md-3 order-3 order-md-3 text-right" th:fragment="login_logout">
+    <div class="site-top-icons">
+        <ul>
+            <!-- jika belum login-->
+            <li th:unless="${username}"><a th:href="@{/login}"><strong class="text-black">Login</strong></a></li>
+
+            <div th:if="${username}"><!-- jika sudah login-->
+
+                <li><a href="#"><span class="icon icon-person"></span></a></li>
+                <!--<li><a href="#"><span class="icon icon-heart-o"></span></a></li>-->
+                <li>
+                    <a th:href="@{/cart}" class="site-cart">
+                        <span class="icon icon-shopping_cart"></span>
+<!--                        <span class="count">1</span>-->
+                    </a>
+                </li>
+                <li class="d-inline-block d-md-none ml-md-0">
+                    <a href="#" class="site-menu-toggle js-menu-toggle">
+                        <span class="icon-menu"></span>
+                    </a>
+                </li>
+                <li><a th:href="@{/logout}"><span class="icon icon-sign-out"></span></a></li>
+            </div>
+
+        </ul>
+    </div>
+</div>
+
+</html>

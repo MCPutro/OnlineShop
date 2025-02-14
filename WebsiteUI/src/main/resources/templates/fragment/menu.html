@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--            <li><a href="#">Catalogue</a></li>-->
+<!--            <li><a href="#">New Arrivals</a></li>-->
+
+<nav class="site-navigation text-right text-md-center" role="navigation" th:fragment="menuFragment">
+    <div class="container">
+        <ul class="site-menu js-clone-nav d-none d-md-block" th:utext="${module}"></ul>
+    </div>
+</nav>
+
+</html>
