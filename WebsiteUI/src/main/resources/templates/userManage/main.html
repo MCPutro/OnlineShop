@@ -42,7 +42,9 @@
                 <!--Tombol add-->
                 <div class="col-6 col-md-3 order-1 order-md-1 mb-3 mb-md-0 text-left ">
                     <div class="site-logo">
-                        <btn onclick="loadAddUserForm('user-management/add')" class="btn btn-primary">Add User</btn>
+                        <btn onclick="loadAddUserForm2('#userCreateModal','user-management/add','Add User')" class="btn btn-primary">Add
+                            User
+                        </btn>
                     </div>
                 </div>
 
@@ -114,46 +116,39 @@
     </div>
 
     <!--Footer-->
-    <footer class="site-footer border-top">
-        <div class="container">
-            <div class="row pt-5 mt-5 text-center">
-                <div class="col-md-12">
-                    <p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script data-cfasync="false"
-                                                src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-                        <script>document.write(new Date().getFullYear());</script>
-                        All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i>
-                        by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </footer>
+    <footer th:replace="~{fragment/footer2::footer2}"></footer>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered block" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-black-50" id="exampleModalLongTitle">Add User</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body" id="modal-content">
-                Loading...
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="~{fragment/modalA::modalA('userCreateModal')}"></div>
+<!--<div class="modal fade" id="userCreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-centered block" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title text-black" id="modalTitle">Add Data</h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--            </div>-->
+<!--            <div class="modal-body" id="modal-content">-->
+<!--                Loading...-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 <script>
-    function loadAddUserForm(url) {
-        $.get(url, function(data) {
+    // function loadAddUserForm(url, title) {
+    //     $.get(url, function (data) {
+    //         $("#modalTitle").text(title);
+    //         $("#modal-content").html(data);
+    //         $("#userCreateModal").modal("show");
+    //     });
+    // }
+
+    function loadAddUserForm2(modalId, url, title) {
+        $.get(url, function (data) {
+            $("#modalTitle").text(title);
             $("#modal-content").html(data);
-            $("#userModal").modal("show");
+            $(modalId).modal("show");
         });
     }
 </script>
