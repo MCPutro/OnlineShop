@@ -9,6 +9,7 @@ Created on 27 Jan 2025 11:51
 Version 1.0
 */
 
+import com.codebean.websiteui.dto.UserCreateDto;
 import com.codebean.websiteui.dto.UserDto;
 import com.codebean.websiteui.dto.client.user.ModuleDto;
 import com.codebean.websiteui.dto.pageAttribute;
@@ -62,4 +63,13 @@ public interface UserClient {
                                   @RequestParam(value = "page") Integer page,
                                   @RequestParam(value = "sizePerPage") Integer sizePerPage
     );
+
+    @GetMapping("/api/v1/roles/active")
+    Map<String, Object> findActiveRole(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                       @RequestParam(value = "page") Integer page,
+                                       @RequestParam(value = "sizePerPage") Integer sizePerPage
+    );
+
+    @PostMapping("/api/v1/user-create")
+    Response<String> createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserCreateDto dto);
 }

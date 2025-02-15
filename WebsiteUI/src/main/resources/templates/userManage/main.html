@@ -14,10 +14,19 @@
     <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
     <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
 
-
     <link rel="stylesheet" th:href="@{/css/aos.css}">
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        .modal {
+            z-index: 2000 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 1999 !important;
+        }
+    </style>
 
 </head>
 <body>
@@ -33,7 +42,7 @@
                 <!--Tombol add-->
                 <div class="col-6 col-md-3 order-1 order-md-1 mb-3 mb-md-0 text-left ">
                     <div class="site-logo">
-                        <a href="admin_add_user.html" class="btn btn-primary">Add User</a>
+                        <btn onclick="loadAddUserForm('user-management/add')" class="btn btn-primary">Add User</btn>
                     </div>
                 </div>
 
@@ -49,7 +58,9 @@
                             <option th:selected="${filterBy == 'email'}" value="email">Email</option>
                             <option th:selected="${filterBy == 'rolename'}" value="rolename">Role</option>
                         </select>
-                        <input type="hidden" name="size" th:value="${size}" disabled>
+                        <input type="hidden" name="size" class=" "
+                               th:value="${size}">
+                        <!--                        <input type="text" name="size" th:value="${size}" disabled>-->
                         <button type="submit" class="btn btn-outline-info ml-auto ">Apply</button>
                     </form>
                 </div>
@@ -123,6 +134,29 @@
     </footer>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered block" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-black-50" id="exampleModalLongTitle">Add User</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                Loading...
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadAddUserForm(url) {
+        $.get(url, function(data) {
+            $("#modal-content").html(data);
+            $("#userModal").modal("show");
+        });
+    }
+</script>
 
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/jquery-ui.js}"></script>

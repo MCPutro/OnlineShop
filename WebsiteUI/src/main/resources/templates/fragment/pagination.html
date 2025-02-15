@@ -11,7 +11,7 @@
                      )}">&lt;</a>
                 </li>
 
-                <li th:class="${currentPage == 1} ? 'active' : ''"><a
+                <li th:class="${currentPage == 1} ? 'active' : ''" th:if="${totalPages != currentPage}"><a
                         th:href="@{/user-management(page=${1}, size=${size}, search=${search}, filterBy=${filterBy}  )}">1</a>
                 </li>
                 <li th:if="${currentPage > 4}"><span>...</span></li>
@@ -24,7 +24,7 @@
                 </li>
                 <li th:if="${currentPage < totalPages - 3}"><span>...</span></li>
 
-                <li><a th:href="@{/user-management(page=${totalPages}, size=${size}, search=${search}, filterBy=${filterBy}  )}" th:text="${totalPages}"></a></li>
+                <li  th:class="${totalPages == currentPage} ? 'active' : '' " ><a th:href="@{/user-management(page=${totalPages}, size=${size}, search=${search}, filterBy=${filterBy}  )}" th:text="${totalPages}" ></a></li>
                 <li th:if="${currentPage < totalPages}"><a
                         th:href="@{/user-management(page=${currentPage + 1}, size=${size}, search=${search}, filterBy=${filterBy} )}">&gt;</a></li>
 

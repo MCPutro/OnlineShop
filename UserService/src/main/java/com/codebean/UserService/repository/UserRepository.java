@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByEmailContainingIgnoreCaseAndIsDelete(Pageable pageable, String email, Boolean isDelete);
 
-    @Query("SELECT u FROM User u WHERE u.isDelete = :isDelete AND u.role.name LIKE %:roleName%")
+    @Query("SELECT u FROM User u JOIN u.role r WHERE u.isDelete = :isDelete AND r.name LIKE %:roleName%")
     Page<User> findAllUserByStatusDeleteAndRoleName(@Param("isDelete") Boolean isDelete,
                                                     @Param("roleName") String roleName,
                                                     Pageable pageable);

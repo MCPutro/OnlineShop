@@ -10,21 +10,28 @@ Version 1.0
 */
 
 import com.codebean.websiteui.client.UserClient;
+import com.codebean.websiteui.dto.UserCreateDto;
+import com.codebean.websiteui.dto.UserDto;
+import com.codebean.websiteui.dto.request.UserRegReqDto;
+import com.codebean.websiteui.dto.response.Response;
 import com.codebean.websiteui.util.Constans;
 import com.codebean.websiteui.util.GlobalFunction;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("user-management")
+@RequestMapping("/user-management")
 public class UserManageController {
 
     @Autowired
@@ -54,7 +61,7 @@ public class UserManageController {
                     case "email":
                         allUser = this.userClient.findAllBy(Constans.BEARER + auth, "email", search, page, size);
                         break;
-                    case "role":
+                    case "rolename":
                         allUser = this.userClient.findAllBy(Constans.BEARER + auth, "rolename", search, page, size);
                         break;
                     default:
@@ -84,5 +91,60 @@ public class UserManageController {
         model.addAttribute("size", size);
 
         return "userManage/main";
+    }
+
+    @GetMapping("/add")
+    public String add(Model model, WebRequest webRequest) {
+        try {
+            String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+
+            //get role list
+            Map<String, Object> activeRole = this.userClient.findActiveRole(Constans.BEARER + auth, 0, 500);
+            Map<String, Object> data = (Map<String, Object>) activeRole.get("data");
+            List<Map<String, Object>> content = (List<Map<String, Object>>) data.get("content");
+
+            Map<Object, Object> role = new HashMap<>();
+            for (int i = 0; i < content.size(); i++) {
+                Object id = content.get(i).get("id");
+                Object name = content.get(i).get("name");
+                role.put(id, name);
+            }
+            model.addAttribute("listRole", role);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "userManage/add";
+    }
+
+    @PostMapping("/save")
+    @ResponseBody
+    public ResponseEntity<String> saveUser(@RequestBody @Valid UserCreateDto user, BindingResult bindingResult, WebRequest webRequest) {
+
+        if (bindingResult.hasErrors()) {
+            List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
+                return err.getField() + " " + err.getDefaultMessage();
+            }).toList();
+
+            return ResponseEntity.badRequest().body(list.toString());
+        }
+
+
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            return ResponseEntity.badRequest().body("passwords don't match");
+        }
+
+        try {
+            String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+
+            //get role list
+            Response<String> user1 = this.userClient.createUser(Constans.BEARER + auth, user);
+            return ResponseEntity.ok(user1.getMessage());
+        } catch (Exception e) {
+//            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+//        return ResponseEntity.ok("User berhasil ditambahkan!");
     }
 }
