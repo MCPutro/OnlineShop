@@ -33,6 +33,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -63,7 +64,6 @@ public class UserController {
     }
 
 
-
     @PreAuthorize("hasAuthority('VIEW_USER')")
     @GetMapping(path = "/user/{userId}",
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -72,8 +72,6 @@ public class UserController {
                                          HttpServletRequest request) {
         return this.userService.findById(userId, request);
     }
-
-
 
 
     @GetMapping(path = "/user",
@@ -93,8 +91,6 @@ public class UserController {
     }
 
 
-
-
     @PreAuthorize("hasAuthority('VIEW_USER')")
     @GetMapping(path = "/users",
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -107,8 +103,6 @@ public class UserController {
         Pageable Pageable = PageRequest.of(page, sizePerPage);
         return this.userService.findAll(Pageable, request);
     }
-
-
 
 
     @PatchMapping(path = "/user",
@@ -137,7 +131,6 @@ public class UserController {
     }
 
 
-
     @PreAuthorize("hasAnyAuthority('MANAGE_USER')")
     @PatchMapping(path = "/user/{userId}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -163,4 +156,26 @@ public class UserController {
 
 
     //fitur search belum
+    @PreAuthorize("hasAuthority('VIEW_USER')")
+    @GetMapping(path = "/find/user",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> searchUsers(
+            @RequestParam(value = "by", required = false, defaultValue = "0") String by,
+            @RequestParam(value = "search", required = false, defaultValue = "0") String search,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+            HttpServletRequest request
+    ) {
+
+//        ResponseEntity<Object> response;
+        Pageable Pageable = PageRequest.of(page, sizePerPage);
+
+        if (by.equalsIgnoreCase("username") || by.toLowerCase().equals("email") || by.toLowerCase().equals("rolename")) {
+            return this.userService.findByParam(Pageable, by, search, request);
+        }
+
+        return this.userService.findAll(Pageable, request);
+    }
+
 }

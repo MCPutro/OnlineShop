@@ -11,6 +11,7 @@ Version 1.0
 
 import com.codebean.websiteui.dto.UserDto;
 import com.codebean.websiteui.dto.client.user.ModuleDto;
+import com.codebean.websiteui.dto.pageAttribute;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.response.Response;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @FeignClient(name = "UserService", url = "http://localhost:8081")
 public interface UserClient {
@@ -47,4 +49,17 @@ public interface UserClient {
     @PostMapping("/auth/v1/login")
     Response<UserDto> login(@RequestBody UserLoginDto dto);
 
+    @GetMapping("/api/v1/users")
+    Map<String, Object> findAll(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                @RequestParam(value = "page") Integer page,
+                                @RequestParam(value = "sizePerPage") Integer sizePerPage
+    );
+
+    @GetMapping("/api/v1/find/user")
+    Map<String, Object> findAllBy(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                  @RequestParam(value = "by") String by,
+                                  @RequestParam(value = "search") String search,
+                                  @RequestParam(value = "page") Integer page,
+                                  @RequestParam(value = "sizePerPage") Integer sizePerPage
+    );
 }

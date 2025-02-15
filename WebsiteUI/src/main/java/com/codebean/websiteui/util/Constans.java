@@ -22,8 +22,16 @@ public class Constans {
     public static final String IS_MANAGEMENT = "isManagement";
     public static final String IS_LOGIN_OR_REGIS_PAGE = "isLoginOrRegisPage";
 
-
     public static final String ERRORS = "errors";
+
+    public static final String CURRENT_PAGE = "currentPage";
+    public static final String TOTAL_PAGES = "totalPages";
+
+    public static final String NAV_PAGINATION = "navPagination";
+
+    //pencarian
+    public static final String FILTER_BY = "filterBy";
+    public static final String SEARCH = "search";
 
 
     public static final String CUSTOMER_REGISTER = "register";

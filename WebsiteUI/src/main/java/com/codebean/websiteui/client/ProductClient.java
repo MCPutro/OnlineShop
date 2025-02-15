@@ -22,4 +22,8 @@ public interface ProductClient {
     Map<String, Object> getActiveCategory(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                           @RequestParam(value = "sizePerPage", required = false, defaultValue = "5") Integer sizePerPage
     );
+
+    @GetMapping("/api/v1/shop/products")
+    Map<String, Object> getActiveProducts(@RequestParam(value = "page") Integer page,
+                                          @RequestParam(value = "sizePerPage") Integer sizePerPage);
 }

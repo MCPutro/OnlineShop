@@ -13,6 +13,8 @@ import com.codebean.UserService.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,9 +29,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByIsDelete(Boolean isDelete);
 
     Page<User> findAllByIsDelete(Pageable pageable, Boolean isDelete);
+
     Page<User> findAllByUsernameContainingIgnoreCaseAndIsDelete(Pageable pageable, String username, Boolean isDelete);
 
     Page<User> findAllByEmailContainingIgnoreCaseAndIsDelete(Pageable pageable, String email, Boolean isDelete);
+
+    @Query("SELECT u FROM User u WHERE u.isDelete = :isDelete AND u.role.name LIKE %:roleName%")
+    Page<User> findAllUserByStatusDeleteAndRoleName(@Param("isDelete") Boolean isDelete,
+                                                    @Param("roleName") String roleName,
+                                                    Pageable pageable);
 
     Optional<User> findFirstByUsername(String username);
 }

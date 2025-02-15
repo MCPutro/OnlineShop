@@ -221,6 +221,9 @@ public class UserService implements iService<User> {
                 case "email":
                     page = this.userRepository.findAllByEmailContainingIgnoreCaseAndIsDelete(pageable, value, false);
                     break;
+                case "rolename":
+                    page = this.userRepository.findAllUserByStatusDeleteAndRoleName(false, value, pageable);
+                    break;
                 default:
                     page = this.userRepository.findAllByIsDelete(pageable, false);
                     break;

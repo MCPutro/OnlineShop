@@ -28,70 +28,78 @@
     <!--Isi content-->
     <div class="site-section-sm mb-5">
         <div class="container">
+            <!-- Filter -->
             <div class="row align-items-center mb-3">
-                <div class="col-12 mb-3 mb-md-0 col-md-3 order-1 order-md-1 text-left ">
+                <!--Tombol add-->
+                <div class="col-6 col-md-3 order-1 order-md-1 mb-3 mb-md-0 text-left ">
                     <div class="site-logo">
                         <a href="admin_add_user.html" class="btn btn-primary">Add User</a>
                     </div>
                 </div>
 
-                <div class="col-12 col-md-9 order-2 order-md-2 site-search-icon border-0 ">
-                    <!--<form action="" class="site-block-top-search">-->
-                    <!--    <span class="icon icon-search2"></span>-->
-                    <!--    <input type="text" class="form-control border-0" placeholder="Search">-->
-                    <!--</form>-->
-                    <form class="form-inline site-search-icon center" action="/action_page.php">
-                        <!--                        <span class="icon icon-search2"></span>-->
-                        <input type="Search" name="search" class="form-control border col-7 col-md-7 rounded-0"
-                               placeholder="Search" required>
+                <!-- Pencarian -->
+                <div class="col-12 col-md-7 order-3 order-md-2 site-search-icon border-1 ">
+                    <form class="form-inline site-search-icon center" action="/user-management">
+                        <!--<span class="icon icon-search2"></span>-->
+                        <input type="Search" name="search" class="form-control border col-6 col-md-7 rounded-0"
+                               placeholder="Search" th:value="${search}" required>
                         <select id="filter" name="filterBy"
-                                class="form-control col-3 col-md-3 border border-left-0 rounded-0">
-                            <option value="username">Username</option>
-                            <option value="email">Email</option>
-                            <option value="role">Role</option>
-                            <!--<option value="audi">Audi</option>-->
+                                class="form-control col-4 col-md-3 border border-left-0 rounded-0">
+                            <option th:selected="${filterBy == 'username'}" value="username">Username</option>
+                            <option th:selected="${filterBy == 'email'}" value="email">Email</option>
+                            <option th:selected="${filterBy == 'rolename'}" value="rolename">Role</option>
                         </select>
+                        <input type="hidden" name="size" th:value="${size}" disabled>
                         <button type="submit" class="btn btn-outline-info ml-auto ">Apply</button>
+                    </form>
+                </div>
+                <div class="col-6 col-md-2 order-2 order-md-3 mt-3 text-right">
+                    <!-- Dropdown untuk jumlah data per halaman -->
+                    <form method="get" action="/user-management" class="float-right float-md-right form-inline mb-3">
+                        <label>Show :</label>
+                        <select class="form-control" name="size" onchange="this.form.submit()">
+                            <option value="5" th:selected="${size == 5}">5</option>
+                            <option value="10" th:selected="${size == 10}">10</option>
+                            <option value="20" th:selected="${size == 20}">20</option>
+                            <option value="50" th:selected="${size == 50}">50</option>
+                        </select>
                     </form>
                 </div>
             </div>
 
 
-            <table class="table table-hover">
+            <table class="table table-hover mt-4 mt-md-4" data-aos="fade-up">
                 <thead>
                 <tr class="text-primary">
                     <th scope="col">#</th>
                     <th scope="col">Username</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Role</th>
                     <th scope="col">Status</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="text-black align-content-center a">
-                    <th scope="row">1</th>
-                    <td><a href="#">Mark</a></td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td><span class="badge badge-secondary col-5 p-2">Inactive</span></td>
-                </tr>
-                <tr class="text-black align-content-center a">
-                    <th scope="row">2</th>
-                    <td><a href="#">Jacob</a></td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td><span class="badge badge-secondary col-5 p-2">Inactive</span></td>
-                </tr>
-                <tr class="text-black align-content-center a">
-                    <th scope="row">3</th>
-                    <td><a href="#">Larry the Bird</a></td>
-                    <td>asda@asd.com</td>
-                    <td>@twitter</td>
-                    <td><span class="badge badge-success col-5 p-2">Active</span></td>
+                <tr class="text-black align-content-center a" th:each="user, seq : ${listUser}">
+                    <th scope="row" th:with="hasil=${((currentPage - 1) * size + 1)+seq.index}" th:text="${hasil}"></th>
+                    <td><a th:href="@{/user-management/detail/{userId}(userId=${user['id']})}"
+                           th:text="${user['username']}"></a></td>
+                    <td th:text="${user['name']}"></td>
+                    <td th:text="${user['email']}"></td>
+                    <td th:text="${user['role']}"></td>
+                    <td>
+                        <span class="badge badge-secondary col-5 p-2"
+                              th:if="${user['isActive'] == false}">Inactive</span>
+                        <span class="badge badge-success col-5 p-2" th:if="${user['isActive'] == true}">Active</span>
+                    </td>
+
                 </tr>
                 </tbody>
             </table>
         </div>
+
+        <!-- pagination -->
+        <div th:replace="~{fragment/pagination::paginationFragment}"></div>
     </div>
 
     <!--Footer-->
