@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<form th:object="${newCategory}" method="post" th:action="@{/product-management/save}">
+    <label for="categoryName">Category :</label>
+    <input type="text" id="categoryName" name="categoryName" th:field="*{name}" required>
+    <input type="submit">
+</form>
+
+</body>
+</html>

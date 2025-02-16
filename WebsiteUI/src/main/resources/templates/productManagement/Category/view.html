@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+<!--        <th>isactive</th>-->
+    </tr>
+    <tr th:each="ctgr : ${listContent}">
+        <td th:text="${ctgr['id']}"></td>
+        <td th:text="${ctgr['name']}"></td>
+<!--        <td th:text="${ctgr['isActive']}"></td>-->
+    </tr>
+
+</table>
+</body>
+</html>

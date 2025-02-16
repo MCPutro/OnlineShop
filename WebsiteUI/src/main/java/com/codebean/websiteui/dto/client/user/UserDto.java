@@ -1,4 +1,4 @@
-package com.codebean.websiteui.dto;
+package com.codebean.websiteui.dto.client.user;
 
 /*
 IntelliJ IDEA 2024.2.4 (Community Edition)
@@ -9,29 +9,18 @@ Created on 29 Jan 2025 13:03
 Version 1.0
 */
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 @ToString
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDetailDto {
+public class UserDto {
     private Long id;
     private String username;
     private String email;
     private String phoneNumber;
-    private String name;
     private String role;
-    private String profilePicture;
-    private Boolean isActive;
-    private Boolean isDelete;
-    private String gender;
-    private LocalDate dateOfBirth;
-    private List<UserAddressDto> addresses;
+    private String token;
 }

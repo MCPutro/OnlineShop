@@ -10,13 +10,12 @@ Version 1.0
 */
 
 import com.codebean.websiteui.client.UserClient;
-import com.codebean.websiteui.dto.UserDto;
+import com.codebean.websiteui.dto.client.user.UserDto;
 import com.codebean.websiteui.dto.client.user.ModuleDto;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.request.UserRegReqDto;
 import com.codebean.websiteui.dto.response.Response;
 import com.codebean.websiteui.util.Constans;
-import com.codebean.websiteui.util.GlobalFunction;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;

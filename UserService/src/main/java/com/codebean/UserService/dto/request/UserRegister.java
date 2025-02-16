@@ -53,5 +53,5 @@ public class UserRegister {
     @NotNull(message = "cannot be null")
     private String role;
 
-    private Set<PermissionDto> permissions;
+//    private Set<PermissionDto> permissions;
 }

@@ -19,7 +19,13 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
     <style>
+        .modal {
+            z-index: 2000 !important;
+        }
 
+        .modal-backdrop {
+            z-index: 1999 !important;
+        }
     </style>
 
 </head>
@@ -58,8 +64,8 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mb-3" >
-                    <h5 class="mb-0 mt-3 mt-md-3 " >Addresses :</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 mt-3 mt-md-3 ">Addresses :</h5>
                     <button class="btn btn-outline-primary" th:if="${userDetail.id == userId}">New Address</button>
                 </div>
                 <table class="table table-bordered">
@@ -100,7 +106,9 @@
 
             </div>
             <div class="card-footer text-right">
-                <a class="btn btn-primary" th:href="@{/admin/user-edit/{id}(id=${userDetail.getId()})}">Edit</a>
+                <button class="btn btn-primary"
+                        onclick="loadEditUserForm('#userEditModal','user-management/edit','Edit Profile' )">Edit Profile
+                </button>
                 <a class="btn btn-danger" th:href="@{/user-management/delete/{userId}(userId = ${userDetail.id})   }">Delete</a>
             </div>
         </div>
@@ -111,6 +119,30 @@
     <footer th:replace="~{fragment/footer2::footer2}"></footer>
 </div>
 
+
+<!-- Modal edit user-->
+<div th:replace="~{fragment/modalA::modalA('userEditModal')}"></div>
+<!--<div th:replace="~{fragment/modalA::modalA('userCreateModal')}"></div>-->
+
+<script>
+    // function loadAddUserForm(url, title) {
+    //     $.get(url, function (data) {
+    //         $("#modalTitle").text(title);
+    //         $("#modal-content").html(data);
+    //         $("#userCreateModal").modal("show");
+    //     });
+    // }
+
+    function loadEditUserForm(modalId, url, title) {
+        console.log(modalId, url, title)
+        // `${window.location.origin}/${url}`
+        $.get(`/${url}`, function (data) {
+            $("#modalTitle").text(title);
+            $("#modal-content").html(data);
+            $(modalId).modal("show");
+        });
+    }
+</script>
 
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/jquery-ui.js}"></script>

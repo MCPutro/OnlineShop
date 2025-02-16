@@ -1,4 +1,4 @@
-package com.codebean.websiteui.dto;
+package com.codebean.websiteui.dto.client.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

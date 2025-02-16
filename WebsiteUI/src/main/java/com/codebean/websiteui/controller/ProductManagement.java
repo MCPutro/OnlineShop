@@ -9,20 +9,81 @@ Created on 14 Feb 2025 18:41
 Version 1.0
 */
 
-import com.codebean.websiteui.util.Constans;
-import com.codebean.websiteui.util.GlobalFunction;
+import com.codebean.websiteui.client.ProductClient;
+import com.codebean.websiteui.dto.client.product.CategoryDto;
+import com.codebean.websiteui.dto.client.product.CategoryReqDto;
+import com.codebean.websiteui.dto.pageAttribute;
+import com.codebean.websiteui.dto.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.List;
+import java.util.Map;
+
 @Controller
+@RequestMapping("product-management")
 public class ProductManagement {
 
-    @GetMapping("/product-management")
-    public String productManagement(Model model, WebRequest webRequest) {
-        GlobalFunction.setGlobalFragment(model, webRequest);
-        model.addAttribute(Constans.IS_MANAGEMENT, "Product & Category Management");
-        return "productManagement/main";
+    @Autowired
+    private ProductClient productClient;
+
+    private String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk2ODgzNzksImV4cCI6MTczOTcyNDM3OX0.pneKPoEsjO4luw3cZn3JG011ttyT9Fu3uvzegqCXDB4";
+
+//    @GetMapping("/product-management")
+//    public String productManagement(Model model, WebRequest webRequest) {
+//        GlobalFunction.setGlobalFragment(model, webRequest);
+//        model.addAttribute(Constans.IS_MANAGEMENT, "Product & Category Management");
+//        return "productManagement/main";
+//    }
+
+    // ini untuk tampilin ui add category
+    @GetMapping
+    public String productManagement(Model model) {
+        model.addAttribute("newCategory", new CategoryReqDto());
+        return "productManagement/Category/add";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute("newCategory") CategoryReqDto newCategory,
+                       BindingResult bindingResult,
+                       Model model,
+                       WebRequest webRequest) {
+        try{
+            System.out.println(newCategory);
+            this.productClient.createCategory(token, newCategory);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        return "redirect:/product-management";
+    }
+
+    @GetMapping("/all")
+    public String all(Model model) {
+        try {
+            Map<String, Object> activeCategory = this.productClient.getActiveCategory(0, 100);
+            Map<String, Object> data = (Map<String, Object>) activeCategory.get("data");
+            List<Map<String, Object>> listContent = (List<Map<String, Object>>) data.get("content");
+
+            for (Map<String, Object> map : listContent) {
+                System.out.println(map);
+            }
+
+            model.addAttribute("listContent", listContent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return "productManagement/Category/view";
     }
 }

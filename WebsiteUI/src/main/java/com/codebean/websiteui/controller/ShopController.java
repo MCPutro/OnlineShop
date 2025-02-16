@@ -34,23 +34,23 @@ public class ShopController {
     public String shop(Model model, WebRequest webRequest) {
         GlobalFunction.setGlobalFragment(model, webRequest);
 
-        try {
-            // get category list
-            Map<String, Object> activeCategory = this.productClient.getActiveCategory(0, 100);
-            Map<String, Object> mapData = (Map<String, Object>) activeCategory.get("data");
-            List<Map<String, Object>> ltCategory = (List<Map<String, Object>>) mapData.get("content");
-
-            model.addAttribute("ltCategory", ltCategory);
-
-            Map<String, Object> activeProducts = this.productClient.getActiveProducts(0, 15);
-            Map<String, Object> dataProducts = (Map<String, Object>) activeProducts.get("data");
-            List<Map<String, Object>> products = (List<Map<String, Object>>) dataProducts.get("content");
-
-            model.addAttribute("ltProducts", products);
-        } catch (Exception e) {
-
-            throw new RuntimeException(e);
-        }
+//        try {
+//            // get category list
+//            Map<String, Object> activeCategory = this.productClient.getActiveCategory(0, 100);
+//            Map<String, Object> mapData = (Map<String, Object>) activeCategory.get("data");
+//            List<Map<String, Object>> ltCategory = (List<Map<String, Object>>) mapData.get("content");
+//
+//            model.addAttribute("ltCategory", ltCategory);
+//
+//            Map<String, Object> activeProducts = this.productClient.getActiveProducts(0, 15);
+//            Map<String, Object> dataProducts = (Map<String, Object>) activeProducts.get("data");
+//            List<Map<String, Object>> products = (List<Map<String, Object>>) dataProducts.get("content");
+//
+//            model.addAttribute("ltProducts", products);
+//        } catch (Exception e) {
+//
+//            throw new RuntimeException(e);
+//        }
 
         return "shop";
     }

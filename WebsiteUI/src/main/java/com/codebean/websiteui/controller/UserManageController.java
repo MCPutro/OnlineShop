@@ -10,18 +10,13 @@ Version 1.0
 */
 
 import com.codebean.websiteui.client.UserClient;
-import com.codebean.websiteui.dto.UserCreateDto;
-import com.codebean.websiteui.dto.UserDetailDto;
-import com.codebean.websiteui.dto.UserDto;
-import com.codebean.websiteui.dto.request.UserRegReqDto;
+import com.codebean.websiteui.dto.client.user.UserCreateDto;
+import com.codebean.websiteui.dto.client.user.UserDetailDto;
 import com.codebean.websiteui.dto.response.Response;
-import com.codebean.websiteui.errorHandling.BadRequestException;
 import com.codebean.websiteui.util.Constans;
 import com.codebean.websiteui.util.GlobalFunction;
-import feign.FeignException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -189,4 +184,32 @@ public class UserManageController {
 
     }
 
+
+    @GetMapping("/edit")
+    public String edit(Model model, WebRequest webRequest) {
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+
+            //get role list
+            Map<String, Object> activeRole = this.userClient.findActiveRole(auth, 0, 500);
+            Map<String, Object> data = (Map<String, Object>) activeRole.get("data");
+            List<Map<String, Object>> content = (List<Map<String, Object>>) data.get("content");
+
+            Map<Object, Object> role = new HashMap<>();
+            for (int i = 0; i < content.size(); i++) {
+                Object id = content.get(i).get("id");
+                Object name = content.get(i).get("name");
+                role.put(id, name);
+            }
+            model.addAttribute("listRole", role);
+
+
+//            this.userClient.findById(auth, )
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "userManage/edit";
+    }
 }

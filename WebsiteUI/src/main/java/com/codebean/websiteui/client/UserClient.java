@@ -10,15 +10,14 @@ Version 1.0
 */
 
 import com.codebean.websiteui.errorHandling.FeignClientConfig;
-import com.codebean.websiteui.dto.UserCreateDto;
-import com.codebean.websiteui.dto.UserDetailDto;
-import com.codebean.websiteui.dto.UserDto;
+import com.codebean.websiteui.dto.client.user.UserCreateDto;
+import com.codebean.websiteui.dto.client.user.UserDetailDto;
+import com.codebean.websiteui.dto.client.user.UserDto;
 import com.codebean.websiteui.dto.client.user.ModuleDto;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.response.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

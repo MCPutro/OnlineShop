@@ -11,11 +11,11 @@
 //
 //import com.codebean.websiteui.client.UserClient;
 //import com.codebean.websiteui.dto.Permission;
-//import com.codebean.websiteui.dto.UserDetailDto;
+//import com.codebean.websiteui.dto.client.user.UserDetailDto;
 //import com.codebean.websiteui.dto.request.UserCreateReqDto;
 //import com.codebean.websiteui.dto.response.Response;
 //import com.codebean.websiteui.dto.RolePermissionsDto;
-//import com.codebean.websiteui.dto.UserDto;
+//import com.codebean.websiteui.dto.client.user.UserDto;
 //import com.codebean.websiteui.util.Constans;
 //import com.google.gson.Gson;
 //import feign.FeignException;

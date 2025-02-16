@@ -87,6 +87,10 @@ public class AuthUserDetailService implements UserDetailsService {
                 return Response.unauthorized(Constants.ACCOUNT_IS_NOT_ACTIVE, "FVAUT05003", request);
             }
 
+            if(userDB.getIsDelete()){
+                return Response.unauthorized(Constants.ACCOUNT_NOT_FOUND, "FVAUT05004", request);
+            }
+
             List<String> activePermissions = this.getActivePermissionsByRole(userDB.getRole());
 
             //generate token jwt
