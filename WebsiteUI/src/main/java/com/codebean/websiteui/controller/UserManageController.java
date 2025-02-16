@@ -12,6 +12,7 @@ Version 1.0
 import com.codebean.websiteui.client.UserClient;
 import com.codebean.websiteui.dto.client.user.UserCreateDto;
 import com.codebean.websiteui.dto.client.user.UserDetailDto;
+import com.codebean.websiteui.dto.client.user.UserUpdateProfileDto;
 import com.codebean.websiteui.dto.response.Response;
 import com.codebean.websiteui.util.Constans;
 import com.codebean.websiteui.util.GlobalFunction;
@@ -34,6 +35,7 @@ public class UserManageController {
     @Autowired
     private UserClient userClient;
 
+    // 🔹 Fungsi untuk membuka ui web untuk menampilkan semua user
     @GetMapping
     public String findAll(
             @RequestParam(defaultValue = "0") Integer page,
@@ -99,6 +101,7 @@ public class UserManageController {
         return "userManage/main";
     }
 
+    // 🔹 Fungsi untuk membuka ui popup form add user
     @GetMapping("/add")
     public String add(Model model, WebRequest webRequest) {
         try {
@@ -123,8 +126,9 @@ public class UserManageController {
         return "userManage/add";
     }
 
-    @PostMapping("/save")
+    // 🔹 Fungsi untuk memanggil user service untuk save new user, bukan ke halaman web
     @ResponseBody
+    @PostMapping("/save")
     public ResponseEntity<String> saveUser(@RequestBody @Valid UserCreateDto user, BindingResult bindingResult, WebRequest webRequest) {
 
         if (bindingResult.hasErrors()) {
@@ -149,8 +153,9 @@ public class UserManageController {
         }
     }
 
+    // 🔹 Fungsi untuk membuka ui web user detail
     @GetMapping("/detail/{userId}")
-    public String show(@PathVariable("userId") Long userId, Model model, WebRequest webRequest) {
+    public String showUserDetailById(@PathVariable("userId") Long userId, Model model, WebRequest webRequest) {
         try {
             GlobalFunction.setGlobalFragment(model, webRequest);
 
@@ -166,8 +171,9 @@ public class UserManageController {
         return "userManage/view";
     }
 
+    // 🔹 Fungsi untuk soft delete user
     @GetMapping("/delete/{userId}")
-    public String delete(@PathVariable("userId") Long userId, Model model, RedirectAttributes redirectAttributes, WebRequest webRequest) {
+    public String deleteById(@PathVariable("userId") Long userId, Model model, RedirectAttributes redirectAttributes, WebRequest webRequest) {
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
             Response<Object> objectResponse = this.userClient.deleteById(auth, userId);
@@ -184,25 +190,15 @@ public class UserManageController {
 
     }
 
-
-    @GetMapping("/edit")
-    public String edit(Model model, WebRequest webRequest) {
+    // 🔹 Fungsi untuk menampilkan ui web user detail
+    @GetMapping("/edit/{userId}")
+    public String editById(@PathVariable("userId") Long userId, Model model, WebRequest webRequest) {
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 
-            //get role list
-            Map<String, Object> activeRole = this.userClient.findActiveRole(auth, 0, 500);
-            Map<String, Object> data = (Map<String, Object>) activeRole.get("data");
-            List<Map<String, Object>> content = (List<Map<String, Object>>) data.get("content");
-
-            Map<Object, Object> role = new HashMap<>();
-            for (int i = 0; i < content.size(); i++) {
-                Object id = content.get(i).get("id");
-                Object name = content.get(i).get("name");
-                role.put(id, name);
-            }
-            model.addAttribute("listRole", role);
-
+            //
+            Response<UserDetailDto> response = this.userClient.findById(auth, userId);
+            model.addAttribute("userDetail", response.getData());
 
 //            this.userClient.findById(auth, )
         } catch (RuntimeException e) {
@@ -211,5 +207,20 @@ public class UserManageController {
             throw new RuntimeException(e);
         }
         return "userManage/edit";
+    }
+
+    // 🔹 Fungsi untuk memanggil user service untuk menupdate data user profile
+    @PostMapping("/edit/{userId}")
+    @ResponseBody
+    public ResponseEntity<String> updateUserById(@PathVariable Long userId, @RequestBody UserUpdateProfileDto dto, WebRequest webRequest) {
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+
+            Response<String> stringResponse = this.userClient.updateUserProfileById(auth, userId, dto);
+
+            return ResponseEntity.ok(stringResponse.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

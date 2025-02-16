@@ -1,69 +1,68 @@
-<form id="editUserForm">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<form id="editUserForm" th:object="${userDetail}">
     <div class="form-group">
-        <label for="username">Username <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="username" name="username" required>
+        <label>Username <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" name="viewOnly" th:value="${userDetail.username}" disabled>
+        <!--        <input type="hidden" class="form-control" name="username" th:field="*{username}" >-->
     </div>
     <div class="form-group">
-        <label for="email">Email <span class="text-danger">*</span></label>
-        <input type="email" class="form-control" id="email" name="email" required>
-    </div>
-    <div class="form-group">
-        <label for="name">Fullname <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Password <span class="text-danger">*</span></label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password"
+        <label for="fm_email">Email <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="fm_email" name="email" th:field="*{email}"
                required>
     </div>
     <div class="form-group">
-        <label for="confirmPassword">Confirm Password <span class="text-danger">*</span></label>
-        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-               placeholder="Enter confirm password" required>
+        <label for="fn_name">Fullname <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="fn_name" name="name" placeholder="Enter full name" th:field="*{name}"
+               required>
     </div>
     <div class="form-group">
-        <label for="role">Role <span class="text-danger">*</span></label>
-        <select id="role" class="form-control form-select" name="role" aria-label="select role" required>
-            <option hidden disabled selected value>Select role</option>
-            <option th:each="role : ${listRole}" th:value="${role.getValue()}" th:text="${role.getValue()}"></option>
+        <label for="fm_phoneNumber">Phone number <span class="text-danger">*</span></label>
+        <input type="number" min="0" class="form-control" id="fm_phoneNumber" name="phoneNumber"
+               placeholder="Enter phone number" th:field="*{phoneNumber}" th:value="${userDetail.phoneNumber}"
+               required>
+    </div>
+    <div class="form-group">
+        <label for="fm_dateOfBirth">Date of birth <span class="text-danger">*</span></label>
+        <input type="date" class="form-control" id="fm_dateOfBirth" name="dateOfBirth" th:value="${userDetail.dateOfBirth}"
+               placeholder="Enter date of birth" required>
+    </div>
+    <div class="form-group">
+        <label for="fm_gender">Gender <span class="text-danger">*</span></label>
+        <select id="fm_gender" class="form-control form-select" name="gender" aria-label="select gender" required>
+            <option hidden disabled selected value>Select gender</option>
+            <option value="Laki - laki" th:selected="${userDetail.gender == 'Laki - laki'}">Laki - laki</option>
+            <option value="Perempuan" th:selected="${userDetail.gender == 'Perempuan'}">Perempuan</option>
         </select>
     </div>
     <div class="form-group">
-        <label for="status">Status <span class="text-danger">*</span></label>
-        <select id="status" class="form-control form-select" name="status" aria-label="select status" required>
-            <option value="1">Active</option>
-            <option value="0">Inactive</option>
+        <label for="fm_status">Status <span class="text-danger">*</span></label>
+        <select id="fm_status" class="form-control form-select" name="status" aria-label="select status" required>
+            <option value="true" th:selected="*{isActive}">Active</option>
+            <option value="false" th:selected="*{!isActive}">Inactive</option>
         </select>
     </div>
-    <button type="button" class="btn btn-primary mt-3 mb-3" onclick="updateUser('/user-management/save')">Save</button>
+    <button type="button" class="btn btn-primary mt-3 mb-3" th:attr="onclick='updateUser(\'/user-management/edit/' + ${userDetail.id} + '\')'">Save</button>
 </form>
 
 <script>
     function updateUser(url) {
-        // Cara 1
-        // var username = $("#username").val();
-        // var email = $("#email").val();
-        //
-        // $.post("/users3/save", {username: username, email: email}, function(response) {
-        //     alert(response);
-        //     $("#userModal").modal("hide");
-        //     location.reload(); // Reload halaman untuk update daftar user
-        // });
 
-        const newUser = {
-            username: $("#username").val(),
-            email: $("#email").val(),
-            name: $("#name").val(),
-            password: $("#password").val(),
-            confirmPassword: $("#confirmPassword").val(),
-            role: $("#role").val()
+        const updateUser = {
+            phoneNumber: $("#fm_phoneNumber").val(),
+            email: $("#fm_email").val(),
+            name: $("#fn_name").val(),
+            dateOfBirth: $("#fm_dateOfBirth").val(),
+            gender: $("#fm_gender").val(),
+            isActive: $("#fm_status").val()
         }
 
         $.ajax({
             url: url,
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(newUser),
+            data: JSON.stringify(updateUser),
             success: function (response) {
                 alert(response);
                 $("#userModal").modal("hide"); // Tutup modal
@@ -76,3 +75,6 @@
         });
     }
 </script>
+
+
+</html>

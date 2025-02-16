@@ -107,7 +107,7 @@
             </div>
             <div class="card-footer text-right">
                 <button class="btn btn-primary"
-                        onclick="loadEditUserForm('#userEditModal','user-management/edit','Edit Profile' )">Edit Profile
+                        th:onclick="'loadEditUserForm(\'#userEditModal\', \'user-management/edit/'+${userDetail.id}+'\', \'Edit Profile\' )'">Edit Profile
                 </button>
                 <a class="btn btn-danger" th:href="@{/user-management/delete/{userId}(userId = ${userDetail.id})   }">Delete</a>
             </div>
@@ -133,6 +133,7 @@
     //     });
     // }
 
+    // Open modals
     function loadEditUserForm(modalId, url, title) {
         console.log(modalId, url, title)
         // `${window.location.origin}/${url}`

@@ -9,11 +9,8 @@ Created on 27 Jan 2025 11:51
 Version 1.0
 */
 
+import com.codebean.websiteui.dto.client.user.*;
 import com.codebean.websiteui.errorHandling.FeignClientConfig;
-import com.codebean.websiteui.dto.client.user.UserCreateDto;
-import com.codebean.websiteui.dto.client.user.UserDetailDto;
-import com.codebean.websiteui.dto.client.user.UserDto;
-import com.codebean.websiteui.dto.client.user.ModuleDto;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.response.Response;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -79,4 +76,7 @@ public interface UserClient {
 
     @DeleteMapping("/api/v1/user/{userId}")
     Response<Object> deleteById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
+
+    @PutMapping("/api/v1/user/{userId}")
+    Response<String> updateUserProfileById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId, @RequestBody UserUpdateProfileDto dto);
 }
