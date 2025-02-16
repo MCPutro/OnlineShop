@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add New Account</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+
+    </style>
+
+</head>
+<body>
+<div class="site-wrap text-black">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+
+    <!--Content-->
+    <div class="container mb-5 mb-md-5">
+        <h2 class="mb-4  text-black">User Detail</h2>
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0 mx-auto  text-black">Username:
+                    <span id="username"
+                          th:text="${userDetail.getUsername()}"></span></h4>
+                <span id="statusActive" class="badge badge-success"
+                      th:if="${userDetail.getIsActive().equals(true)}">Active</span>
+                <span id="statusInactive" class="badge badge-secondary"
+                      th:if="${userDetail.getIsActive().equals(false)}">Inactive</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-md-6">
+                        <strong>Email : </strong> <span id="email" th:text="${userDetail.email}"></span><br>
+                        <strong>Role : </strong> <span id="role" th:text="${userDetail.role}"></span><br>
+                        <strong>Password : </strong> <span id="password">******** </span> <a href="#"><b> Change</b></a><br>
+                        <strong>Phone number : </strong> <span id="phoneNumber"
+                                                               th:text="${userDetail.phoneNumber}"></span><br>
+                    </div>
+                    <div class="col-6 col-md-6">
+                        <strong>First name : </strong> <span id="Name"
+                                                             th:text="${userDetail.name}"></span><br>
+                        <strong>Date of birth : </strong> <span id="dateOfBirth"
+                                                                th:text="${userDetail.dateOfBirth}"></span><br>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3" >
+                    <h5 class="mb-0 mt-3 mt-md-3 " >Addresses :</h5>
+                    <button class="btn btn-outline-primary" th:if="${userDetail.id == userId}">New Address</button>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Country</th>
+                        <th>Postal Code</th>
+                        <th>Status</th>
+                        <th style="width: 150px;" th:if="${userDetail.id == userId}">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="alamat : ${userDetail.addresses}">
+                        <td th:text="${alamat.name}"></td>
+                        <td th:text="${alamat.address}"></td>
+                        <td th:text="${alamat.country}"></td>
+                        <td th:text="${alamat.postalCode}"></td>
+                        <td th:text="${alamat.isActive}"></td>
+                        <td th:if="${userDetail.id == userId}">
+                            <button class="btn btn-warning d-inline-flex align-items-center justify-content-center"
+                                    th:onclick="${alamat.getId()}">
+                                <i class="icon icon-pencil"></i>
+                            </button>
+                            <button class="btn btn-danger d-inline-flex align-items-center justify-content-center">
+                                <i class="icon icon-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr th:if="${userDetail.addresses.isEmpty()}">
+                        <td colspan="6" class="text-center text-md-center">belum ada address</td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+            <div class="card-footer text-right">
+                <a class="btn btn-primary" th:href="@{/admin/user-edit/{id}(id=${userDetail.getId()})}">Edit</a>
+                <a class="btn btn-danger" th:href="@{/user-management/delete/{userId}(userId = ${userDetail.id})   }">Delete</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Footer-->
+    <footer th:replace="~{fragment/footer2::footer2}"></footer>
+</div>
+
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<form id="addUserForm">
+    <div class="form-group">
+        <label for="username">Username <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="name">Fullname <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password <span class="text-danger">*</span></label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password"
+               required>
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Confirm Password <span class="text-danger">*</span></label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+               placeholder="Enter confirm password" required>
+    </div>
+    <div class="form-group">
+        <label for="role">Role <span class="text-danger">*</span></label>
+        <select id="role" class="form-control form-select" name="role" aria-label="select role" required>
+            <option hidden disabled selected value>Select role</option>
+            <option th:each="role : ${listRole}" th:value="${role.getValue()}" th:text="${role.getValue()}"></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="status">Status <span class="text-danger">*</span></label>
+        <select id="status" class="form-control form-select" name="status" aria-label="select status" required>
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+        </select>
+    </div>
+    <button type="button" class="btn btn-primary mt-3 mb-3" onclick="updateUser('/user-management/save')">Save</button>
+</form>
+
+<script>
+    function updateUser(url) {
+        // Cara 1
+        // var username = $("#username").val();
+        // var email = $("#email").val();
+        //
+        // $.post("/users3/save", {username: username, email: email}, function(response) {
+        //     alert(response);
+        //     $("#userModal").modal("hide");
+        //     location.reload(); // Reload halaman untuk update daftar user
+        // });
+
+        const newUser = {
+            username: $("#username").val(),
+            email: $("#email").val(),
+            name: $("#name").val(),
+            password: $("#password").val(),
+            confirmPassword: $("#confirmPassword").val(),
+            role: $("#role").val()
+        }
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(newUser),
+            success: function (response) {
+                alert(response);
+                $("#userModal").modal("hide"); // Tutup modal
+                location.reload(); // Refresh halaman untuk update data
+            },
+            error: function (xhr, status, error) {
+                const errorMessage = "Terjadi kesalahan: " + xhr.responseText;
+                alert(errorMessage);
+            }
+        });
+    }
+</script>

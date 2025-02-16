@@ -135,6 +135,7 @@ public class UserService implements iService<User> {
                 user1.setPhoneNumber(user.getPhoneNumber());
                 user1.setDateOfBirth(user.getDateOfBirth());
                 user1.setGender(user.getGender());
+                user1.setIsActive(user.getIsActive());
             });
 
             return Response.success(Constants.UPDATES_SUCCESS, null, request);

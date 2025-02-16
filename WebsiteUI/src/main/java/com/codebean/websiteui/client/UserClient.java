@@ -9,20 +9,22 @@ Created on 27 Jan 2025 11:51
 Version 1.0
 */
 
+import com.codebean.websiteui.errorHandling.FeignClientConfig;
 import com.codebean.websiteui.dto.UserCreateDto;
+import com.codebean.websiteui.dto.UserDetailDto;
 import com.codebean.websiteui.dto.UserDto;
 import com.codebean.websiteui.dto.client.user.ModuleDto;
-import com.codebean.websiteui.dto.pageAttribute;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.response.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "UserService", url = "http://localhost:8081")
+@FeignClient(name = "UserService", url = "http://localhost:8081", configuration = FeignClientConfig.class)
 public interface UserClient {
 
 //    @PostMapping("/auth/v1/customer")
@@ -72,4 +74,10 @@ public interface UserClient {
 
     @PostMapping("/api/v1/user-create")
     Response<String> createUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserCreateDto dto);
+
+    @GetMapping("/api/v1/user/{userId}")
+    Response<UserDetailDto> findById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
+
+    @DeleteMapping("/api/v1/user/{userId}")
+    Response<Object> deleteById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
 }

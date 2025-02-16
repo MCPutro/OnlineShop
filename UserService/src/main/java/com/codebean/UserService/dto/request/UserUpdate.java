@@ -45,6 +45,9 @@ public class UserUpdate {
     @NotNull(message = "cannot be null")
     private String gender;
 
+    @NotNull(message = "cannot be null")
+    private Boolean isActive = true;
+
 //    @NotEmpty(message = "cannot be empty")
 //    @NotBlank(message = "cannot be blank")
 //    @NotNull(message = "cannot be null")

@@ -155,7 +155,6 @@ public class UserController {
     }
 
 
-    //fitur search belum
     @PreAuthorize("hasAuthority('VIEW_USER')")
     @GetMapping(path = "/find/user",
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -177,5 +176,26 @@ public class UserController {
 
         return this.userService.findAll(Pageable, request);
     }
+
+
+
+
+    @PreAuthorize("hasAnyAuthority('MANAGE_USER')")
+    @DeleteMapping(path = "/user/{userId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> deleteUserByUserId(@PathVariable(value = "userId") Long userId,
+                                                HttpServletRequest request
+    ) {
+        try {
+            return this.userService.delete(userId, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR : " + e.getMessage());
+            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_UPDATE, "FEUSRCTRL01071", request);
+        }
+    }
+
+
 
 }

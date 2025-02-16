@@ -11,11 +11,14 @@ Version 1.0
 
 import com.codebean.websiteui.client.UserClient;
 import com.codebean.websiteui.dto.UserCreateDto;
+import com.codebean.websiteui.dto.UserDetailDto;
 import com.codebean.websiteui.dto.UserDto;
 import com.codebean.websiteui.dto.request.UserRegReqDto;
 import com.codebean.websiteui.dto.response.Response;
+import com.codebean.websiteui.errorHandling.BadRequestException;
 import com.codebean.websiteui.util.Constans;
 import com.codebean.websiteui.util.GlobalFunction;
+import feign.FeignException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +28,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user-management")
@@ -82,13 +84,22 @@ public class UserManageController {
             model.addAttribute(Constans.FILTER_BY, filterBy); //kirim data pencarian
             model.addAttribute(Constans.SEARCH, search); //kirim data pencarian
 
+            model.addAttribute("size", size);
+
+        } catch (RuntimeException e) {
+            System.out.println("Error : " + e.getMessage());
+            model.addAttribute(Constans.CURRENT_PAGE, 0);
+            model.addAttribute(Constans.TOTAL_PAGES, 0);
+
+            model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
+
+            return "userManage/main";
         } catch (Exception e) {
-            throw new RuntimeException(e);
-//            model.addAttribute(Constans.ERRORS, e.getStackTrace());
+            model.addAttribute(Constans.CURRENT_PAGE, 0);
+            model.addAttribute(Constans.TOTAL_PAGES, 0);
+            model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
 //            return "/";
         }
-
-        model.addAttribute("size", size);
 
         return "userManage/main";
     }
@@ -136,15 +147,46 @@ public class UserManageController {
 
         try {
             String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
-
-            //get role list
             Response<String> user1 = this.userClient.createUser(Constans.BEARER + auth, user);
             return ResponseEntity.ok(user1.getMessage());
         } catch (Exception e) {
-//            throw new RuntimeException(e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-//        return ResponseEntity.ok("User berhasil ditambahkan!");
     }
+
+    @GetMapping("/detail/{userId}")
+    public String show(@PathVariable("userId") Long userId, Model model, WebRequest webRequest) {
+        try {
+            GlobalFunction.setGlobalFragment(model, webRequest);
+
+            String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<UserDetailDto> response = this.userClient.findById(Constans.BEARER + auth, userId);
+
+            model.addAttribute("userDetail", response.getData());
+
+        } catch (Exception e) {
+            model.addAttribute(Constans.ERRORS, e.getMessage());
+        }
+
+        return "userManage/view";
+    }
+
+    @GetMapping("/delete/{userId}")
+    public String delete(@PathVariable("userId") Long userId, Model model, RedirectAttributes redirectAttributes, WebRequest webRequest) {
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<Object> objectResponse = this.userClient.deleteById(auth, userId);
+
+            redirectAttributes.addFlashAttribute("successMessage", objectResponse.getMessage());
+            return "redirect:/user-management";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
+            return "redirect:/user-management";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Internal Server Error"));
+            return "redirect:/user-management";
+        }
+
+    }
+
 }

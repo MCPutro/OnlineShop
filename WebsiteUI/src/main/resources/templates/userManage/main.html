@@ -18,6 +18,8 @@
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
+    <script th:src="@{/sweetalert/sweetalert.min.js}"></script>
+
     <style>
         .modal {
             z-index: 2000 !important;
@@ -42,7 +44,8 @@
                 <!--Tombol add-->
                 <div class="col-6 col-md-3 order-1 order-md-1 mb-3 mb-md-0 text-left ">
                     <div class="site-logo">
-                        <btn onclick="loadAddUserForm2('#userCreateModal','user-management/add','Add User')" class="btn btn-primary">Add
+                        <btn onclick="loadAddUserForm2('#userCreateModal','user-management/add','Add User')"
+                             class="btn btn-primary">Add
                             User
                         </btn>
                     </div>
@@ -90,6 +93,7 @@
                     <th scope="col">Email</th>
                     <th scope="col">Role</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -101,9 +105,15 @@
                     <td th:text="${user['email']}"></td>
                     <td th:text="${user['role']}"></td>
                     <td>
-                        <span class="badge badge-secondary col-5 p-2"
+                        <span class="badge badge-secondary  p-2"
                               th:if="${user['isActive'] == false}">Inactive</span>
-                        <span class="badge badge-success col-5 p-2" th:if="${user['isActive'] == true}">Active</span>
+                        <span class="badge badge-success  p-2" th:if="${user['isActive'] == true}">Active</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger d-inline-flex align-items-center justify-content-center"
+                           th:href="@{/user-management/delete/{userId}(userId = ${user['id']})   }">
+                            <i class="icon icon-trash"></i>
+                        </a>
                     </td>
 
                 </tr>
@@ -151,6 +161,45 @@
             $(modalId).modal("show");
         });
     }
+</script>
+
+<!--untuk pop up alert error-->
+<script th:inline="javascript">
+
+    // let errors  = /*[[${errors}]]*/ {};
+    // console.log(errors)
+    // if (errors.length > 0) {
+    //     let msg = "";
+    //     for (let i = 0; i < errors.length; i++) {
+    //         msg += errors[i] + "\n";
+    //     }
+    //     console.log(msg)
+    //     swal("Error!", msg, "error");
+    // }
+    //
+    //
+    // let successMessage = /*[[${successMessage}]]*/ '';
+    // console.log(successMessage);
+    // if (successMessage !== '') {
+    //     swal(
+    //         "Success!",
+    //         successMessage,
+    //         "success"
+    //     );
+    // }
+
+    let successMessage = /*[[${successMessage}]]*/ '';
+    if (successMessage) {
+        swal("Success!", successMessage, "success");
+    }
+
+    let errors = /*[[${errors}]]*/ [];
+    if (errors.length) {
+        swal("Error!", errors.join("\n"), "error");
+    }
+
+
+
 </script>
 
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
