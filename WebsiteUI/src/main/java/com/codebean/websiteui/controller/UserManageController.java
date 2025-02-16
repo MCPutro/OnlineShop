@@ -14,6 +14,7 @@ import com.codebean.websiteui.dto.client.user.UserCreateDto;
 import com.codebean.websiteui.dto.client.user.UserDetailDto;
 import com.codebean.websiteui.dto.client.user.UserUpdateProfileDto;
 import com.codebean.websiteui.dto.response.Response;
+import com.codebean.websiteui.errorHandling.ForbiddenException;
 import com.codebean.websiteui.util.Constans;
 import com.codebean.websiteui.util.GlobalFunction;
 import jakarta.validation.Valid;
@@ -42,7 +43,8 @@ public class UserManageController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String filterBy,
-            Model model, WebRequest webRequest
+            Model model, WebRequest webRequest,
+            RedirectAttributes redirectAttributes
     ) {
         GlobalFunction.setGlobalFragment(model, webRequest);
         model.addAttribute(Constans.IS_MANAGEMENT, "User Management");
@@ -83,15 +85,20 @@ public class UserManageController {
 
             model.addAttribute("size", size);
 
+        } catch (ForbiddenException fe) {
+            System.out.println("masuk  A");
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList(fe.getMessage()));
+            return "redirect:";
         } catch (RuntimeException e) {
-            System.out.println("Error : " + e.getMessage());
+            System.out.println("masuk  B");
             model.addAttribute(Constans.CURRENT_PAGE, 0);
             model.addAttribute(Constans.TOTAL_PAGES, 0);
 
-            model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
-
-            return "userManage/main";
+//            model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
+            return "redirect:/user-management";
         } catch (Exception e) {
+            System.out.println("masuk  C");
             model.addAttribute(Constans.CURRENT_PAGE, 0);
             model.addAttribute(Constans.TOTAL_PAGES, 0);
             model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
@@ -101,9 +108,11 @@ public class UserManageController {
         return "userManage/main";
     }
 
+
     // 🔹 Fungsi untuk membuka ui popup form add user
     @GetMapping("/add")
-    public String add(Model model, WebRequest webRequest) {
+    public String add(Model model, WebRequest webRequest
+    ) {
         try {
             String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 
@@ -126,10 +135,14 @@ public class UserManageController {
         return "userManage/add";
     }
 
+
     // 🔹 Fungsi untuk memanggil user service untuk save new user, bukan ke halaman web
     @ResponseBody
     @PostMapping("/save")
-    public ResponseEntity<String> saveUser(@RequestBody @Valid UserCreateDto user, BindingResult bindingResult, WebRequest webRequest) {
+    public ResponseEntity<String> saveUser(@RequestBody @Valid UserCreateDto user,
+                                           BindingResult bindingResult,
+                                           WebRequest webRequest
+    ) {
 
         if (bindingResult.hasErrors()) {
             List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
@@ -153,9 +166,12 @@ public class UserManageController {
         }
     }
 
+
     // 🔹 Fungsi untuk membuka ui web user detail
     @GetMapping("/detail/{userId}")
-    public String showUserDetailById(@PathVariable("userId") Long userId, Model model, WebRequest webRequest) {
+    public String showUserDetailById(@PathVariable("userId") Long userId,
+                                     Model model,
+                                     WebRequest webRequest) {
         try {
             GlobalFunction.setGlobalFragment(model, webRequest);
 
@@ -171,9 +187,30 @@ public class UserManageController {
         return "userManage/view";
     }
 
+
+    @GetMapping("/detail/my")
+    public String showUserDetailByToken(Model model,
+                                        WebRequest webRequest) {
+        try {
+            GlobalFunction.setGlobalFragment(model, webRequest);
+
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<UserDetailDto> userClientByToken = this.userClient.findByToken(auth);
+        } catch (RuntimeException e) {
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "userManage/view";
+    }
+
     // 🔹 Fungsi untuk soft delete user
     @GetMapping("/delete/{userId}")
-    public String deleteById(@PathVariable("userId") Long userId, Model model, RedirectAttributes redirectAttributes, WebRequest webRequest) {
+    public String deleteById(@PathVariable("userId") Long userId,
+                             Model model,
+                             RedirectAttributes redirectAttributes,
+                             WebRequest webRequest
+    ) {
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
             Response<Object> objectResponse = this.userClient.deleteById(auth, userId);
@@ -192,7 +229,10 @@ public class UserManageController {
 
     // 🔹 Fungsi untuk menampilkan ui web user detail
     @GetMapping("/edit/{userId}")
-    public String editById(@PathVariable("userId") Long userId, Model model, WebRequest webRequest) {
+    public String editById(@PathVariable("userId") Long userId,
+                           Model model,
+                           WebRequest webRequest
+    ) {
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 
@@ -209,10 +249,23 @@ public class UserManageController {
         return "userManage/edit";
     }
 
+
     // 🔹 Fungsi untuk memanggil user service untuk menupdate data user profile
     @PostMapping("/edit/{userId}")
     @ResponseBody
-    public ResponseEntity<String> updateUserById(@PathVariable Long userId, @RequestBody UserUpdateProfileDto dto, WebRequest webRequest) {
+    public ResponseEntity<String> updateUserById(@PathVariable Long userId,
+                                                 @RequestBody @Valid UserUpdateProfileDto dto,
+                                                 BindingResult bindingResult,
+                                                 WebRequest webRequest
+    ) {
+        if (bindingResult.hasErrors()) {
+            List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
+                return err.getField() + " " + err.getDefaultMessage();
+            }).toList();
+
+            return ResponseEntity.badRequest().body(list.toString());
+        }
+
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 

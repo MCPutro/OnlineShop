@@ -74,6 +74,9 @@ public interface UserClient {
     @GetMapping("/api/v1/user/{userId}")
     Response<UserDetailDto> findById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
 
+    @GetMapping("/api/v1/user/{userId}")
+    Response<UserDetailDto> findByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
+
     @DeleteMapping("/api/v1/user/{userId}")
     Response<Object> deleteById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
 

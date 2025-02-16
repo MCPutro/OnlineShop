@@ -2,11 +2,13 @@ package com.codebean.websiteui.errorHandling;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 
@@ -54,13 +56,15 @@ public class NewCustomErrorDecoder implements ErrorDecoder {
         );
 
         // Tentukan exception berdasarkan status kode
-//        if (response.status() == HttpStatus.NOT_FOUND.value()) {
-//            return new NotFoundException(errorMessage);
-//        } else if (response.status() == HttpStatus.BAD_REQUEST.value()) {
-//            return new BadRequestException(errorMessage);
-//        } else {
-//            return new RuntimeException(errorMessage);
-//        }
-        return new RuntimeException(errorMessage);
+        if (response.status() == HttpStatus.FORBIDDEN.value() || response.status() == HttpStatus.UNAUTHORIZED.value()) {
+            return new ForbiddenException(errorMessage);
+        } else if (response.status() == HttpStatus.NOT_FOUND.value()) {
+            return new NotFoundException(errorMessage);
+        } else if (response.status() == HttpStatus.BAD_REQUEST.value()) {
+            return new BadRequestException(errorMessage);
+        } else {
+            return new RuntimeException(errorMessage);
+        }
+//        return new RuntimeException(errorMessage);
     }
 }

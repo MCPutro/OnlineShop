@@ -14,11 +14,11 @@
     <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
     <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
 
-
     <link rel="stylesheet" th:href="@{/css/aos.css}">
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
+    <script th:src="@{/sweetalert/sweetalert.min.js}"></script>
 </head>
 <body>
 
@@ -223,6 +223,21 @@
     <!-- footer -->
     <div th:replace="~{fragment/footer::footer}"></div>
 </div>
+
+<!--untuk pop up alert error-->
+<script th:inline="javascript">
+
+    let successMessage = /*[[${successMessage}]]*/ '';
+    if (successMessage) {
+        swal("Success!", successMessage, "success");
+    }
+
+    let errors = /*[[${errors}]]*/ [];
+    if (errors.length) {
+        swal("Error!", errors.join("\n"), "error");
+    }
+
+</script>
 
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/jquery-ui.js}"></script>
