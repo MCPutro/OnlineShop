@@ -78,7 +78,7 @@
 <script>
     function saveRole(button) {
         let dataUrl = button.getAttribute("data-url");
-        console.log(dataUrl);
+        // console.log(dataUrl);
 
         let selectedPermissions = getCheckedValuesByName('permissionIds');
         // console.log("Selected Permissions:", selectedPermissions);
@@ -86,7 +86,7 @@
             roleName: $("#fm_role_name").val(),
             permissionIds: selectedPermissions
         }
-        console.log(newRole)
+        // console.log(newRole);
 
         $.ajax({
             url: dataUrl,

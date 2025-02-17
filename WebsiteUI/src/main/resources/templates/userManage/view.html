@@ -52,7 +52,16 @@
                     <div class="col-6 col-md-6">
                         <strong>Email : </strong> <span id="email" th:text="${userDetail.email}"></span><br>
                         <strong>Role : </strong> <span id="role" th:text="${userDetail.role}"></span><br>
-                        <strong>Password : </strong> <span id="password">******** </span> <a href="#"><b> Change</b></a><br>
+                        <strong>Password : </strong> <span id="password">******** </span>
+                        <a href="#"  th:if="${userDetail.id == userId}"
+                           data-toggle="modal"
+                           data-target="#changePassword"
+                           th:data-url="${navPagination} + '/' + ${ userDetail.id } +'/change-password'"
+                           data-title="Change Password"
+                           data-target-title="#modalTitleEdit"
+                           data-target-content="#modal-contentEdit"
+                           onclick="openRoleModalsFromButton(this)"><b> Change</b></a>
+                        <br>
                         <strong>Phone number : </strong> <span id="phoneNumber"
                                                                th:text="${userDetail.phoneNumber}"></span><br>
                     </div>
@@ -106,10 +115,18 @@
 
             </div>
             <div class="card-footer text-right">
+<!--                th:onclick="'loadEditUserForm(\'#userEditModal\', \'user-management/edit/'+${userDetail.id}+'\', \'Edit Profile\' )'"-->
                 <button class="btn btn-primary"
-                        th:onclick="'loadEditUserForm(\'#userEditModal\', \'user-management/edit/'+${userDetail.id}+'\', \'Edit Profile\' )'">Edit Profile
+                        data-toggle="modal"
+                        data-target="#userEditModal"
+                        th:data-url="${navPagination} + '/edit/' + ${ userDetail.id }"
+                        data-title="Edit Profile"
+                        data-target-title="#modalTitle"
+                        data-target-content="#modal-content"
+                        onclick="openRoleModalsFromButton(this)"
+                >Edit Profile
                 </button>
-                <a class="btn btn-danger" th:href="@{/user-management/delete/{userId}(userId = ${userDetail.id})   }">Delete</a>
+                <a class="btn btn-danger" th:if="${permissions.contains('MANAGE_USER')}" th:href="@{/user-management/delete/{userId}(userId = ${userDetail.id})   }">Delete</a>
             </div>
         </div>
     </div>
@@ -123,26 +140,42 @@
 <!-- Modal edit user-->
 <div th:replace="~{fragment/modalA::modalA('userEditModal')}"></div>
 <!--<div th:replace="~{fragment/modalA::modalA('userCreateModal')}"></div>-->
+<!-- Change password-->
+<div th:replace="~{fragment/modalAEdit::modalAEdit('changePassword')}"></div>
 
 <script>
-    // function loadAddUserForm(url, title) {
-    //     $.get(url, function (data) {
-    //         $("#modalTitle").text(title);
-    //         $("#modal-content").html(data);
-    //         $("#userCreateModal").modal("show");
-    //     });
-    // }
+    function openRoleModalsFromButton(button) {
+        let modulePath = button.getAttribute("data-url");
+        // let fullUrl = modulePath + "/add";
+        let dataTarget = button.getAttribute("data-target");
+        let dataTitle = button.getAttribute("data-title");
+        let dataTargetTitle = button.getAttribute("data-target-title");
+        let dataTargetContent = button.getAttribute("data-target-content");
 
-    // Open modals
-    function loadEditUserForm(modalId, url, title) {
-        console.log(modalId, url, title)
-        // `${window.location.origin}/${url}`
-        $.get(`/${url}`, function (data) {
-            $("#modalTitle").text(title);
-            $("#modal-content").html(data);
+        // console.log(modulePath, dataTarget, dataTitle);
+        openRoleModalsUserDetail(dataTarget, dataTargetTitle, dataTargetContent, modulePath, dataTitle);
+    }
+
+    function openRoleModalsUserDetail(modalId, dataTargetTitle, dataTargetContent, url, title) {
+        $.get(`${window.location.origin}/${url}`, function (data) {
+            // $("#modalTitle").text(title);
+            $(dataTargetTitle).text(title);
+            // $("#modal-content").html(data);
+            $(dataTargetContent).html(data);
             $(modalId).modal("show");
         });
     }
+
+    // // Open modals
+    // function loadEditUserForm(modalId, url, title) {
+    //     console.log(modalId, url, title)
+    //     // `${window.location.origin}/${url}`
+    //     $.get(`/${url}`, function (data) {
+    //         $("#modalTitle").text(title);
+    //         $("#modal-content").html(data);
+    //         $(modalId).modal("show");
+    //     });
+    // }
 </script>
 
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>

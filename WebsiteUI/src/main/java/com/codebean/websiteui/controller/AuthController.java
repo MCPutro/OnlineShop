@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.websiteui.client.UserClient;
+import com.codebean.websiteui.dto.client.user.PermissionDto;
 import com.codebean.websiteui.dto.client.user.UserDto;
 import com.codebean.websiteui.dto.client.user.ModuleDto;
 import com.codebean.websiteui.dto.request.UserLoginDto;
@@ -29,11 +30,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 public class AuthController {
 
+    private final List<String> perm = new ArrayList<>();
     @Autowired
     private UserClient userClient;
 
@@ -76,6 +79,7 @@ public class AuthController {
         //login to userService
         UserDto userDto;
         StringBuilder modules = new StringBuilder();
+        this.perm.clear();
         try {
             // login user
             Response<UserDto> login = this.userClient.login(user);
@@ -84,10 +88,12 @@ public class AuthController {
             // get module
             Response<List<ModuleDto>> responseModuleByRoleName = this.userClient.getModuleByRoleName(Constans.BEARER + userDto.getToken(), userDto.getRole());
 
+
             //generate nav module
             modules.append("<li><a href=\"/\">Home</a></li>");
             for (ModuleDto moduleDto : responseModuleByRoleName.getData()) {
                 modules.append("<li><a href=\"").append(moduleDto.getPath()).append("\">").append(moduleDto.getName()).append("</a></li>");
+                perm.addAll(moduleDto.getPermissions().stream().map(PermissionDto::getName).toList());
             }
 
         } catch (Exception e) {
@@ -101,6 +107,7 @@ public class AuthController {
         webRequest.setAttribute(Constans.ROLE, userDto.getRole(), WebRequest.SCOPE_SESSION);
         webRequest.setAttribute(Constans.TOKEN, userDto.getToken(), WebRequest.SCOPE_SESSION);
         webRequest.setAttribute(Constans.MODULE, modules.toString(), WebRequest.SCOPE_SESSION);
+        webRequest.setAttribute(Constans.PERMISSIONS, perm, WebRequest.SCOPE_SESSION);
 
         return "redirect:/";
     }

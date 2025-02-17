@@ -12,6 +12,7 @@ Version 1.0
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.List;
 import java.util.Map;
 
 public class GlobalFunction {
@@ -22,6 +23,7 @@ public class GlobalFunction {
         model.addAttribute(Constans.ROLE, webRequest.getAttribute(Constans.ROLE, 1));
         model.addAttribute(Constans.TOKEN, webRequest.getAttribute(Constans.TOKEN, 1));
         model.addAttribute(Constans.MODULE, webRequest.getAttribute(Constans.MODULE, 1));
+        model.addAttribute(Constans.PERMISSIONS, (List<String>) webRequest.getAttribute(Constans.PERMISSIONS, 1));
 //        model.addAttribute("URL_IMG",webRequest.getAttribute("URL_IMG",1));
 //        model.addAttribute("MENU_NAVBAR",webRequest.getAttribute("MENU_NAVBAR",1));
     }

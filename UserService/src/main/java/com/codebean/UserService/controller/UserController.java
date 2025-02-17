@@ -17,6 +17,7 @@ Version 1.0
  * ex = FVUSRCTRL01001 -> [FV] [USR] [CTRL01] 001 -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
  */
 
+import com.codebean.UserService.dto.request.ChangePasswordDto;
 import com.codebean.UserService.dto.request.UserRegister;
 import com.codebean.UserService.dto.request.UserUpdate;
 import com.codebean.UserService.handler.Response;
@@ -178,8 +179,6 @@ public class UserController {
     }
 
 
-
-
     @PreAuthorize("hasAnyAuthority('MANAGE_USER')")
     @DeleteMapping(path = "/user/{userId}",
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -191,11 +190,34 @@ public class UserController {
             return this.userService.delete(userId, request);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("ERROR : " + e.getMessage());
+//            System.out.println("ERROR : " + e.getMessage());
             return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_UPDATE, "FEUSRCTRL01071", request);
         }
     }
 
+
+    @PostMapping(path = "/user/change-password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changePasswordByToken(@RequestBody ChangePasswordDto dto, HttpServletRequest request) {
+        this.validateService.validate(dto, "FEUSRCTRL01081", request);
+
+        try {
+
+            // get userid from token
+            Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
+
+            if (!userId.equals(dto.getUserId())) {
+                return Response.badRequest(Constants.BAD_DATA, "FVUSRCTRL01082", request);
+            }
+
+            if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+                return Response.badRequest(Constants.CONFIRM_PASSWORD_NOT_MATCH, "FVUSRCTRL01082", request);
+            }
+
+            return this.userService.changePassword(dto.getUserId(), dto.getCurrentPassword(), dto.getNewPassword(), request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_UPDATE, "FEUSRCTRL01082", request);
+        }
+    }
 
 
 }

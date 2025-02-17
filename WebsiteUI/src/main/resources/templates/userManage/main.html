@@ -37,12 +37,12 @@
     <header th:replace="~{fragment/header::header}"></header>
     <br>
     <!--Isi content-->
-    <div class="site-section-sm mb-5">
+    <div class="site-section-sm mb-5" >
         <div class="container">
             <!-- Filter -->
             <div class="row align-items-center mb-3">
                 <!--Tombol add-->
-                <div class="col-6 col-md-3 order-1 order-md-1 mb-3 mb-md-0 text-left ">
+                <div class="col-6 col-md-3 order-1 order-md-1 mb-3 mb-md-0 text-left " th:if="${permissions.contains('MANAGE_USER')}">
                     <div class="site-logo">
                         <btn onclick="loadAddUserForm2('#userCreateModal','user-management/add','Add User')"
                              class="btn btn-primary">Add
@@ -93,7 +93,7 @@
                     <th scope="col">Email</th>
                     <th scope="col">Role</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" th:if="${permissions.contains('MANAGE_USER')}">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,7 +108,7 @@
                         <span class="badge badge-secondary  p-2" th:if="${user['isActive'] == false}">Inactive</span>
                         <span class="badge badge-success  p-2" th:if="${user['isActive'] == true}">Active</span>
                     </td>
-                    <td>
+                    <td th:if="${permissions.contains('MANAGE_USER')}">
                         <a class="btn btn-danger d-inline-flex align-items-center justify-content-center"
                            th:href="@{/user-management/delete/{userId}(userId = ${user['id']})   }">
                             <i class="icon icon-trash"></i>

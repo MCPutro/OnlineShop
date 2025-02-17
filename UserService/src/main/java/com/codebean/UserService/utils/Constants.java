@@ -42,6 +42,9 @@ public class Constants {
     public static final String ACCOUNT_FAILED_TO_UPDATE = "Account update failed";
     public static final String ACCOUNT_FAILED_TO_DELETE = "Account deletion failed";
     public static final String ACCOUNT_FAILED_TO_GET = "Failed to retrieve account";
+    public static final String PASSWORD_CHANGED_FAILED = "Password changed failed";
+    public static final String PASSWORD_CHANGED_SUCCESSFULLY = "Password changed successfully";
+    public static final String PASSWORD_WRONG = "Password wrong";
 
     public static final String EMAIL_ADDRESS_ALREADY_EXISTS = "Email address already exists";
     public static final String USERNAME_ALREADY_EXISTS = "Username already exists";

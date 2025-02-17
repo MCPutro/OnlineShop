@@ -16,6 +16,7 @@ public class Constans {
     public static final String ROLE = "role";
     public static final String TOKEN = "token";
     public static final String MODULE = "module";
+    public static final String PERMISSIONS = "permissions";
 
     public static final String BEARER = "Bearer ";
 

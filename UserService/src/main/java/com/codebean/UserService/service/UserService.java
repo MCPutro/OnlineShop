@@ -253,6 +253,46 @@ public class UserService implements iService<User> {
         }
     }
 
+    @Transactional
+    public ResponseEntity<Object> changePassword(Long id, String currentPassword, String password, HttpServletRequest request) {
+        try{
+            if (id == null || currentPassword == null || password == null) {
+                return Response.badRequest(Constants.BAD_DATA, "FVUSR01061", request);
+            }
+
+            // get user by id
+            Optional<User> optionalUser = this.userRepository.findById(id);
+            if (!optionalUser.isPresent()) {
+                return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01062", request);
+            }
+
+            User userDB = optionalUser.get();
+
+            //check if user is not active
+            if (!userDB.getIsActive()) {
+                return Response.badRequest(Constants.ACCOUNT_IS_NOT_ACTIVE, "FVUSR01063", request);
+            }
+
+            if(userDB.getIsDelete()){
+                return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01064", request);
+            }
+
+            // check current password
+            if (!this.passwordEncoder.matches((userDB.getUsername() + "." + currentPassword), userDB.getPassword())) {
+                return Response.badRequest(Constants.PASSWORD_WRONG, "FVUSR01065", request);
+            }
+
+            // hash password
+            userDB.setPassword(this.passwordEncoder.encode(userDB.getUsername() + "." + password));
+
+//            this.userRepository.save(userDB);
+
+            return Response.success(Constants.PASSWORD_CHANGED_SUCCESSFULLY, null, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.PASSWORD_CHANGED_FAILED, "FEUSR01061", request);
+        }
+    }
+
     private List<UserDto> listUserModelToDto(List<User> listUser) {
         return this.modelMapper.map(listUser, new TypeToken<List<UserDto>>() {
 

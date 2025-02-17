@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.websiteui.client.UserClient;
+import com.codebean.websiteui.dto.ChangePassDto;
 import com.codebean.websiteui.dto.client.user.UserCreateDto;
 import com.codebean.websiteui.dto.client.user.UserDetailDto;
 import com.codebean.websiteui.dto.client.user.UserUpdateProfileDto;
@@ -174,6 +175,7 @@ public class UserManageController {
                                      WebRequest webRequest) {
         try {
             GlobalFunction.setGlobalFragment(model, webRequest);
+            model.addAttribute(Constans.NAV_PAGINATION, "user-management");
 
             String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
             Response<UserDetailDto> response = this.userClient.findById(Constans.BEARER + auth, userId);
@@ -275,5 +277,43 @@ public class UserManageController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+
+    // ini untuk nampilin ui
+    @GetMapping("/{userId}/change-password")
+    public String changePassword(@PathVariable Long userId, Model model, WebRequest webRequest) {
+        GlobalFunction.setGlobalFragment(model, webRequest);
+        model.addAttribute(Constans.NAV_PAGINATION, "user-management");
+        model.addAttribute("userId", userId);
+        return "userManage/changePassword";
+    }
+
+    // ini untuk ke backend
+    @ResponseBody
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody @Valid ChangePassDto dto,
+                                                 BindingResult bindingResult,
+                                                 Model model,
+                                                 WebRequest webRequest
+    ) {
+        if (bindingResult.hasErrors()) {
+            List<String> list = bindingResult.getFieldErrors().stream()
+                    .map(err -> err.getField() + " " + err.getDefaultMessage()
+                    ).toList();
+
+            return ResponseEntity.badRequest().body(list.toString());
+        }
+
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<String> stringResponse = this.userClient.changePassword(auth, dto);
+            return ResponseEntity.ok(stringResponse.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
     }
 }

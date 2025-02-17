@@ -9,6 +9,7 @@ Created on 27 Jan 2025 11:51
 Version 1.0
 */
 
+import com.codebean.websiteui.dto.ChangePassDto;
 import com.codebean.websiteui.dto.client.user.*;
 import com.codebean.websiteui.dto.pageAttribute;
 import com.codebean.websiteui.errorHandling.FeignClientConfig;
@@ -117,4 +118,7 @@ public interface UserClient {
 
     @PutMapping("/api/v1/role/reactivation/{roleId}")
     Response<String> reactivationRoleById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String roleId);
+
+    @PostMapping("/api/v1/user/change-password")
+    Response<String> changePassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody ChangePassDto dto);
 }
