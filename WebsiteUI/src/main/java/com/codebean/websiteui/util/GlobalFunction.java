@@ -28,6 +28,10 @@ public class GlobalFunction {
 //        model.addAttribute("MENU_NAVBAR",webRequest.getAttribute("MENU_NAVBAR",1));
     }
 
+    public static String cekSession(WebRequest webRequest){
+        return (String) webRequest.getAttribute(Constans.USER_ID, 1).toString();
+    }
+
     public static void printModel(Model model) {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>.");
         Map<String, Object> map = model.asMap();

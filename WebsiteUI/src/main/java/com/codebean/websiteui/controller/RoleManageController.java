@@ -35,7 +35,14 @@ public class RoleManageController {
                           RedirectAttributes redirectAttributes,
                           WebRequest webRequest
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         GlobalFunction.setGlobalFragment(model, webRequest);
+
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 
@@ -85,6 +92,12 @@ public class RoleManageController {
                            Model model, WebRequest webRequest,
                            RedirectAttributes redirectAttributes
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         GlobalFunction.setGlobalFragment(model, webRequest);
         model.addAttribute(Constans.NAV_PAGINATION, "role-management");
 
@@ -146,6 +159,12 @@ public class RoleManageController {
                                WebRequest webRequest,
                                RedirectAttributes redirectAttributes
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         GlobalFunction.setGlobalFragment(model, webRequest);
         model.addAttribute(Constans.NAV_PAGINATION, "role-management");
 
@@ -209,6 +228,12 @@ public class RoleManageController {
                                RedirectAttributes redirectAttributes,
                                WebRequest webRequest
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
             Response<String> objectResponse = this.userClient.deleteRoleById(auth, roleId);
@@ -229,6 +254,12 @@ public class RoleManageController {
                                    RedirectAttributes redirectAttributes,
                                    WebRequest webRequest
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
             Response<String> objectResponse = this.userClient.reactivationRoleById(auth, roleId);

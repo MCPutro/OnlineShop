@@ -47,6 +47,11 @@ public class UserManageController {
             Model model, WebRequest webRequest,
             RedirectAttributes redirectAttributes
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            return "redirect:/";
+        }
+
         GlobalFunction.setGlobalFragment(model, webRequest);
         model.addAttribute(Constans.IS_MANAGEMENT, "User Management");
 
@@ -112,8 +117,13 @@ public class UserManageController {
 
     // 🔹 Fungsi untuk membuka ui popup form add user
     @GetMapping("/add")
-    public String add(Model model, WebRequest webRequest
-    ) {
+    public String add(Model model, WebRequest webRequest, RedirectAttributes redirectAttributes) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 
@@ -172,7 +182,15 @@ public class UserManageController {
     @GetMapping("/detail/{userId}")
     public String showUserDetailById(@PathVariable("userId") Long userId,
                                      Model model,
-                                     WebRequest webRequest) {
+                                     WebRequest webRequest,
+                                     RedirectAttributes redirectAttributes
+    ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             GlobalFunction.setGlobalFragment(model, webRequest);
             model.addAttribute(Constans.NAV_PAGINATION, "user-management");
@@ -191,8 +209,13 @@ public class UserManageController {
 
 
     @GetMapping("/detail/my")
-    public String showUserDetailByToken(Model model,
-                                        WebRequest webRequest) {
+    public String showUserDetailByToken(Model model, WebRequest webRequest, RedirectAttributes redirectAttributes) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             GlobalFunction.setGlobalFragment(model, webRequest);
 
@@ -213,6 +236,12 @@ public class UserManageController {
                              RedirectAttributes redirectAttributes,
                              WebRequest webRequest
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
             Response<Object> objectResponse = this.userClient.deleteById(auth, userId);
@@ -233,8 +262,15 @@ public class UserManageController {
     @GetMapping("/edit/{userId}")
     public String editById(@PathVariable("userId") Long userId,
                            Model model,
-                           WebRequest webRequest
+                           WebRequest webRequest,
+                           RedirectAttributes redirectAttributes
     ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 
@@ -283,9 +319,13 @@ public class UserManageController {
 
     // 🔹 Fungsi untuk menampilkan ui web user detail berdasarkan token
     @GetMapping("/edit/profile")
-    public String editProfileByToken(Model model,
-                                     WebRequest webRequest
-    ) {
+    public String editProfileByToken(Model model, WebRequest webRequest,RedirectAttributes redirectAttributes) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
             Response<UserDetailDto> userByToken = this.userClient.findByToken(auth);
@@ -298,17 +338,15 @@ public class UserManageController {
             throw new RuntimeException(e);
         }
 
-        GlobalFunction.printModel(model);
-
         return "userManage/edit";
     }
 
+    // 🔹 Fungsi untuk mengakses user service untuk update user detail berdasarkan token
     @ResponseBody
     @PostMapping("/edit/profile")
-    public ResponseEntity<String> updateUserByToken(
-            @RequestBody @Valid UserUpdateProfileDto dto,
-            BindingResult bindingResult,
-            WebRequest webRequest
+    public ResponseEntity<String> updateUserByToken(@RequestBody @Valid UserUpdateProfileDto dto,
+                                                    BindingResult bindingResult,
+                                                    WebRequest webRequest
     ) {
         if (bindingResult.hasErrors()) {
             List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
@@ -330,16 +368,22 @@ public class UserManageController {
     }
 
 
-    // ini untuk nampilin ui
+    // 🔹  ini untuk nampilin ui ubah password
     @GetMapping("/{userId}/change-password")
-    public String changePassword(@PathVariable Long userId, Model model, WebRequest webRequest) {
+    public String changePassword(@PathVariable Long userId, Model model, WebRequest webRequest, RedirectAttributes redirectAttributes) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         GlobalFunction.setGlobalFragment(model, webRequest);
         model.addAttribute(Constans.NAV_PAGINATION, "user-management");
         model.addAttribute("userId", userId);
         return "userManage/changePassword";
     }
 
-    // ini untuk ke backend
+    // ini untuk ke backend ubah password
     @ResponseBody
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody @Valid ChangePassDto dto,
@@ -353,6 +397,15 @@ public class UserManageController {
                     ).toList();
 
             return ResponseEntity.badRequest().body(list.toString());
+        }
+
+        // check password
+        if(!dto.getNewPassword().equals(dto.getConfirmPassword())){
+            return ResponseEntity.badRequest().body("Confirm password does not match");
+        }
+
+        if(dto.getCurrentPassword().equals(dto.getNewPassword())){
+            return ResponseEntity.badRequest().body("New password doesn't change from before");
         }
 
         try {
