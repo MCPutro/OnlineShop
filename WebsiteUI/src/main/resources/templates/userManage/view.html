@@ -70,6 +70,8 @@
                                                              th:text="${userDetail.name}"></span><br>
                         <strong>Date of birth : </strong> <span id="dateOfBirth"
                                                                 th:text="${userDetail.dateOfBirth}"></span><br>
+                        <strong>Gender : </strong> <span id="Gender"
+                                                                th:text="${userDetail.gender}"></span><br>
                     </div>
                 </div>
 
@@ -116,10 +118,24 @@
             </div>
             <div class="card-footer text-right">
 <!--                th:onclick="'loadEditUserForm(\'#userEditModal\', \'user-management/edit/'+${userDetail.id}+'\', \'Edit Profile\' )'"-->
+
+<!--                <button class="btn btn-primary" th:if="${userDetail.id == userId} ? ${navPagination} + '/edit/profile' : ${navPagination} + '/edit/' + ${ userDetail.id }"-->
+<!--                        data-toggle="modal"-->
+<!--                        data-target="#userEditModal"-->
+<!--                        th:data-url="${navPagination} + '/edit/profile'"-->
+<!--                        data-title="Edit Profile"-->
+<!--                        data-target-title="#modalTitle"-->
+<!--                        data-target-content="#modal-content"-->
+<!--                        onclick="openRoleModalsFromButton(this)"-->
+<!--                >Edit Profile-->
+<!--                </button>-->
+
+
+<!--                th:data-url="${navPagination} + '/edit/' + ${ userDetail.id }"-->
                 <button class="btn btn-primary"
                         data-toggle="modal"
                         data-target="#userEditModal"
-                        th:data-url="${navPagination} + '/edit/' + ${ userDetail.id }"
+                        th:data-url="${userDetail.id == userId} ? ${navPagination} + '/edit/profile' : ${navPagination} + '/edit/' + ${ userDetail.id }"
                         data-title="Edit Profile"
                         data-target-title="#modalTitle"
                         data-target-content="#modal-content"

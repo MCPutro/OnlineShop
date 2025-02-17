@@ -9,7 +9,7 @@
 
             <div th:if="${username}"><!-- jika sudah login-->
 
-                <li><a href="#"><span class="icon icon-person"></span></a></li>
+                <li><a th:href="@{/profile}"><span class="icon icon-person"></span></a></li>
                 <!--<li><a href="#"><span class="icon icon-heart-o"></span></a></li>-->
                 <li>
                     <a th:href="@{/cart}" class="site-cart">

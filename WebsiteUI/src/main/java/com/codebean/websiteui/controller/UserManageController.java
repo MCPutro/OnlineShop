@@ -241,8 +241,9 @@ public class UserManageController {
             //
             Response<UserDetailDto> response = this.userClient.findById(auth, userId);
             model.addAttribute("userDetail", response.getData());
+            GlobalFunction.setGlobalFragment(model, webRequest);
+            model.addAttribute(Constans.NAV_PAGINATION, "user-management");
 
-//            this.userClient.findById(auth, )
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -272,6 +273,55 @@ public class UserManageController {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
 
             Response<String> stringResponse = this.userClient.updateUserProfileById(auth, userId, dto);
+
+            return ResponseEntity.ok(stringResponse.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+    // 🔹 Fungsi untuk menampilkan ui web user detail berdasarkan token
+    @GetMapping("/edit/profile")
+    public String editProfileByToken(Model model,
+                                     WebRequest webRequest
+    ) {
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<UserDetailDto> userByToken = this.userClient.findByToken(auth);
+            model.addAttribute("userDetail", userByToken.getData());
+            GlobalFunction.setGlobalFragment(model, webRequest);
+            model.addAttribute(Constans.NAV_PAGINATION, "user-management");
+        } catch (ForbiddenException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        GlobalFunction.printModel(model);
+
+        return "userManage/edit";
+    }
+
+    @ResponseBody
+    @PostMapping("/edit/profile")
+    public ResponseEntity<String> updateUserByToken(
+            @RequestBody @Valid UserUpdateProfileDto dto,
+            BindingResult bindingResult,
+            WebRequest webRequest
+    ) {
+        if (bindingResult.hasErrors()) {
+            List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
+                return err.getField() + " " + err.getDefaultMessage();
+            }).toList();
+
+            return ResponseEntity.badRequest().body(list.toString());
+        }
+
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+
+            Response<String> stringResponse = this.userClient.updateUserProfileByToken(auth, dto);
 
             return ResponseEntity.ok(stringResponse.getMessage());
         } catch (Exception e) {

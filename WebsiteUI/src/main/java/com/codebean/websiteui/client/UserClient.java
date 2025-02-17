@@ -85,6 +85,9 @@ public interface UserClient {
     @PutMapping("/api/v1/user/{userId}")
     Response<String> updateUserProfileById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId, @RequestBody UserUpdateProfileDto dto);
 
+    @PutMapping("/api/v1/user")
+    Response<String> updateUserProfileByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserUpdateProfileDto dto);
+
     @GetMapping("/api/v1/roles")
     Response<pageAttribute<RoleDto>> findAllRole(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                  @RequestParam(value = "page") Integer page,
