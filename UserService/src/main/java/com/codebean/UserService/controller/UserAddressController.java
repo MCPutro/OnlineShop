@@ -57,7 +57,7 @@ public class UserAddressController {
         }
     }
 
-    @PatchMapping(path = "/user/address/{addressId}",
+    @PutMapping(path = "/user/address/{addressId}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

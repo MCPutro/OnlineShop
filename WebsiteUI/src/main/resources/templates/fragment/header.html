@@ -14,7 +14,7 @@
 
                 <div class="col-6 col-md-6 order-2 order-md-2 site-search-icon text-left border rounded"
                      th:unless="${isManagement}">
-                    <form th:action="@{/search}" class="site-block-top-search">
+                    <form th:action="@{/shop/search}" class="site-block-top-search">
                         <span class="icon icon-search2"></span>
                         <input type="text" class="form-control border-0" placeholder="Product Name" id="SearchProductName" name="productName" th:value="${productName != null ? productName : ''}">
                     </form>

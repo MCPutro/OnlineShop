@@ -37,7 +37,12 @@ public class UserAddressReq {
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")
     @NotNull(message = "cannot be null")
-    private String country;
+    private String province;
+
+    @NotEmpty(message = "cannot be empty")
+    @NotBlank(message = "cannot be blank")
+    @NotNull(message = "cannot be null")
+    private String regency;
 
     @NotEmpty(message = "cannot be empty")
     @NotBlank(message = "cannot be blank")

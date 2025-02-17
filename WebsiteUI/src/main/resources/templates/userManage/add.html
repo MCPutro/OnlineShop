@@ -63,8 +63,9 @@
                 location.reload(); // Refresh halaman untuk update data
             },
             error: function (xhr, status, error) {
-                const errorMessage = "Terjadi kesalahan: " + xhr.responseText;
-                alert(errorMessage);
+                const errorMessage = "" + xhr.responseText;
+                // alert(errorMessage); terjadi kesalan
+                swal("Error!", errorMessage, "error");
             }
         });
     }

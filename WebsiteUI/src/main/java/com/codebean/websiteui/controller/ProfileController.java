@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Collections;
 
 @Controller
 @RequestMapping("profile")
@@ -20,7 +23,14 @@ public class ProfileController {
     private UserClient userClient;
 
     @GetMapping
-    public String profile(Model model, WebRequest webRequest) {
+    public String profile(Model model, WebRequest webRequest, RedirectAttributes redirectAttributes) {
+
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
         GlobalFunction.setGlobalFragment(model, webRequest);
         try {
             String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();

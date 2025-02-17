@@ -39,7 +39,7 @@ public interface UserAddressRepository extends JpaRepository<UserAddress, Long> 
 
     Page<UserAddress> findAllByPostalCodeContainingIgnoreCaseAndIsActive(String postalCode, Boolean isActive, Pageable pageable);
 
-    Page<UserAddress> findAllByCountryContainingIgnoreCaseAndIsActive(String country, Boolean isActive, Pageable pageable);
+//    Page<UserAddress> findAllByCountryContainingIgnoreCaseAndIsActive(String country, Boolean isActive, Pageable pageable);
 
     Page<UserAddress> findAllByUser_IDAndNameContainingIgnoreCaseAndIsActive(Long userID, String name, Boolean isActive, Pageable pageable);
 
@@ -47,5 +47,5 @@ public interface UserAddressRepository extends JpaRepository<UserAddress, Long> 
 
     Page<UserAddress> findAllByUser_IDAndPostalCodeContainingIgnoreCaseAndIsActive(Long userID, String postalCode, Boolean isActive, Pageable pageable);
 
-    Page<UserAddress> findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive(Long userID, String country, Boolean isActive, Pageable pageable);
+//    Page<UserAddress> findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive(Long userID, String country, Boolean isActive, Pageable pageable);
 }

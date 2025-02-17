@@ -43,8 +43,11 @@ public class UserAddress {
     @Column(name = "Address", nullable = false)
     private String address;
 
-    @Column(name = "Country", nullable = false)
-    private String country;
+    @Column(name = "Province", nullable = false)
+    private String province;
+
+    @Column(name = "Regency", nullable = false)
+    private String regency;
 
     @Column(name = "PostalCode", nullable = false)
     private String postalCode;

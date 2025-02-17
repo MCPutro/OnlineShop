@@ -11,6 +11,7 @@ Version 1.0
 
 import com.codebean.websiteui.client.UserClient;
 import com.codebean.websiteui.dto.ChangePassDto;
+import com.codebean.websiteui.dto.UserAddressDto;
 import com.codebean.websiteui.dto.client.user.UserCreateDto;
 import com.codebean.websiteui.dto.client.user.UserDetailDto;
 import com.codebean.websiteui.dto.client.user.UserUpdateProfileDto;
@@ -319,7 +320,7 @@ public class UserManageController {
 
     // 🔹 Fungsi untuk menampilkan ui web user detail berdasarkan token
     @GetMapping("/edit/profile")
-    public String editProfileByToken(Model model, WebRequest webRequest,RedirectAttributes redirectAttributes) {
+    public String editProfileByToken(Model model, WebRequest webRequest, RedirectAttributes redirectAttributes) {
         //validate session
         if (GlobalFunction.cekSession(webRequest) == null) {
             redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
@@ -400,11 +401,11 @@ public class UserManageController {
         }
 
         // check password
-        if(!dto.getNewPassword().equals(dto.getConfirmPassword())){
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
             return ResponseEntity.badRequest().body("Confirm password does not match");
         }
 
-        if(dto.getCurrentPassword().equals(dto.getNewPassword())){
+        if (dto.getCurrentPassword().equals(dto.getNewPassword())) {
             return ResponseEntity.badRequest().body("New password doesn't change from before");
         }
 
@@ -417,6 +418,111 @@ public class UserManageController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+
+    }
+
+    // show ui to add address
+    @GetMapping("/address")
+    public String address(Model model, WebRequest webRequest) {
+        GlobalFunction.setGlobalFragment(model, webRequest);
+        model.addAttribute("address", new UserAddressDto());
+        model.addAttribute(Constans.NAV_PAGINATION, "user-management");
+        return "userManage/userAddress";
+    }
+
+    @GetMapping("/address/{addressId}")
+    public String addressById(Model model, WebRequest webRequest, @PathVariable Long addressId) {
+        GlobalFunction.setGlobalFragment(model, webRequest);
+
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<UserAddressDto> addressById = this.userClient.findAddressById(auth, addressId);
+
+            model.addAttribute("address", addressById.getData());
+            model.addAttribute(Constans.NAV_PAGINATION, "user-management");
+        } catch (ForbiddenException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return "userManage/userAddress";
+    }
+
+    // save
+    @ResponseBody
+    @PostMapping("/address")
+    public ResponseEntity<String> address(@RequestBody @Valid UserAddressDto dto,
+                                          BindingResult bindingResult,
+                                          WebRequest webRequest
+    ) {
+        System.out.println("-9");
+        if (bindingResult.hasErrors()) {
+            System.out.println("0");
+            List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
+                return err.getField() + " " + err.getDefaultMessage();
+            }).toList();
+            return ResponseEntity.badRequest().body(list.toString());
+        }
+
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<String> stringResponse;
+
+            System.out.println("1");
+
+            // update
+            if (dto.getId() != null) {
+                System.out.println("2");
+
+                stringResponse = this.userClient.updateAddress(auth, dto, dto.getId());
+            } else {
+                System.out.println("3");
+
+                // insert new
+                stringResponse = this.userClient.addNewAddress(auth, dto);
+            }
+            System.out.println("4");
+
+            return ResponseEntity.ok(stringResponse.getMessage());
+        } catch (Exception e) {
+            System.out.println("5");
+
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+//        return ResponseEntity.ok(userAddressDto.toString());
+    }
+
+
+    // 🔹 Fungsi untuk soft delete user
+    @GetMapping("/address/delete/{addressId}")
+    public String deleteAddressById(@PathVariable("addressId") Long addressId,
+                             Model model,
+                             RedirectAttributes redirectAttributes,
+                             WebRequest webRequest
+    ) {
+        //validate session
+        if (GlobalFunction.cekSession(webRequest) == null) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Session expired, please relogin"));
+            return "redirect:/";
+        }
+
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Response<String> objectResponse = this.userClient.deleteAddressById(auth, addressId);
+
+            redirectAttributes.addFlashAttribute("successMessage", objectResponse.getMessage());
+            return "redirect:/profile";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
+            return "redirect:/profile";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList("Internal Server Error"));
+            return "redirect:/profile";
+        }
 
     }
 }

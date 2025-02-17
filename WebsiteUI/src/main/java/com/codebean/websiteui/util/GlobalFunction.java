@@ -29,7 +29,11 @@ public class GlobalFunction {
     }
 
     public static String cekSession(WebRequest webRequest){
-        return (String) webRequest.getAttribute(Constans.USER_ID, 1).toString();
+        Object userId = webRequest.getAttribute(Constans.USER_ID, 1);
+        if(userId != null){
+            return userId.toString();
+        }
+        return null;
     }
 
     public static void printModel(Model model) {

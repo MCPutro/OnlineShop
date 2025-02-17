@@ -99,7 +99,8 @@ public class UserAddressService implements iService<UserAddress> {
             UserAddress address = optionalUserAddress.get();
             address.setName(userAddress.getName());
             address.setAddress(userAddress.getAddress());
-            address.setCountry(userAddress.getCountry());
+            address.setProvince(userAddress.getProvince());
+            address.setRegency(userAddress.getRegency());
             address.setPostalCode(userAddress.getPostalCode());
             this.userAddressRepository.save(address);
 
@@ -212,9 +213,9 @@ public class UserAddressService implements iService<UserAddress> {
                 case "address":
                     page = this.userAddressRepository.findAllByUser_IDAndAddressContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
                     break;
-                case "country":
-                    page = this.userAddressRepository.findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
-                    break;
+//                case "country":
+//                    page = this.userAddressRepository.findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
+//                    break;
                 case "postalcode":
                     page = this.userAddressRepository.findAllByUser_IDAndPostalCodeContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
                     break;

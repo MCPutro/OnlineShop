@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Address</title>
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+</head>
+<body class="container mt-5">
+
+<!--<div th:if="${param.success}" class="alert alert-success">-->
+<!--    Address successfully added!-->
+<!--</div>-->
+<!--th:action="@{/add-address}" method="post" -->
+<form th:object="${address}" class="mt-1">
+    <input type="hidden" class="form-control" th:field="*{id}" id="fm_address_id">
+    <div class="mb-3">
+        <label class="form-label">Address Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="fm_address_name" th:field="*{name}" >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Address <span class="text-danger">*</span></label>
+        <textarea class="form-control" id="fm_address_1" th:field="*{address}" ></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Province <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="fm_province" th:field="*{province}" >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Regency <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="fm_regency" th:field="*{regency}" >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Postal Code <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="fm_postal_code" th:field="*{postalCode}" >
+    </div>
+
+    <button type="button" class="btn btn-primary mt-3 mb-3 loat-right float-md-right"
+            th:data-url="${navPagination} + '/address' " onclick="saveAddress(this)">Save</button>
+</form>
+
+<script>
+
+    function saveAddress(button) {
+        let saveAddressUrl = button.getAttribute("data-url");
+
+        const updateUser = {
+            id: $("#fm_address_id").val(),
+            address_name: $("#fm_address_name").val(),
+            address: $("#fm_address_1").val(),
+            province: $("#fm_province").val(),
+            regency: $("#fm_regency").val(),
+            postalCode: $("#fm_postal_code").val()
+        }
+
+        $.ajax({
+            url: `${window.location.origin}/${saveAddressUrl}`,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(updateUser),
+            success: function (response) {
+                // alert(response);
+                // swal("Success!", response, "success");
+                swal({
+                    title: "Success!",
+                    text: response,
+                    icon: "success",
+                    buttons: {
+                        // cancel: "Batal",
+                        confirm: "Ok",
+                    },
+                    // dangerMode: true,
+                }).then((userConfirmed) => {
+                    if (userConfirmed) {
+                        location.reload(); // Refresh halaman untuk update data
+                    }
+                });
+                // $("#userModal").modal("hide"); // Tutup modal
+                // location.reload(); // Refresh halaman untuk update data
+            },
+            error: function (xhr, status, error) {
+                const errorMessage = "" + xhr.responseText;
+                // alert(errorMessage);
+                swal("Error!", errorMessage, "error");
+            }
+        });
+
+    }
+    function saveAddress2(url) {
+        // let url = button.getAttribute("data-url");
+
+        // const updateUser = {
+        //     id: $("#fm_address_id").val(),
+        //     name: $("#fm_address_name").val(),
+        //     address: $("#fm_address_1").val(),
+        //     province: $("#fm_province").val(),
+        //     regency: $("#fm_regency").val(),
+        //     postalCode: $("#fm_postal_code").val()
+        // }
+        //
+        // console.log(updateUser);
+        console.log(url)
+
+        // $.ajax({
+        //     url: `${window.location.origin}/${url}`,
+        //     type: "POST",
+        //     contentType: "application/json",
+        //     data: JSON.stringify(changePass),
+        //     success: function (response) {
+        //         alert(response);
+        //         // $("#userModal").modal("hide"); // Tutup modal
+        //         location.reload(); // Refresh halaman untuk update data
+        //     },
+        //     error: function (xhr, status, error) {
+        //         const errorMessage = "" + xhr.responseText;
+        //         // alert(errorMessage);
+        //         swal("Error!", errorMessage, "error");
+        //     }
+        // });
+    }
+
+</script>
+</body>
+</html>

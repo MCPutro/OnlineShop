@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.websiteui.dto.ChangePassDto;
+import com.codebean.websiteui.dto.UserAddressDto;
 import com.codebean.websiteui.dto.client.user.*;
 import com.codebean.websiteui.dto.pageAttribute;
 import com.codebean.websiteui.errorHandling.FeignClientConfig;
@@ -124,4 +125,17 @@ public interface UserClient {
 
     @PostMapping("/api/v1/user/change-password")
     Response<String> changePassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody ChangePassDto dto);
+
+    @PostMapping("/api/v1/user/address")
+    Response<String> addNewAddress(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,  @RequestBody UserAddressDto dto);
+
+    @PutMapping("/api/v1/user/address/{addressId}")
+    Response<String> updateAddress(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAddressDto dto, @PathVariable Long addressId);
+
+    @GetMapping("/api/v1/user/address/{addressId}")
+    Response<UserAddressDto> findAddressById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long addressId);
+
+    @DeleteMapping("/api/v1/user/address/{addressId}")
+    Response<String> deleteAddressById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long addressId);
+
 }

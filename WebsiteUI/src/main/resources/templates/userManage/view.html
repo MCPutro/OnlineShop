@@ -27,7 +27,7 @@
             z-index: 1999 !important;
         }
     </style>
-
+    <script th:src="@{/sweetalert/sweetalert.min.js}"></script>
 </head>
 <body>
 <div class="site-wrap text-black">
@@ -53,7 +53,7 @@
                         <strong>Email : </strong> <span id="email" th:text="${userDetail.email}"></span><br>
                         <strong>Role : </strong> <span id="role" th:text="${userDetail.role}"></span><br>
                         <strong>Password : </strong> <span id="password">******** </span>
-                        <a href="#"  th:if="${userDetail.id == userId}"
+                        <a href="#" th:if="${userDetail.id == userId}"
                            data-toggle="modal"
                            data-target="#changePassword"
                            th:data-url="${navPagination} + '/' + ${ userDetail.id } +'/change-password'"
@@ -66,45 +66,69 @@
                                                                th:text="${userDetail.phoneNumber}"></span><br>
                     </div>
                     <div class="col-6 col-md-6">
-                        <strong>First name : </strong> <span id="Name"
-                                                             th:text="${userDetail.name}"></span><br>
+                        <strong>Name : </strong> <span id="Name"
+                                                       th:text="${userDetail.name}"></span><br>
                         <strong>Date of birth : </strong> <span id="dateOfBirth"
                                                                 th:text="${userDetail.dateOfBirth}"></span><br>
                         <strong>Gender : </strong> <span id="Gender"
-                                                                th:text="${userDetail.gender}"></span><br>
+                                                         th:text="${userDetail.gender}"></span><br>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="mb-0 mt-3 mt-md-3 ">Addresses :</h5>
-                    <button class="btn btn-outline-primary" th:if="${userDetail.id == userId}">New Address</button>
+                    <button class="btn btn-outline-primary"
+                            th:if="${userDetail.id == userId}"
+                            data-toggle="modal"
+                            data-target="#userEditModal"
+                            th:data-url="${navPagination} + '/address' "
+                            data-title="Add Address"
+                            data-target-title="#modalTitle"
+                            data-target-content="#modal-content"
+                            onclick="openRoleModalsFromButton(this)"
+                    >New Address
+                    </button>
                 </div>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
                         <th>Name</th>
                         <th>Address</th>
-                        <th>Country</th>
+                        <th>Province</th>
+                        <th>Regency</th>
                         <th>Postal Code</th>
                         <th>Status</th>
                         <th style="width: 150px;" th:if="${userDetail.id == userId}">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="alamat : ${userDetail.addresses}">
+                    <tr th:each="alamat : ${userDetail.addresses}" th:if="${alamat.isActive == true}">
                         <td th:text="${alamat.name}"></td>
                         <td th:text="${alamat.address}"></td>
-                        <td th:text="${alamat.country}"></td>
+                        <td th:text="${alamat.province}"></td>
+                        <td th:text="${alamat.regency}"></td>
                         <td th:text="${alamat.postalCode}"></td>
                         <td th:text="${alamat.isActive}"></td>
                         <td th:if="${userDetail.id == userId}">
-                            <button class="btn btn-warning d-inline-flex align-items-center justify-content-center"
-                                    th:onclick="${alamat.getId()}">
-                                <i class="icon icon-pencil"></i>
-                            </button>
-                            <button class="btn btn-danger d-inline-flex align-items-center justify-content-center">
+                            <a class="btn btn-warning d-inline-flex align-items-center justify-content-center"
+                               data-toggle="modal"
+                               data-target="#userEditModal"
+                               th:data-url="${navPagination} + '/address/' + ${alamat.getId()}"
+                               data-title="Edit Address"
+                               data-target-title="#modalTitle"
+                               data-target-content="#modal-content"
+                               onclick="openRoleModalsFromButton(this)"
+                            ><i class="icon icon-pencil"></i>
+                            </a>
+                            <!--                            <button class="btn btn-warning d-inline-flex align-items-center justify-content-center"-->
+                            <!--                                    th:onclick="${alamat.getId()}">-->
+                            <!--                                <i class="icon icon-pencil"></i>-->
+                            <!--                            </button>-->
+                            <a class="btn btn-danger d-inline-flex align-items-center justify-content-center"
+                                th:href="${navPagination} + '/address/delete/' + ${alamat.id}"
+                            >
                                 <i class="icon icon-trash"></i>
-                            </button>
+                            </a>
                         </td>
                     </tr>
                     </tbody>
@@ -117,21 +141,21 @@
 
             </div>
             <div class="card-footer text-right">
-<!--                th:onclick="'loadEditUserForm(\'#userEditModal\', \'user-management/edit/'+${userDetail.id}+'\', \'Edit Profile\' )'"-->
+                <!--                th:onclick="'loadEditUserForm(\'#userEditModal\', \'user-management/edit/'+${userDetail.id}+'\', \'Edit Profile\' )'"-->
 
-<!--                <button class="btn btn-primary" th:if="${userDetail.id == userId} ? ${navPagination} + '/edit/profile' : ${navPagination} + '/edit/' + ${ userDetail.id }"-->
-<!--                        data-toggle="modal"-->
-<!--                        data-target="#userEditModal"-->
-<!--                        th:data-url="${navPagination} + '/edit/profile'"-->
-<!--                        data-title="Edit Profile"-->
-<!--                        data-target-title="#modalTitle"-->
-<!--                        data-target-content="#modal-content"-->
-<!--                        onclick="openRoleModalsFromButton(this)"-->
-<!--                >Edit Profile-->
-<!--                </button>-->
+                <!--                <button class="btn btn-primary" th:if="${userDetail.id == userId} ? ${navPagination} + '/edit/profile' : ${navPagination} + '/edit/' + ${ userDetail.id }"-->
+                <!--                        data-toggle="modal"-->
+                <!--                        data-target="#userEditModal"-->
+                <!--                        th:data-url="${navPagination} + '/edit/profile'"-->
+                <!--                        data-title="Edit Profile"-->
+                <!--                        data-target-title="#modalTitle"-->
+                <!--                        data-target-content="#modal-content"-->
+                <!--                        onclick="openRoleModalsFromButton(this)"-->
+                <!--                >Edit Profile-->
+                <!--                </button>-->
 
 
-<!--                th:data-url="${navPagination} + '/edit/' + ${ userDetail.id }"-->
+                <!--                th:data-url="${navPagination} + '/edit/' + ${ userDetail.id }"-->
                 <button class="btn btn-primary"
                         data-toggle="modal"
                         data-target="#userEditModal"
@@ -142,7 +166,8 @@
                         onclick="openRoleModalsFromButton(this)"
                 >Edit Profile
                 </button>
-                <a class="btn btn-danger" th:if="${permissions.contains('MANAGE_USER')}" th:href="@{/user-management/delete/{userId}(userId = ${userDetail.id})   }">Delete</a>
+                <a class="btn btn-danger" th:if="${permissions.contains('MANAGE_USER')}"
+                   th:href="@{/user-management/delete/{userId}(userId = ${userDetail.id})   }">Delete</a>
             </div>
         </div>
     </div>

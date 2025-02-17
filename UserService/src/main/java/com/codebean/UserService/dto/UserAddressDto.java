@@ -9,6 +9,7 @@ Created on 28 Jan 2025 16:43
 Version 1.0
 */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Setter
@@ -21,11 +22,14 @@ public class UserAddressDto {
 
     private Long ID;
 
+    @JsonProperty("address_name")
     private String name;
 
     private String address;
 
-    private String country;
+    private String province;
+
+    private String regency;
 
     private String postalCode;
 
