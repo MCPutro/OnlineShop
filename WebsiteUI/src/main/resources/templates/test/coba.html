@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulir Pembuatan Role Baru</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Buat Role Baru</h1>
+
+<form>
+    <label for="role_name">Nama Role:</label><br>
+    <input type="text" id="role_name" name="role_name"><br><br>
+
+    <h2>Permission:</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th></th>
+            <th>Modul Name</th>
+            <th>Permission View Only</th>
+            <th>Permission Add/Edit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><input type="checkbox" id="select_all_user_management"></td>
+            <td>User Management</td>
+            <td><input type="checkbox" name="permissionId" id="1" value="1"></td>
+            <td><input type="checkbox" name="permissionId" id="2" value="2"></td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="select_all_product_management"></td>
+            <td>Product Management</td>
+            <td><input type="checkbox" name="permissionId" id="3" value="3"></td>
+            <td><input type="checkbox" name="permissionId" id="4" value="4"></td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" id="select_all_shop"></td>
+            <td>Shop Management</td>
+            <td><input type="checkbox" name="permissionId" id="5" value="5"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <input type="submit" value="Simpan">
+</form>
+
+<!--<script>-->
+<!--  document.addEventListener("DOMContentLoaded", function () {-->
+<!--    function setupSelectAll(moduleId, checkboxes) {-->
+<!--      const selectAllCheckbox = document.getElementById(moduleId);-->
+<!--      selectAllCheckbox.addEventListener("change", function () {-->
+<!--        checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);-->
+<!--      });-->
+
+<!--      checkboxes.forEach(checkbox => {-->
+<!--        checkbox.addEventListener("change", function () {-->
+<!--          if (!checkbox.checked) {-->
+<!--            selectAllCheckbox.checked = false;-->
+<!--          } else if ([...checkboxes].every(cb => cb.checked)) {-->
+<!--            selectAllCheckbox.checked = true;-->
+<!--          }-->
+<!--        });-->
+<!--      });-->
+<!--    }-->
+
+<!--    setupSelectAll("select_all_user_management", [-->
+<!--      document.getElementById("1"),-->
+<!--      document.getElementById("2")-->
+<!--    ]);-->
+
+<!--    setupSelectAll("select_all_product_management", [-->
+<!--      document.getElementById("3"),-->
+<!--      document.getElementById("4")-->
+<!--    ]);-->
+<!--  });-->
+
+<!--cara 1-->
+<!--</script>-->
+
+<!--  cara2 -->
+<!--<script>-->
+<!--  document.addEventListener("DOMContentLoaded", function () {-->
+<!--    function setupSelectAll(moduleId, checkboxes) {-->
+<!--      const selectAllCheckbox = document.getElementById(moduleId);-->
+
+<!--      function updateSelectAllState() {-->
+<!--        const checkedCount = checkboxes.filter(cb => cb.checked).length;-->
+<!--        if (checkedCount === 0) {-->
+<!--          selectAllCheckbox.checked = false;-->
+<!--          selectAllCheckbox.indeterminate = false;-->
+<!--        } else if (checkedCount === checkboxes.length) {-->
+<!--          selectAllCheckbox.checked = true;-->
+<!--          selectAllCheckbox.indeterminate = false;-->
+<!--        } else {-->
+<!--          selectAllCheckbox.checked = false;-->
+<!--          selectAllCheckbox.indeterminate = true;-->
+<!--        }-->
+<!--      }-->
+
+<!--      selectAllCheckbox.addEventListener("change", function () {-->
+<!--        checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);-->
+<!--        selectAllCheckbox.indeterminate = false;-->
+<!--      });-->
+
+<!--      checkboxes.forEach(checkbox => {-->
+<!--        checkbox.addEventListener("change", updateSelectAllState);-->
+<!--      });-->
+
+<!--      updateSelectAllState();-->
+<!--    }-->
+
+<!--    setupSelectAll("select_all_user_management", [-->
+<!--      document.getElementById("1"),-->
+<!--      document.getElementById("2")-->
+<!--    ]);-->
+
+<!--    setupSelectAll("select_all_product_management", [-->
+<!--      document.getElementById("3"),-->
+<!--      document.getElementById("4")-->
+<!--    ]);-->
+<!--  });-->
+<!--</script>-->
+
+<!--&lt;!&ndash; cara 3 &ndash;&gt;-->
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        function setupSelectAll(moduleId, checkboxes) {-->
+<!--            const selectAllCheckbox = document.getElementById(moduleId);-->
+
+<!--            function updateSelectAllState() {-->
+<!--                const checkedCount = checkboxes.filter(cb => cb.checked).length;-->
+<!--                if (checkboxes.length === 1) {-->
+<!--                    selectAllCheckbox.checked = checkboxes[0].checked;-->
+<!--                    selectAllCheckbox.indeterminate = false;-->
+<!--                } else {-->
+<!--                    if (checkedCount === 0) {-->
+<!--                        selectAllCheckbox.checked = false;-->
+<!--                        selectAllCheckbox.indeterminate = false;-->
+<!--                    } else if (checkedCount === checkboxes.length) {-->
+<!--                        selectAllCheckbox.checked = true;-->
+<!--                        selectAllCheckbox.indeterminate = false;-->
+<!--                    } else {-->
+<!--                        selectAllCheckbox.checked = false;-->
+<!--                        selectAllCheckbox.indeterminate = true;-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+
+<!--            selectAllCheckbox.addEventListener("change", function () {-->
+<!--                checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);-->
+<!--                selectAllCheckbox.indeterminate = false;-->
+<!--            });-->
+
+<!--            checkboxes.forEach(checkbox => {-->
+<!--                checkbox.addEventListener("change", updateSelectAllState);-->
+<!--            });-->
+
+<!--            updateSelectAllState();-->
+<!--        }-->
+
+<!--        setupSelectAll("select_all_user_management", [-->
+<!--            document.getElementById("1"),-->
+<!--            document.getElementById("2")-->
+<!--        ]);-->
+
+<!--        setupSelectAll("select_all_product_management", [-->
+<!--            document.getElementById("3"),-->
+<!--            document.getElementById("4")-->
+<!--        ]);-->
+
+<!--        setupSelectAll("select_all_shop", [-->
+<!--            document.getElementById("5")-->
+<!--        ]); // Hanya satu permission-->
+<!--    });-->
+<!--</script>-->
+
+<!-- cara 4 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function setupSelectAll(moduleId, checkboxIds) {
+            const selectAllCheckbox = document.getElementById(moduleId);
+            const checkboxes = checkboxIds.map(id => document.getElementById(id)).filter(cb => cb !== null);
+
+            if (!selectAllCheckbox || checkboxes.length === 0) return;
+
+            function updateSelectAllState() {
+                const checkedCount = checkboxes.filter(cb => cb.checked).length;
+                if (checkboxes.length === 1) {
+                    selectAllCheckbox.checked = checkboxes[0].checked;
+                    selectAllCheckbox.indeterminate = false;
+                } else {
+                    if (checkedCount === 0) {
+                        selectAllCheckbox.checked = false;
+                        selectAllCheckbox.indeterminate = false;
+                    } else if (checkedCount === checkboxes.length) {
+                        selectAllCheckbox.checked = true;
+                        selectAllCheckbox.indeterminate = false;
+                    } else {
+                        selectAllCheckbox.checked = false;
+                        selectAllCheckbox.indeterminate = true;
+                    }
+                }
+            }
+
+            selectAllCheckbox.addEventListener("change", function () {
+                checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);
+                selectAllCheckbox.indeterminate = false;
+            });
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", updateSelectAllState);
+            });
+
+            updateSelectAllState();
+        }
+
+        setupSelectAll("select_all_user_management", ["1", "2"]);
+        setupSelectAll("select_all_product_management", ["3", "4"]);
+        setupSelectAll("select_all_shop", ["5"]);
+    });
+
+</script>
+</body>
+</html>

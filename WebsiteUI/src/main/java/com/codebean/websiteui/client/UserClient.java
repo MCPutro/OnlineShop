@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.websiteui.dto.client.user.*;
+import com.codebean.websiteui.dto.pageAttribute;
 import com.codebean.websiteui.errorHandling.FeignClientConfig;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.response.Response;
@@ -74,7 +75,7 @@ public interface UserClient {
     @GetMapping("/api/v1/user/{userId}")
     Response<UserDetailDto> findById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
 
-    @GetMapping("/api/v1/user/{userId}")
+    @GetMapping("/api/v1/user")
     Response<UserDetailDto> findByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
 
     @DeleteMapping("/api/v1/user/{userId}")
@@ -82,4 +83,38 @@ public interface UserClient {
 
     @PutMapping("/api/v1/user/{userId}")
     Response<String> updateUserProfileById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId, @RequestBody UserUpdateProfileDto dto);
+
+    @GetMapping("/api/v1/roles")
+    Response<pageAttribute<RoleDto>> findAllRole(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                 @RequestParam(value = "page") Integer page,
+                                                 @RequestParam(value = "sizePerPage") Integer sizePerPage
+    );
+
+    @GetMapping("/api/v1/role/search/{roleName}")
+    Response<pageAttribute<RoleDto>> findRoleByName(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                    @RequestParam(value = "page") Integer page,
+                                                    @RequestParam(value = "sizePerPage") Integer sizePerPage,
+                                                    @PathVariable String roleName);
+
+    @GetMapping("/api/v1/module/active")
+    Response<List<ModuleDto>> findAllActiveModuleAndPermission(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
+
+
+    @GetMapping("/api/v1/modules")
+    Response<List<ModuleDto>> findAllModuleAndPermission(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
+
+    @PostMapping("/api/v1/role-create")
+    Response<String> createRole(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody RoleCreateDto dto);
+
+    @GetMapping("/api/v1/role/{roleId}")
+    Response<RoleDto> findRoleById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long roleId);
+
+    @PutMapping("/api/v1/role/{roleId}")
+    Response<String> updateRoleById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long roleId, @RequestBody RoleCreateDto dto);
+
+    @DeleteMapping("/api/v1/role/{roleId}")
+    Response<String> deleteRoleById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String roleId);
+
+    @PutMapping("/api/v1/role/reactivation/{roleId}")
+    Response<String> reactivationRoleById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String roleId);
 }

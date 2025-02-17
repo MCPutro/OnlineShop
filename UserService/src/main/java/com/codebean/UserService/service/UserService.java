@@ -118,13 +118,16 @@ public class UserService implements iService<User> {
             List<User> listUserByEmailOrUsername = this.userRepository.findAllByEmailOrUsername(user.getEmail(), user.getUsername());
             if (listUserByEmailOrUsername != null && !listUserByEmailOrUsername.isEmpty()) {
                 for (User u : listUserByEmailOrUsername) {
+                    if (u.getID().equals(id)) {
+                        continue;
+                    }
                     if (u.getEmail().equals(user.getEmail())) {
                         return Response.badRequest(Constants.EMAIL_ADDRESS_ALREADY_EXISTS, "FVUSR01012", request);
                     }
 
-                    if (u.getUsername().equals(user.getUsername())) {
-                        return Response.badRequest(Constants.USERNAME_ALREADY_EXISTS, "FVUSR01013", request);
-                    }
+//                    if (u.getUsername().equals(user.getUsername())) {
+//                        return Response.badRequest(Constants.USERNAME_ALREADY_EXISTS, "FVUSR01013", request);
+//                    }
                 }
             }
 

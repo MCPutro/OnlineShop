@@ -105,8 +105,7 @@
                     <td th:text="${user['email']}"></td>
                     <td th:text="${user['role']}"></td>
                     <td>
-                        <span class="badge badge-secondary  p-2"
-                              th:if="${user['isActive'] == false}">Inactive</span>
+                        <span class="badge badge-secondary  p-2" th:if="${user['isActive'] == false}">Inactive</span>
                         <span class="badge badge-success  p-2" th:if="${user['isActive'] == true}">Active</span>
                     </td>
                     <td>

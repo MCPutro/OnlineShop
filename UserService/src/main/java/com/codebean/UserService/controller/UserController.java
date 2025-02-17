@@ -105,7 +105,7 @@ public class UserController {
     }
 
 
-    @PatchMapping(path = "/user",
+    @PutMapping(path = "/user",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -132,7 +132,7 @@ public class UserController {
 
 
     @PreAuthorize("hasAnyAuthority('MANAGE_USER')")
-    @PatchMapping(path = "/user/{userId}",
+    @PutMapping(path = "/user/{userId}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

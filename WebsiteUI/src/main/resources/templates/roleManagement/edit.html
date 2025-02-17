@@ -1,0 +1,163 @@
+<!--<!doctype html>-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--<form th:action="@{ ${role.id == null} ? '/'+${navPagination}+'/save' : '/'+${navPagination}+'/role/edit/' + ${role.id} }"-->
+<!--      th:object="${role}">-->
+<form th:object="${role}">
+    <div class="form-group">
+        <input type="hidden" th:if="${role.id != null}" th:field="*{id}">
+
+        <label for="fm_role_name_edit">Role name <span class="text-danger">*</span></label>
+        <input class="form-control" type="text" id="fm_role_name_edit" name="name" th:value="*{name}">
+    </div>
+
+
+    <div class="form-group">
+        <label>Permission <span class="text-danger">*</span></label>
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Modul Name</th>
+                <th>Permission View Only</th>
+                <th>Permission Add/Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="module : ${modules}">
+                <td><input class=" " type="checkbox" th:id="'fm_select_all_' + ${module.id}"
+                           onclick="toggleSelectAll(this)"></td>
+                <td th:text="${module.name}"></td>
+                <td>
+                    <input class=" " type="checkbox" name="permissionIds"
+                           th:each="perm : ${module.permissions}"
+                           th:if="${#strings.contains(perm.description, 'View')}"
+                           th:value="${perm.id}"
+                           th:checked="${selectedPermissions!=null ? selectedPermissions.contains(perm.id) : 'false'}"
+                           onclick="updateSelectAllState(this)"
+                    >
+                    <!--th:checked="${selectedPermissions!=null ? selectedPermissions.contains(perm.id) : 'false'}"-->
+                </td>
+                <td>
+                    <input class=" " type="checkbox" name="permissionIds"
+                           th:each="perm : ${module.permissions}"
+                           th:if="${#strings.contains(perm.description, 'Edit')}"
+                           th:value="${perm.id}"
+                           th:checked="${selectedPermissions!=null ? selectedPermissions.contains(perm.id) : 'false'}"
+                           onclick="updateSelectAllState(this)"
+                    >
+                    <!--th:checked="${selectedPermissions!=null ? selectedPermissions.contains(perm.id) : 'false'}"-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--    saveUser('/user-management/save')-->
+<!--    <button type="button" class="btn btn-primary mt-3 mb-3 float-md-right" onclick="">Save</button>-->
+    <button type="button" class="btn btn-primary mt-3 mb-3 float-md-right" th:data-url="${navPagination} + '/edit/'+${role.id}+'/save'" onclick="saveChangeRole(this)">Save</button>
+</form>
+
+
+<script>
+    function saveChangeRole(button) {
+        let dataUrl = button.getAttribute("data-url");
+        console.log(dataUrl);
+
+        let selectedPermissions = getCheckedValuesByName('permissionIds');
+        // console.log("Selected Permissions:", selectedPermissions);
+        const newRole = {
+            roleName: $("#fm_role_name_edit").val(),
+            permissionIds: selectedPermissions
+        }
+        console.log(newRole)
+
+        $.ajax({
+            url: dataUrl,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(newRole),
+            success: function (response) {
+                alert(response);
+                $("#userModal").modal("hide"); // Tutup modal
+                location.reload(); // Refresh halaman untuk update data
+            },
+            error: function (xhr, status, error) {
+                const errorMessage = "Terjadi kesalahan: " + xhr.responseText;
+                alert(errorMessage);
+            }
+        });
+    }
+
+    function getCheckedValuesByName(name) {
+        let checkedValues = [];
+        document.querySelectorAll(`input[name='${name}']:checked`).forEach(cb => {
+            checkedValues.push(cb.value);
+        });
+        return checkedValues;
+    }
+</script>
+
+<!--Select All-->
+<script>
+    function toggleSelectAll(selectAll) {
+        let checkboxes = selectAll.closest("tr").querySelectorAll("input[type='checkbox']:not([id^='fm_select_all_'])");
+        checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        selectAll.indeterminate = false;
+    }
+
+    function updateSelectAllState(checkbox) {
+        let selectAll = checkbox.closest("tr").querySelector("input[id^='fm_select_all_']");
+        let checkboxes = checkbox.closest("tr").querySelectorAll("input[type='checkbox']:not([id^='fm_select_all_'])");
+        let checkedCount = [...checkboxes].filter(cb => cb.checked).length;
+
+        if (checkedCount === 0) {
+            selectAll.checked = false;
+            selectAll.indeterminate = false;
+        } else if (checkedCount === checkboxes.length) {
+            selectAll.checked = true;
+            selectAll.indeterminate = false;
+        } else {
+            selectAll.checked = false;
+            selectAll.indeterminate = true;
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        document.querySelectorAll("input[id^='fm_select_all_']").forEach(selectAll => {
+            let checkboxes = selectAll.closest("tr").querySelectorAll("input[type='checkbox']:not([id^='fm_select_all_'])");
+
+            function updateSelectAllState() {
+                let checkedCount = [...checkboxes].filter(cb => cb.checked).length;
+                if (checkedCount === 0) {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = false;
+                } else if (checkedCount === checkboxes.length) {
+                    selectAll.checked = true;
+                    selectAll.indeterminate = false;
+                } else {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = true; // Set indeterminate state
+                }
+            }
+
+            // // Event untuk Select All checkbox
+            // selectAll.addEventListener("change", function () {
+            //     checkboxes.forEach(cb => cb.checked = selectAll.checked);
+            //     selectAll.indeterminate = false;
+            // });
+            //
+            // // Event untuk setiap checkbox permission
+            // checkboxes.forEach(cb => {
+            //     cb.addEventListener("change", updateSelectAllState);
+            // });
+            //
+            // // Inisialisasi state saat halaman dimuat
+            updateSelectAllState();
+        });
+    });
+</script>
+
+</html>

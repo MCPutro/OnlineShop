@@ -65,7 +65,7 @@ public class RoleController {
 
 
     @PreAuthorize("hasAuthority('MANAGE_ROLE')")
-    @PatchMapping(path = "/role/{roleId}",
+    @PutMapping(path = "/role/{roleId}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -145,7 +145,36 @@ public class RoleController {
             return this.roleService.findByParam(Pageable, "status", "active", request);
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_GET, "FEROLCTRL03021", request);
+            return Response.internalServerError(Constants.ROLE_FAILED_TO_GET, "FEROLCTRL03051", request);
+        }
+    }
+
+    //digunakan saat membuat user baru makannya pake MANAGE_USER
+    @PreAuthorize("hasAnyAuthority('VIEW_ROLE','MANAGE_USER')")
+    @GetMapping(path = "/role/search/{roleName}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getRolesByName(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                            @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+                                            @PathVariable(value = "roleName") String roleName,
+                                            HttpServletRequest request) {
+        try {
+            Pageable Pageable = PageRequest.of(page, sizePerPage);
+            return this.roleService.findByParam(Pageable, "name", roleName, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.internalServerError(Constants.ROLE_FAILED_TO_GET, "FEROLCTRL03061", request);
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('MANAGE_ROLE')")
+    @PutMapping(path = "/role/reactivation/{roleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> reactivationRoleById(@PathVariable(value = "roleId") Long roleId, HttpServletRequest request) {
+        try {
+            return this.roleService.reactivationRole(roleId, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.internalServerError(Constants.ROLE_FAILED_TO_DELETE, "FEROLCTRL03071", request);
         }
     }
 }

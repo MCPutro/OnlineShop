@@ -11,6 +11,7 @@ Version 1.0
 
 
 import com.codebean.UserService.exception.ValidateException;
+import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.handler.ResponseHandler;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -70,13 +71,14 @@ public class ErrorController {
     // Menangani AccessDeniedException ketika pengguna tidak memiliki izin
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDenied(AccessDeniedException exception) {
-        return new ResponseHandler().handleResponse(
-                null, // String message,
-                HttpStatus.FORBIDDEN,// HttpStatus status,
-                exception.getMessage(), // Object data,
-                "FORBIDDEN",// Object errorCode,
-                null// HttpServletRequest request
-        );
+        return Response.forbidden(exception.getMessage(), "FORBIDDEN", null );
+//        return new ResponseHandler().handleResponse(
+//                null, // String message,
+//                HttpStatus.FORBIDDEN,// HttpStatus status,
+//                exception.getMessage(), // Object data,
+//                "FORBIDDENx",// Object errorCode,
+//                null// HttpServletRequest request
+//        );
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

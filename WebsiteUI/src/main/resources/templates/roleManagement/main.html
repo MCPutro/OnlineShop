@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Role and Permission Management</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <script th:src="@{/sweetalert/sweetalert.min.js}"></script>
+
+    <style>
+        .modal {
+            z-index: 2000 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 1999 !important;
+        }
+    </style>
+
+</head>
+<body>
+<div class="site-wrap">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+    <br>
+    <!-- Content Section -->
+    <div class="site-section-sm mb-5">
+        <div class="container">
+            <!-- Add Role Button -->
+            <div class="row align-items-center mb-3">
+                <div class="col-6 mb-3 mb-md-0 col-md-3 order-1 order-md-1 text-left">
+                    <div class="site-logo">
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#roleCreateModal"
+                                th:data-url="${navPagination} + '/add'"
+                                data-title="Add Role"
+                                data-target-title="#modalTitle"
+                                data-target-content="#modal-content"
+                                onclick="openRoleModalsFromButton(this)"
+                        >
+                            Add Role
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-7 order-3 order-md-2 site-search-icon border-0 ">
+                    <form class="form-inline site-search-icon center"
+                          th:action="@{/{navPagination}(navPagination=${navPagination})}">
+                        <!--                        <span class="icon icon-search2"></span>-->
+                        <input type="Search" name="search"
+                               class="form-control border-1 col-9 col-md-9 rounded-0" th:value="${search}"
+                               placeholder="Search Role Name" required>
+                        <button type="submit" class="btn btn-outline-info ml-auto rounded-0 ">Apply</button>
+                    </form>
+                </div>
+
+                <div class="col-6 col-md-2 order-2 order-md-3 mt-3 text-right">
+                    <!-- Dropdown untuk jumlah data per halaman -->
+                    <form method="get" th:action="@{/{navPagination}(navPagination=${navPagination})}"
+                          class="float-right float-md-right form-inline mb-3">
+                        <label>Show :</label>
+                        <select class="form-control" name="size" onchange="this.form.submit()">
+                            <option value="5" th:selected="${size == 5}">5</option>
+                            <option value="10" th:selected="${size == 10}">10</option>
+                            <option value="20" th:selected="${size == 20}">20</option>
+                            <option value="50" th:selected="${size == 50}">50</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!--table content-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Table to display roles and permissions -->
+                        <table data-aos="fade-up" class="table">
+                            <thead>
+                            <tr class="text-primary">
+                                <th>Id</th>
+                                <th>Role Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Role and permission data will be dynamically populated here -->
+                            <tr class="text-black align-content-center a" th:each="role : ${listRole}">
+                                <td th:text="${ role.id }"></td>
+                                <td th:text="${ role.name }"></td>
+                                <td>
+                                    <span class="badge badge-success  p-2"
+                                          th:if="${ role.isActive == true }">Active</span>
+
+                                    <span class="badge badge-secondary  p-2"
+                                          th:if="${ role.isActive == false }">Inactive</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning d-inline-flex align-items-center justify-content-center"
+                                            data-toggle="modal"
+                                            data-target="#roleEditModal"
+                                            th:data-url="${navPagination} + '/edit/' + ${ role.id }"
+                                            data-title="Edit Role"
+                                            data-target-title="#modalTitleEdit"
+                                            data-target-content="#modal-contentEdit"
+                                            onclick="openRoleModalsFromButton(this)"
+                                    >
+                                        <i class="icon icon-pencil"></i>
+                                    </button>
+                                    <a class="btn btn-danger d-inline-flex align-items-center justify-content-center"
+                                       th:if="${role.isActive == true}"
+                                       th:href="@{/role-management/inactive/role/{roleId}(roleId = ${role.id})   }">
+                                        <i class="icon icon-trash"></i>
+                                    </a>
+                                    <a class="btn btn-info d-inline-flex align-items-center justify-content-center"
+                                       th:if="${role.isActive == false}"
+                                       th:href="@{/role-management/reactivation/{roleId}(roleId = ${role.id})   }">
+                                        <i class="icon icon-refresh"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- pagination -->
+        <div th:replace="~{fragment/pagination::paginationFragment}"></div>
+    </div>
+
+    <!--Footer-->
+    <footer th:replace="~{fragment/footer2::footer2}"></footer>
+
+</div>
+
+<!-- Add Role Modal -->
+<div th:replace="~{fragment/modalB::modalB('roleCreateModal')}"></div>
+<!-- edit Role Modal -->
+<div th:replace="~{fragment/modalBEdit::modalBEdit('roleEditModal')}"></div>
+
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<!--POP UP-->
+<script th:inline="javascript">
+
+    let successMessage = /*[[${successMessage}]]*/ '';
+    if (successMessage) {
+        swal("Success!", successMessage, "success");
+    }
+
+    let errors = /*[[${errors}]]*/ [];
+    if (errors.length) {
+        swal("Error!", errors.join("\n"), "error");
+    }
+</script>
+
+<!-- Open modals -->
+<script th:inline="javascript">
+    function openRoleModalsFromButton(button) {
+        let modulePath = button.getAttribute("data-url");
+        // let fullUrl = modulePath + "/add";
+        let dataTarget = button.getAttribute("data-target");
+        let dataTitle = button.getAttribute("data-title");
+        let dataTargetTitle = button.getAttribute("data-target-title");
+        let dataTargetContent = button.getAttribute("data-target-content");
+
+        console.log(modulePath, dataTarget, dataTitle);
+        openRoleModals(dataTarget, dataTargetTitle, dataTargetContent, modulePath, dataTitle);
+    }
+
+    function openRoleModals(modalId, dataTargetTitle, dataTargetContent, url, title) {
+        $.get(url, function (data) {
+            // $("#modalTitle").text(title);
+            $(dataTargetTitle).text(title);
+            // $("#modal-content").html(data);
+            $(dataTargetContent).html(data);
+            $(modalId).modal("show");
+        });
+    }
+</script>
+</body>
+</html>

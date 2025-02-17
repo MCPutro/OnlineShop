@@ -27,9 +27,12 @@ public class GlobalFunction {
     }
 
     public static void printModel(Model model) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>.");
         Map<String, Object> map = model.asMap();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             System.out.println(entry.getKey() + " = " + entry.getValue());
         }
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>.");
+
     }
 }

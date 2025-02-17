@@ -289,6 +289,24 @@ public class RoleService implements iService<Role> {
         }
     }
 
+    @Transactional
+    public ResponseEntity<?> reactivationRole(Long id, HttpServletRequest request) {
+        try{
+            Optional<Role> optionalRole = this.roleRepository.findById(id);
+            if (!optionalRole.isPresent()) {
+                return Response.badRequest(Constants.ROLE_NOT_FOUND, "FVROL03061", request);
+            }
+
+            optionalRole.ifPresent(role1 -> {
+                role1.setIsActive(true);
+            });
+
+            return Response.success(Constants.ROLE_UPDATED_SUCCESSFULLY, null, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.ROLE_FAILED_TO_UPDATE, "FEROL03061", request);
+        }
+    }
+
     private Set<PermissionDto> setPermissionModelToDto(Set<Permission> permissionSet) {
         return this.modelMapper.map(permissionSet, new TypeToken<Set<PermissionDto>>() {
         }.getType());

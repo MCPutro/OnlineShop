@@ -1,9 +1,15 @@
 package com.codebean.websiteui.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.util.List;
 
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class pageAttribute<T> {
 
     @JsonProperty("sort-by")
