@@ -12,13 +12,11 @@ Version 1.0
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRegReqDto {
@@ -36,6 +34,11 @@ public class UserRegReqDto {
     @NotEmpty(message = "cannot be empty ")
     @NotNull(message = "cannot be null ")
     @NotBlank(message = "cannot be blank ")
+    private String name;
+
+    @NotEmpty(message = "cannot be empty ")
+    @NotNull(message = "cannot be null ")
+    @NotBlank(message = "cannot be blank ")
     private String password;
 
     @NotEmpty(message = "cannot be empty ")
@@ -43,13 +46,5 @@ public class UserRegReqDto {
     @NotBlank(message = "cannot be blank ")
     private String confirmPassword;
 
-    @Override
-    public String toString() {
-        return "UserRegReqDto{" +
-                "username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", confirmPassword='" + confirmPassword + '\'' +
-                '}';
-    }
+
 }

@@ -16,7 +16,10 @@ import com.codebean.websiteui.dto.client.user.ModuleDto;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.request.UserRegReqDto;
 import com.codebean.websiteui.dto.response.Response;
+import com.codebean.websiteui.errorHandling.ForbiddenException;
 import com.codebean.websiteui.util.Constans;
+import com.codebean.websiteui.util.GlobalFunction;
+import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,13 +67,13 @@ public class AuthController {
     public String loginSubmit(@ModelAttribute("user") @Valid UserLoginDto user,
                               BindingResult bindingResult,
                               Model model,
+                              RedirectAttributes redirectAttributes,
                               WebRequest webRequest
     ) {
         if (bindingResult.hasErrors()) {
             List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
                 return err.getField() + " " + err.getDefaultMessage();
             }).toList();
-
             model.addAttribute(Constans.ERRORS, list);
             return "login";
         }
@@ -119,26 +121,39 @@ public class AuthController {
         return "registerCustomer";
     }
 
+
     @PostMapping("/register")
     public String register(@ModelAttribute("user") @Valid UserRegReqDto user,
                            BindingResult bindingResult,
                            Model model,
+                           RedirectAttributes redirectAttributes,
                            WebRequest webRequest
     ) {
+        System.out.println(user);
         if (bindingResult.hasErrors()) {
             List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
                 return err.getField() + " " + err.getDefaultMessage();
             }).toList();
-
             model.addAttribute(Constans.ERRORS, list);
-
             return "registerCustomer";
         }
 
-        // save to session
-        webRequest.setAttribute(Constans.USERNAME, user.getUsername(), WebRequest.SCOPE_SESSION);
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            model.addAttribute(Constans.ERRORS, "Password and Confirm Password do not match");
+            return "registerCustomer";
+        }
+
+        // call user service
+        try {
+            this.userClient.registerCustomer(user);
+            model.addAttribute("successMessage", "Customer registered successfully, PLease login with your account.");
+            return "registerCustomer";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
+            return "registerCustomer";
+        }
 
 
-        return "redirect:/";
     }
 }

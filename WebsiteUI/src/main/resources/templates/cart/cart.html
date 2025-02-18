@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+
+<div class="site-wrap">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+
+    <div class="bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black">Cart</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section">
+        <div class="container">
+            <div class="row mb-5">
+                <form class="col-md-12" method="get" th:action="@{/checkout}">
+                    <div class="site-blocks-table mb-5">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th class="product-thumbnail">Image</th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-total">Total</th>
+                                <th class="product-remove">Remove</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="cart : ${carts}">
+                                <td><label><input type="checkbox" name="selectedItems" th:value="${cart.id}"/></label></td>
+                                <td class="product-thumbnail">
+                                    <img th:src="@{/images/cloth_2.jpg}" alt="Image" class="img-fluid">
+                                </td>
+                                <td class="product-name">
+                                    <h2><a class="h5 text-black" th:href="@{/shop/product/{productId}(productId=${cart.productId}) }" th:text="${cart.productName}">Polo Shirt</a></h2>
+                                </td>
+<!--                                <td th:text="${cart.price}"></td>-->
+                                <td th:text="'Rp ' + ${#numbers.formatDecimal(cart.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                                <td>
+                                    <div class="input-group mb-3" style="max-width: 120px;">
+                                        <div class="input-group-prepend">
+<!--                                            <button class="btn btn-outline-primary" type="button">&minus;</button>-->
+                                        </div>
+                                        <input type="number" min="1" class="form-control text-center" value="1" placeholder=""
+                                               aria-label="Example text with button addon" th:value="${cart.quantity}" readonly
+                                               aria-describedby="button-addon1">
+                                        <div class="input-group-append">
+<!--                                            <button class="btn btn-outline-primary" type="button">&plus;</button>-->
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td th:with="res=${cart.price * cart.quantity }"  th:text="'Rp ' + ${#numbers.formatDecimal(res, 0, 'COMMA', 2, 'POINT')}"  ></td>
+                                <td><a th:href="@{/cart/delete/{cartId}(cartId = ${cart.id} ) }" class="btn btn-primary btn-sm">X</a></td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="submit" value="Checkout" class="btn btn-primary btn-lg py-3 float-right float-md-right ">
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div th:replace="~{fragment/footer::footer}"></div>
+</div>
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/sweetalert/sweetalert.min.js}"></script>
+<!--POP UP-->
+<script th:inline="javascript">
+
+    let successMessage = /*[[${successMessage}]]*/ '';
+    if (successMessage) {
+        swal("Success!", successMessage, "success");
+    }
+
+    let errors = /*[[${errors}]]*/ [];
+    if (errors.length) {
+        swal("Error!", errors.join("\n"), "error");
+    }
+</script>
+</body>
+</html>

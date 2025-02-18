@@ -8,7 +8,7 @@
 
                 <div class="col-12 mb-3 mb-md-0 col-md-3 order-1 order-md-1 text-md-left text-center">
                     <div class="site-logo">
-                        <a th:href="@{/}" class="js-logo-clone">Shoppers</a>
+                        <a th:href="@{/}" class="js-logo-clone">codebeans</a>
                     </div>
                 </div>
 
@@ -16,7 +16,7 @@
                      th:unless="${isManagement}">
                     <form th:action="@{/shop/search}" class="site-block-top-search">
                         <span class="icon icon-search2"></span>
-                        <input type="text" class="form-control border-0" placeholder="Product Name" id="SearchProductName" name="productName" th:value="${productName != null ? productName : ''}">
+                        <input type="text" class="form-control border-0" placeholder="Product Name" id="SearchProductName" name="search" th:value="${search != null ? search : ''}">
                     </form>
                 </div>
 

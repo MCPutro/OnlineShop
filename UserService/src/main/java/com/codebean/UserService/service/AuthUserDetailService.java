@@ -71,7 +71,7 @@ public class AuthUserDetailService implements UserDetailsService {
         try {
             Optional<User> optionalUser = this.userRepository.findFirstByUsername(user.getUsername());
             if (!optionalUser.isPresent()) {
-                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FVAUT05001", request);
+                return Response.badRequest(Constants.INVALID_USERNAME_OR_PASSWORD, "FVAUT05001", request);
             }
 
             //get user data from db
@@ -79,16 +79,16 @@ public class AuthUserDetailService implements UserDetailsService {
 
             // matching password
             if (!this.passwordEncoder.matches((user.getUsername() + "." + user.getPassword()), userDB.getPassword())) {
-                return Response.unauthorized(Constants.INVALID_USERNAME_OR_PASSWORD, "FVAUT05001", request);
+                return Response.badRequest(Constants.INVALID_USERNAME_OR_PASSWORD, "FVAUT05001", request);
             }
 
             //check if user is not active
             if (!userDB.getIsActive()) {
-                return Response.unauthorized(Constants.ACCOUNT_IS_NOT_ACTIVE, "FVAUT05003", request);
+                return Response.badRequest(Constants.ACCOUNT_IS_NOT_ACTIVE, "FVAUT05003", request);
             }
 
             if(userDB.getIsDelete()){
-                return Response.unauthorized(Constants.ACCOUNT_NOT_FOUND, "FVAUT05004", request);
+                return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVAUT05004", request);
             }
 
             List<String> activePermissions = this.getActivePermissionsByRole(userDB.getRole());

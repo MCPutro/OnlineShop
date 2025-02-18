@@ -51,7 +51,7 @@ public class Product {
     @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isActive = true;
 
-    @Column(name = "Description")
+    @Column(name = "Description", length = 500)
     private String description;
 
     @Version

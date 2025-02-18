@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .modal {
+            z-index: 2000 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 1999 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="site-wrap">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+
+    <div class="bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <a
+                        href="/cart">Cart</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black">Checkout</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-5 mb-md-0">
+                    <h2 class="h3 mb-3 text-black">Billing Details</h2>
+                    <div class="p-3 p-lg-5 border">
+                        <input type="text" id="selectedAddressId" name="selectedAddressId" readonly>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="selectedAddress" class="text-black">Address <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control"  onclick="openModal()"
+                                       id="selectedAddress" name="selectedAddress" placeholder="Address">
+                            </div>
+                        </div>
+                        <input type="text" name="selectedItems" th:each="item : ${selectedItems}" th:id="${item}" th:value="${item}" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h2 class="h3 mb-3 text-black">Your Order</h2>
+                            <div class="p-3 p-lg-5 border">
+                                <table class="table site-block-order-table mb-5">
+                                    <thead>
+                                    <th>Product</th>
+                                    <th>Total</th>
+                                    </thead>
+                                    <tbody>
+                                    <div>
+                                        <tr th:each="item : ${cartReview}">
+                                            <td th:text="${ item['productName'] + '  &nbsp; x &nbsp;  ' + item['quantity'] }">
+<!--                                                <strong class="mx-2">x</strong>-->
+                                            </td>
+<!--                                            <td th:text="${item['totalPrice']}"></td>-->
+                                            <td th:text="'Rp ' + ${#numbers.formatDecimal(item['totalPrice'], 0, 'COMMA', 2, 'POINT')}"></td>
+                                        </tr>
+                                    </div>
+
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+<!--                                        <td class="text-black font-weight-bold"><strong th:text="${totalPrice}"></strong></td>-->
+                                        <td class="text-black font-weight-bold"><strong th:text="'Rp ' + ${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 2, 'POINT')}"></strong></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-lg py-3 btn-block"
+                                            onclick="window.location='thankyou.html'">Place Order
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- </form> -->
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div th:replace="~{fragment/footer::footer}"></div>
+</div>
+
+<!--Modals alamat-->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered block modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-black" id="modalTitle">Address List</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <table class="table table-bordered text-black">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Alamat</th>
+                        <th>Alamat</th>
+                        <th>Provinsi</th>
+                        <th>Kota</th>
+                        <th>Kode Pos</th>
+                        <th>Aksi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="address : ${listAddress}">
+                        <td th:text="${address.id}"></td>
+                        <td th:text="${address.name}"></td>
+                        <td th:text="${address.address}"></td>
+                        <td th:text="${address.province}"></td>
+                        <td th:text="${address.regency}"></td>
+                        <td th:text="${address.postalCode}"></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm"
+                                    th:attr="onclick='selectAddress(\'' + ${address.address} + ', ' + ${address.regency} + ', ' + ${address.province} + ', ' + ${address.postalCode} + '\' ,\''+${address.id}+'\')'">
+                                Pilih
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<script>
+    // Fungsi untuk membuka modal
+    function openModal() {
+        // document.getElementById("addressModal").style.display = "block";
+        $("#addressModal").modal("show");
+    }
+
+    function selectAddress(address, id) {
+        console.log(id);
+        document.getElementById("selectedAddress").value = address;
+        document.getElementById("selectedAddressId").value = id;
+        $("#addressModal").modal("hide");
+    }
+</script>
+</body>
+</html>

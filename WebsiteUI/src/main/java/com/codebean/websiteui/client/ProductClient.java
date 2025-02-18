@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.websiteui.dto.client.product.CategoryReqDto;
+import com.codebean.websiteui.dto.client.product.ProductDto;
 import com.codebean.websiteui.dto.pageAttribute;
 import com.codebean.websiteui.dto.response.Response;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -32,4 +33,8 @@ public interface ProductClient {
     @PostMapping("/api/v1/category")
     void createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                         @RequestBody CategoryReqDto categoryDto);
+
+    @GetMapping("/api/v1/shop/product/{productId}")
+    Response<ProductDto> getActiveProductById(@PathVariable Long productId);
+
 }

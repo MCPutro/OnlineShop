@@ -20,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 public class CartController {
@@ -64,5 +66,11 @@ public class CartController {
     @GetMapping(path = "/cart", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCart(HttpServletRequest request) {
         return this.cartService.findAll(request);
+    }
+
+    @GetMapping("/cart/review")
+    public ResponseEntity<?> reviewCart(@RequestParam List<Long> cartIds, HttpServletRequest request) {
+        return this.cartService.cartReview(cartIds, request);
+
     }
 }

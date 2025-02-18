@@ -51,6 +51,14 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successMessage}" >
+                            <ul>
+                                <li th:each="msg : ${successMessage}" th:text="${msg}"></li>
+                            </ul>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <!-- error message -->
                     </div>
                 </div>
@@ -59,7 +67,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <h2 class="h3 mb-3 text-black">Welcome</h2>
-                    <form action="#" method="post" th:object="${user}">
+                    <form th:action="@{/register}" method="post" th:object="${user}">
                         <div class="p-3 p-lg-5 border">
                             <div class="form-group">
                                 <label for="r_username" class="text-black">Username <span
@@ -73,11 +81,15 @@
                                        th:field="*{email}">
                             </div>
                             <div class="form-group">
+                                <label for="r_name" class="text-black">Full name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="r_name" name="r_name"
+                                       th:field="*{name}">
+                            </div>
+                            <div class="form-group">
                                 <label for="r_password" class="text-black">Password <span
                                         class="text-danger">*</span></label>
                                 <input type="password" class="form-control" id="r_password" name="r_password"
                                        th:field="*{password}">
-
                             </div>
                             <div class="form-group">
                                 <label for="r_confirm_password" class="text-black">Confirm Password <span

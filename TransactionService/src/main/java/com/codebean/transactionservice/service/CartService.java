@@ -21,6 +21,7 @@ Version 1.0
 import com.codebean.transactionservice.client.ProductServiceClient;
 import com.codebean.transactionservice.client.UserServiceClient;
 import com.codebean.transactionservice.dto.CartDto;
+import com.codebean.transactionservice.dto.CartReview;
 import com.codebean.transactionservice.dto.client.ResponseClient;
 import com.codebean.transactionservice.dto.client.product.ProductDto;
 import com.codebean.transactionservice.dto.client.user.UserDto;
@@ -35,10 +36,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CartService {
@@ -82,6 +82,11 @@ public class CartService {
 
             if (optionalCart.isPresent()) {
                 Cart cartDB = optionalCart.get();
+
+                if (productDto.getStock() < (cart.getQuantity() + cartDB.getQuantity())) {
+                    return Response.badRequest("Maximum quantity exceeded", "FVCRT08003", request);
+                }
+
                 cartDB.setQuantity(cart.getQuantity() + cartDB.getQuantity());
 //                cartDB.setProductId(productDto.getId());
                 cartDB.setPrice(productDto.getPrice());
@@ -229,6 +234,46 @@ public class CartService {
         } catch (Exception e) {
             e.printStackTrace();
             return Response.internalServerError(Constants.CART_FAILED_TO_GET, "FECRT08031", request);
+        }
+    }
+
+    private final List<CartReview> cartReviewList = new ArrayList<>();
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> cartReview(List<Long> cartIds, HttpServletRequest request) {
+        try {
+            List<Cart> listCartById = this.cartRepository.findAllById(cartIds);
+            String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+            List<Long> list = listCartById.stream().map(Cart::getProductId).toList();
+
+            ResponseClient<List<ProductDto>> allProductByIds = this.productServiceClient.getAllProductByIds(auth, list);
+
+            cartReviewList.clear();
+            double totalPrice = 0.0;
+            for (Cart cart : listCartById) {
+                for (ProductDto productDto : allProductByIds.getData()) {
+                    if (productDto.getId().equals(cart.getProductId())) {
+                        double v = productDto.getPrice() * cart.getQuantity();
+                        totalPrice += v;
+                        CartReview cartReview = new CartReview();
+                        cartReview.setProductId(cart.getProductId());
+                        cartReview.setProductName(productDto.getName());
+                        cartReview.setQuantity(cart.getQuantity());
+                        cartReview.setPrice(productDto.getPrice());
+                        cartReview.setTotalPrice(v);
+
+                        cartReviewList.add(cartReview);
+
+                    }
+                }
+            }
+            System.out.println(totalPrice);
+            Map<String, Object> data = new HashMap<>();
+            data.put("totalPrice", totalPrice);
+            data.put("list", cartReviewList);
+            return Response.success(Constants.SUCCESS, data, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.CART_OPERATION_FAILED, "FECRT08041", request);
         }
     }
 

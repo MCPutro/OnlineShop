@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+
+</head>
+<body>
+
+<div class="site-wrap">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+
+
+    <div class="bg-light py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black" th:text="${product.name}"></strong></div>
+            </div>
+        </div>
+    </div>
+
+    <!--Content-->
+    <div class="site-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img th:src="@{/images/cloth_2.jpg}" alt="Image" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="text-black" th:text="${product.name}"></h2>
+                    <p th:text="${product.description}"></p>
+<!--                    <p><strong class="text-primary h4" th:text="'Rp. '+${product.price}"></strong></p>-->
+                    <p><strong class="text-primary h4" th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}"></strong></p>
+                    <div class="mb-5">
+<!--                        style="max-width: 120px;"-->
+<!--                        <div class="input-group mb-3" th:if="${userId != null}">-->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-primary " type="button">&minus;</button>
+                            </div>
+                            <input type="number" class="form-control text-center col-2 col-md-2" min="1" th:max="${product.stock}"
+                                   value="1"
+                                   placeholder="" id="quantity_product" aria-label="Example text with button addon"
+                                   aria-describedby="button-addon1" th:disabled="${userId == null}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="button">&plus;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <p>
+<!--                        <button class="buy-now btn btn-sm btn-primary" th:if="${userId != null}" onclick="addToCart()">Add To Cart</button>-->
+                        <button class="buy-now btn btn-sm btn-primary" onclick="addToCart()">Add To Cart</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section block-3 site-blocks-2 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7 site-section-heading text-center pt-4">
+                    <h2>Featured Products</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="nonloop-block-3 owl-carousel">
+                        <div class="item">
+                            <div class="block-4 text-center">
+                                <figure class="block-4-image">
+                                    <img src="images/cloth_1.jpg" alt="Image placeholder" class="img-fluid">
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="#">Tank Top</a></h3>
+                                    <p class="mb-0">Finding perfect t-shirt</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="block-4 text-center">
+                                <figure class="block-4-image">
+                                    <img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="#">Corater</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="block-4 text-center">
+                                <figure class="block-4-image">
+                                    <img src="images/cloth_2.jpg" alt="Image placeholder" class="img-fluid">
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="#">Polo Shirt</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="block-4 text-center">
+                                <figure class="block-4-image">
+                                    <img src="images/cloth_3.jpg" alt="Image placeholder" class="img-fluid">
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="#">T-Shirt Mockup</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="block-4 text-center">
+                                <figure class="block-4-image">
+                                    <img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
+                                </figure>
+                                <div class="block-4-text p-4">
+                                    <h3><a href="#">Corater</a></h3>
+                                    <p class="mb-0">Finding perfect products</p>
+                                    <p class="text-primary font-weight-bold">$50</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div th:replace="~{fragment/footer::footer}"></div>
+</div>
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/sweetalert/sweetalert.min.js}"></script>
+<script th:inline="javascript">
+
+    function addToCart() {
+        let productId = /*[[${product.id}]]*/ 0;
+
+        const newCart = {
+            productId: productId,
+            quantity: $("#quantity_product").val()
+        }
+
+        // console.log(newCart);
+        $.ajax({
+            url: "/shop/add-cart",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(newCart),
+            success: function (response) {
+                // alert(response);
+                // $("#userModal").modal("hide"); // Tutup modal
+                // location.reload(); // Refresh halaman untuk update data
+                swal({
+                    title: "Success!",
+                    text: "Item successfully added to cart",
+                    icon: "success",
+                    // buttons: {
+                    //     // cancel: "Batal",
+                    //     confirm: "Ok",
+                    // },
+                    // dangerMode: true,
+                }).then((userConfirmed) => {
+                    if (userConfirmed) {
+                        location.reload(); // Refresh halaman untuk update data
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                const errorMessage = "" + xhr.responseText;
+                // alert(errorMessage); terjadi kesalan
+                swal("Error!", errorMessage, "error");
+            }
+        });
+    }
+
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     document.querySelectorAll(".js-btn-plus").forEach(button => {
+    //         button.addEventListener("click", function () {
+    //             let input = this.closest(".input-group").querySelector("input");
+    //             let max = parseInt(input.getAttribute("max"), 10);
+    //             let value = parseInt(input.value, 10);
+    //
+    //             if (value < max) {
+    //                 input.value = value + 1;
+    //             }
+    //         });
+    //     });
+    //
+    //     document.querySelectorAll(".js-btn-minus").forEach(button => {
+    //         button.addEventListener("click", function () {
+    //             let input = this.closest(".input-group").querySelector("input");
+    //             let value = parseInt(input.value, 10);
+    //
+    //             if (value > 1) {
+    //                 input.value = value - 1;
+    //             }
+    //         });
+    //     });
+    // });
+
+</script>
+</body>
+</html>

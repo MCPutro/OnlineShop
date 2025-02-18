@@ -10,16 +10,23 @@ Version 1.0
 */
 
 import com.codebean.websiteui.client.ProductClient;
+import com.codebean.websiteui.client.TransactionClient;
+import com.codebean.websiteui.dto.client.product.CartAdd;
+import com.codebean.websiteui.dto.client.product.ProductDto;
 import com.codebean.websiteui.dto.response.Response;
+import com.codebean.websiteui.util.Constans;
 import com.codebean.websiteui.util.GlobalFunction;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,43 +37,136 @@ public class ShopController {
     @Autowired
     private ProductClient productClient;
 
+    @Autowired
+    private TransactionClient transactionClient;
+
     @GetMapping
-    public String shop(Model model, WebRequest webRequest) {
+    public String shop(@RequestParam(defaultValue = "0") Integer page,
+                       @RequestParam(defaultValue = "15") Integer size,
+                       Model model, RedirectAttributes redirectAttributes,
+                       WebRequest webRequest
+    ) {
+
         GlobalFunction.setGlobalFragment(model, webRequest);
 
         try {
             // get category list
             Map<String, Object> activeCategory = this.productClient.getActiveCategory(0, 100);
-            Map<String, Object> mapData = (Map<String, Object>) activeCategory.get("data");
-            List<Map<String, Object>> ltCategory = (List<Map<String, Object>>) mapData.get("content");
+            Map<String, Object> mapCategoryData = (Map<String, Object>) activeCategory.get("data");
+            List<Map<String, Object>> ltCategory = (List<Map<String, Object>>) mapCategoryData.get("content");
 
             model.addAttribute("ltCategory", ltCategory);
 
-            Map<String, Object> activeProducts = this.productClient.getActiveProducts(0, 15);
-            Map<String, Object> dataProducts = (Map<String, Object>) activeProducts.get("data");
-            List<Map<String, Object>> products = (List<Map<String, Object>>) dataProducts.get("content");
+            //get product
+            page = page > 0 ? page - 1 : page;
+            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size);
+            Map<String, Object> mapProductsData = (Map<String, Object>) activeProducts.get("data");
+            List<Map<String, Object>> ltProducts = (List<Map<String, Object>>) mapProductsData.get("content");
 
-            model.addAttribute("ltProducts", products);
+            model.addAttribute("ltProducts", ltProducts);
+
+            Integer currentPage = (Integer) mapProductsData.get("current-page");
+            Integer totalPage = (Integer) mapProductsData.get("total-page");
+            model.addAttribute(Constans.CURRENT_PAGE, currentPage + 1);
+            model.addAttribute(Constans.TOTAL_PAGES, totalPage);
+            model.addAttribute(Constans.NAV_PAGINATION, "shop");
+            model.addAttribute("size", size);
+
         } catch (Exception e) {
 
             throw new RuntimeException(e);
         }
 
-        return "shop";
+        return "shop/shop";
     }
 
-    @GetMapping("/search")
-    public String shop(@RequestParam(value = "productName", required = false) String productName,
-                       @RequestParam(value = "category", required = false) List<Integer> categoryIds,
-                       @RequestParam(value = "minPrice", required = false) Integer minPrice,
-                       @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
-                       Model model) {
-        System.out.println(productName);
-        System.out.println(categoryIds);
-        System.out.println(minPrice);
-        System.out.println(maxPrice);
+    @GetMapping("/product/{productId}")
+    public String shopProductDetail(@PathVariable Long productId, Model model,
+                                    WebRequest webRequest, RedirectAttributes redirectAttributes
+    ) {
 
-        model.addAttribute("productName", productName);
-        return "shop";
+        GlobalFunction.setGlobalFragment(model, webRequest);
+
+        try {
+            Response<ProductDto> activeProductById = this.productClient.getActiveProductById(productId);
+            model.addAttribute("product", activeProductById.getData());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return "shop/shop_Item";
     }
+
+    @ResponseBody
+    @PostMapping("/add-cart")
+    public ResponseEntity<String> addCart(@RequestBody @Valid CartAdd cartAdd, BindingResult bindingResult,
+                                          Model model, WebRequest webRequest
+    ) {
+
+        if (bindingResult.hasErrors()) {
+            List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
+                return err.getField() + " " + err.getDefaultMessage();
+            }).toList();
+
+            return ResponseEntity.badRequest().body(list.toString());
+        }
+
+        if(GlobalFunction.cekSession(webRequest) == null){
+            return ResponseEntity.badRequest().body("Please login to your account!");
+        }
+
+        try {
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            Map<String, Object> response = this.transactionClient.addToCart(auth, cartAdd);
+
+            return ResponseEntity.ok(response.get("message").toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+//    @GetMapping("/search")
+//    public String shop(@RequestParam(defaultValue = "0") Integer page,
+//                       @RequestParam(defaultValue = "15") Integer size,
+//                       @RequestParam(value = "search", required = false) String search,
+//                       @RequestParam(value = "category", required = false) List<Integer> categoryIds,
+//                       @RequestParam(value = "minPrice", required = false) Integer minPrice,
+//                       @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
+//                       Model model,
+//                       WebRequest webRequest
+//    ) {
+//        GlobalFunction.setGlobalFragment(model, webRequest);
+//
+//        try {
+//            // get category list
+//            Map<String, Object> activeCategory = this.productClient.getActiveCategory(0, 100);
+//            Map<String, Object> mapCategoryData = (Map<String, Object>) activeCategory.get("data");
+//            List<Map<String, Object>> ltCategory = (List<Map<String, Object>>) mapCategoryData.get("content");
+//
+//            model.addAttribute("ltCategory", ltCategory);
+//
+//            //get product
+//            page = page > 0 ? page - 1 : page;
+//            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size);
+//            Map<String, Object> mapProductsData = (Map<String, Object>) activeProducts.get("data");
+//            List<Map<String, Object>> ltProducts = (List<Map<String, Object>>) mapProductsData.get("content");
+//
+//            Integer currentPage = (Integer) mapProductsData.get("current-page");
+//            Integer totalPage = (Integer) mapProductsData.get("total-page");
+//            model.addAttribute(Constans.CURRENT_PAGE, currentPage + 1);
+//            model.addAttribute(Constans.TOTAL_PAGES, totalPage);
+//            model.addAttribute(Constans.NAV_PAGINATION, "shop");
+//            model.addAttribute("size", size);
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        model.addAttribute("search", search);
+//
+//        return "shop";
+//    }
+
+
 }

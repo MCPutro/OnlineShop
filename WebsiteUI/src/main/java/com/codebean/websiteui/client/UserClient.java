@@ -13,6 +13,7 @@ import com.codebean.websiteui.dto.ChangePassDto;
 import com.codebean.websiteui.dto.UserAddressDto;
 import com.codebean.websiteui.dto.client.user.*;
 import com.codebean.websiteui.dto.pageAttribute;
+import com.codebean.websiteui.dto.request.UserRegReqDto;
 import com.codebean.websiteui.errorHandling.FeignClientConfig;
 import com.codebean.websiteui.dto.request.UserLoginDto;
 import com.codebean.websiteui.dto.response.Response;
@@ -50,6 +51,9 @@ public interface UserClient {
 
     @PostMapping("/auth/v1/login")
     Response<UserDto> login(@RequestBody UserLoginDto dto);
+
+    @PostMapping("/auth/v1/register/customer")
+    Response<String> registerCustomer(@RequestBody UserRegReqDto dto);
 
     @GetMapping("/api/v1/users")
     Map<String, Object> findAll(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -137,5 +141,10 @@ public interface UserClient {
 
     @DeleteMapping("/api/v1/user/address/{addressId}")
     Response<String> deleteAddressById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long addressId);
+
+    @GetMapping("/api/v1/user/address")
+    Response<pageAttribute<UserAddressDto>> getAddressByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                                    @RequestParam(value = "page") Integer page,
+                                                                    @RequestParam(value = "sizePerPage") Integer sizePerPage);
 
 }
