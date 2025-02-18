@@ -122,7 +122,7 @@
                     <div class="border p-4 rounded mb-4">
                         <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter Products</h3>
                         <form id="filter-form" method="get" th:action="@{shop/search}">
-                            <input type="text" name="search" th:value="${search != null ? search : ''}"
+                            <input type="hidden" name="search" th:value="${search != null ? search : ''}"
                                    placeholder="cari nama product">
                             <div class="mb-4">
                                 <label class="mb-3 h6  text-black d-block ">Category :</label>

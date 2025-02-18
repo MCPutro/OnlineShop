@@ -2,6 +2,7 @@ package com.codebean.websiteui.client;
 
 import com.codebean.websiteui.dto.client.product.CartAdd;
 import com.codebean.websiteui.dto.client.product.CartDto;
+import com.codebean.websiteui.dto.client.product.OrderCreateDto;
 import com.codebean.websiteui.dto.response.Response;
 import com.codebean.websiteui.errorHandling.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -24,4 +25,7 @@ public interface TransactionClient {
 
     @GetMapping("/api/v1/cart/review")
     Map<String, Object> getCartRevire(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam List<Long> cartIds);
+
+    @PostMapping("/api/v1/order")
+    Response<String> order(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody OrderCreateDto dto);
 }

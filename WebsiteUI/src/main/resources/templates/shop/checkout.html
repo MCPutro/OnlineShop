@@ -50,7 +50,7 @@
                 <div class="col-md-6 mb-5 mb-md-0">
                     <h2 class="h3 mb-3 text-black">Billing Details</h2>
                     <div class="p-3 p-lg-5 border">
-                        <input type="text" id="selectedAddressId" name="selectedAddressId" readonly>
+                        <input type="hidden" id="selectedAddressId" name="selectedAddressId" readonly>
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="selectedAddress" class="text-black">Address <span
@@ -59,7 +59,7 @@
                                        id="selectedAddress" name="selectedAddress" placeholder="Address">
                             </div>
                         </div>
-                        <input type="text" name="selectedItems" th:each="item : ${selectedItems}" th:id="${item}" th:value="${item}" readonly>
+                        <input type="hidden" name="selectedItems" th:each="item : ${selectedItems}" th:id="${item}" th:value="${item}" readonly>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -95,7 +95,7 @@
 
                                 <div class="form-group">
                                     <button class="btn btn-primary btn-lg py-3 btn-block"
-                                            onclick="window.location='thankyou.html'">Place Order
+                                            onclick="createOrder()">Place Order
                                     </button>
                                 </div>
 
@@ -165,7 +165,7 @@
 <script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
 <script th:src="@{/js/aos.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-
+<script th:src="@{/sweetalert/sweetalert.min.js}"></script>
 <script>
     // Fungsi untuk membuka modal
     function openModal() {
@@ -178,6 +178,58 @@
         document.getElementById("selectedAddress").value = address;
         document.getElementById("selectedAddressId").value = id;
         $("#addressModal").modal("hide");
+    }
+    
+    function createOrder() {
+        // let selectedAddressId = document.getElementById("selectedAddressId").value;
+        let checkedValuesByName = getCheckedValuesByName('selectedItems');
+        // console.log(selectedAddressId);
+        // console.log(checkedValuesByName);
+        const newOrder = {
+            addressId: $("#selectedAddressId").val(),
+            cartIds: checkedValuesByName
+        }
+        console.log(newOrder);
+        const url = "checkout";
+        $.ajax({
+            url: `${window.location.origin}/${url}`,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(newOrder),
+            success: function (response) {
+                // alert(response);
+                // $("#userModal").modal("hide"); // Tutup modal
+                // location.reload(); // Refresh halaman untuk update data
+                // window.location.href = "/";
+                swal({
+                    title: "Success!",
+                    text: response,
+                    icon: "success",
+                    buttons: {
+                        // cancel: "Batal",
+                        confirm: "Ok",
+                    },
+                    // dangerMode: true,
+                }).then((userConfirmed) => {
+                    if (userConfirmed) {
+                        window.location.href = "/";
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                const errorMessage = "" + xhr.responseText;
+                alert(errorMessage);
+                // swal("Error!", errorMessage, "error");
+            }
+        });
+
+    }
+    function getCheckedValuesByName(name) {
+        let checkedValues = [];
+        document.querySelectorAll(`input[name='${name}']`).forEach(cb => {
+            checkedValues.push(cb.value);
+        });
+        return checkedValues;
     }
 </script>
 </body>

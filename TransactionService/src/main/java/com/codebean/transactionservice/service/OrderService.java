@@ -131,7 +131,7 @@ public class OrderService {
 
             this.cartRepository.deleteAllById(orderAdd.getCartIds());
 
-            return null;
+            return Response.success(Constants.TRANSACTION_SUCCESSFUL, null, request);
         } catch (FeignException e) {
             throw new RuntimeException(e.contentUTF8());
         } catch (Exception e) {
