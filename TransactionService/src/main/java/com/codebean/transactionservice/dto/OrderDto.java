@@ -22,6 +22,7 @@ import java.util.List;
 public class OrderDto {
     private Long id;
     private Long userId;
+    private String name;
     private Long addressId;
     private Double totalPrice;
     private LocalDate orderDate;

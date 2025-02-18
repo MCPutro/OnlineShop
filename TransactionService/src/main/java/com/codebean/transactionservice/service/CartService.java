@@ -267,7 +267,7 @@ public class CartService {
                     }
                 }
             }
-            System.out.println(totalPrice);
+//            System.out.println(totalPrice);
             Map<String, Object> data = new HashMap<>();
             data.put("totalPrice", totalPrice);
             data.put("list", cartReviewList);

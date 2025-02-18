@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--<div class="row" data-aos="fade-up" th:fragment="paginationFragment2">-->
+<!--    <div class="col-md-12 text-center">-->
+<!--        <div class="site-block-27">-->
+<!--            <ul>-->
+<!--                <li th:if="${currentPage > 1}">-->
+<!--                    <a th:href="@{/{navPagination}(page=${currentPage - 1}, size=${size}, navPagination=${navPagination}-->
+<!--                     , search=${search}, filterBy=${filterBy}-->
+<!--                     )}">&lt;</a>-->
+<!--                </li>-->
+
+<!--                <li th:class="${currentPage == 1} ? 'active' : ''" th:if="${totalPages != currentPage}"><a-->
+<!--                        th:href="@{/{navPagination}(navPagination=${navPagination}, page=${1}, size=${size}, search=${search}, filterBy=${filterBy}  )}">1</a>-->
+<!--                </li>-->
+<!--                <li th:if="${currentPage > 4}"><span>...</span></li>-->
+
+<!--                <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"-->
+<!--                    th:if="${i > 1 && i < totalPages}"-->
+<!--                    th:class="${i == currentPage} ? 'active' : ''">-->
+<!--                    <a th:href="@{/{navPagination}(navPagination=${navPagination}, page=${i}, size=${size}, search=${search}, filterBy=${filterBy} )}"-->
+<!--                       th:text="${i}"></a>-->
+<!--                </li>-->
+<!--                <li th:if="${currentPage < totalPages - 3}"><span>...</span></li>-->
+
+<!--                <li  th:class="${totalPages == currentPage} ? 'active' : '' " >-->
+<!--                    <a th:href="@{/{navPagination}(navPagination=${navPagination},page=${totalPages}, size=${size}, search=${search}, filterBy=${filterBy}  )}" th:text="${totalPages}" ></a>-->
+<!--                </li>-->
+
+<!--                <li th:if="${currentPage < totalPages}"><a-->
+<!--                        th:href="@{/{navPagination}(navPagination=${navPagination}, page=${currentPage + 1}, size=${size}, search=${search}, filterBy=${filterBy} )}">&gt;</a>-->
+<!--                </li>-->
+
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!-- Pagination -->
+<nav aria-label="Page navigation" class="mt-4" th:fragment="paginationFragment2">
+    <ul class="pagination justify-content-center">
+        <li class="page-item " th:if="${currentPage > 1}">
+            <a class="page-link" th:href="@{/{navPagination}(page=${currentPage - 1}, size=${size}, navPagination=${navPagination}
+                     , search=${search}, filterBy=${filterBy}
+                     )}">Previous</a>
+        </li>
+
+        <li th:class="${currentPage == 1} ? 'page-item active' : 'page-item'" th:if="${totalPages != currentPage}">
+            <a class="page-link" th:href="@{/{navPagination}(navPagination=${navPagination}, page=${1}, size=${size}, search=${search}, filterBy=${filterBy}  )}">1</a>
+        </li>
+
+        <li class="page-item" th:if="${currentPage > 4}"><span class="page-link" >...</span></li>
+
+        <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+            th:if="${i > 1 && i < totalPages}"
+            th:class="${i == currentPage} ? 'page-item active' : 'page-item'">
+            <a class="page-link" th:href="@{/{navPagination}(navPagination=${navPagination}, page=${i}, size=${size}, search=${search}, filterBy=${filterBy} )}"
+               th:text="${i}"></a>
+        </li>
+
+        <li class="page-item" th:if="${currentPage < totalPages - 3}"><span class="page-link" >...</span></li>
+
+        <li  th:class="${totalPages == currentPage} ? 'page-item active' : 'page-item' " >
+            <a class="page-link" th:href="@{/{navPagination}(navPagination=${navPagination},page=${totalPages}, size=${size}, search=${search}, filterBy=${filterBy}  )}" th:text="${totalPages}" ></a>
+        </li>
+
+        <li class="page-item" th:if="${currentPage < totalPages}">
+            <a class="page-link" th:href="@{/{navPagination}(navPagination=${navPagination}, page=${currentPage + 1}, size=${size}, search=${search}, filterBy=${filterBy} )}">Next</a>
+        </li>
+
+
+<!--        <li class="page-item active"><a class="page-link" href="#">1</a></li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--        <li class="page-item">-->
+<!--            <a class="page-link" href="#">Next</a>-->
+<!--        </li>-->
+    </ul>
+</nav>
+</html>

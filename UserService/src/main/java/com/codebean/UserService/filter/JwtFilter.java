@@ -62,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     // Menambahkan authentication ke security context
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }else{
-                    System.out.println("JWT Claim : " + jwtClaims);
+//                    System.out.println("JWT Claim : " + jwtClaims);
                 }
             }
         } catch (Exception ex) {

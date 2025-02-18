@@ -174,7 +174,7 @@
     }
 
     function selectAddress(address, id) {
-        console.log(id);
+        // console.log(id);
         document.getElementById("selectedAddress").value = address;
         document.getElementById("selectedAddressId").value = id;
         $("#addressModal").modal("hide");
@@ -189,7 +189,7 @@
             addressId: $("#selectedAddressId").val(),
             cartIds: checkedValuesByName
         }
-        console.log(newOrder);
+        // console.log(newOrder);
         const url = "checkout";
         $.ajax({
             url: `${window.location.origin}/${url}`,

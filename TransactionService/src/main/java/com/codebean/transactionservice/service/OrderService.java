@@ -19,8 +19,11 @@ Version 1.0
 
 
 import com.codebean.transactionservice.client.ProductServiceClient;
+import com.codebean.transactionservice.client.UserServiceClient;
 import com.codebean.transactionservice.dto.OrderDto;
+import com.codebean.transactionservice.dto.client.ResponseClient;
 import com.codebean.transactionservice.dto.client.product.ProductStock;
+import com.codebean.transactionservice.dto.client.user.UserDto;
 import com.codebean.transactionservice.dto.request.OrderAdd;
 import com.codebean.transactionservice.handler.Response;
 import com.codebean.transactionservice.model.Cart;
@@ -47,6 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,6 +67,9 @@ public class OrderService {
 
     @Autowired
     private ProductServiceClient productServiceClient;
+
+    @Autowired
+    private UserServiceClient userServiceClient;
 
     @Autowired
     private TransformPagination transformPagination;
@@ -193,12 +200,24 @@ public class OrderService {
 
             List<Order> listOrder = page.getContent();
             if (listOrder.isEmpty()) {
-                return Response.badRequest(Constants.BAD_DATA, "FVTRX09051", request);
+                return Response.badRequest(Constants.TRANSACTION_NOT_FOUND, "FVTRX09051", request);
             }
 
-            List<OrderDto> ordersDto = this.listModelOrderToDto(listOrder);
+            List<OrderDto> temp = new ArrayList<>();
+            String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
+            for (Order o : listOrder) {
+                ResponseClient<UserDto> userById = this.userServiceClient.getUserByToken(auth);
 
-            return Response.success(Constants.SUCCESS, ordersDto, request);
+                if(Objects.equals(o.getUserId(), userById.getData().getId())){
+                    OrderDto dto = this.modelMapper.map(o, OrderDto.class);
+                    dto.setName(userById.getData().getName());
+                    temp.add(dto);
+                }
+            }
+
+//            List<OrderDto> ordersDto = this.listModelOrderToDto(listOrder);
+
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(temp, page, columnName, value), request);
         } catch (Exception e) {
             return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09051", request);
         }
@@ -206,7 +225,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> findByIdAndUserId(Long id, HttpServletRequest request) {
-        try{
+        try {
             // get userid from token
             Long userId = Long.valueOf((String) request.getAttribute(Constants.USER_ID));
 

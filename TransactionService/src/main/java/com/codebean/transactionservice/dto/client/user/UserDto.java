@@ -18,4 +18,5 @@ public class UserDto {
     private String role;
     private Boolean isActive;
     private Boolean isDelete;
+    private String name;
 }

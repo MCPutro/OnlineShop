@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        .order-items {
+            background-color: #f8f9fa;
+            display: none;
+        }
+        .expand-button {
+            cursor: pointer;
+            color: #007bff;
+        }
+        .expand-button:hover {
+            color: #0056b3;
+        }
+    </style>
+
+    <script th:src="@{/sweetalert/sweetalert.min.js}"></script>
+</head>
+<body>
+<div class="site-wrap">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+
+    <!--content-->
+    <div class="bg-light py-3 mb-md-3 mb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0">
+                    <a href="/">Home</a>
+                    <span class="mx-2 mb-0">/</span>
+                    <strong class="text-black">Transactions</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Isi content-->
+    <div class="site-section-sm mb-5 mt-3">
+        <div class="container">
+            <div class="row align-items-center mb-3" th:if="${permissions.contains('VIEW_TRX')}">
+                <div class="col-12 col-md-7 order-3 order-md-2 site-search-icon border-1">
+                    <form class="form-inline site-search-icon center">
+                        <input type="Search" name="search" class="form-control border col-6 col-md-7 rounded-0"
+                               placeholder="Search" required>
+                        <select id="filter" name="filterBy"
+                                class="form-control col-4 col-md-3 border border-left-0 rounded-0">
+                            <option value="order_id">Order ID</option>
+                            <!--                            <option value="customer">Customer</option>-->
+                            <option value="status">Status</option>
+                            <option value="date">Date</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-info ml-auto">Apply</button>
+                    </form>
+                </div>
+
+                <div class="col-6 col-md-2 order-2 order-md-3 mt-3 text-right">
+                    <form method="get" action="/transactions" class="float-right float-md-right form-inline mb-3">
+                        <label>Show:</label>
+                        <select class="form-control" name="size" onchange="this.form.submit()">
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Table old -->
+            <!--            <table class="table table-hover">-->
+            <!--                <thead>-->
+            <!--                <tr class="text-primary">-->
+            <!--                    <th scope="col">Order ID</th>-->
+            <!--                    <th scope="col">Date</th>-->
+            <!--                    <th scope="col">Customer</th>-->
+            <!--                    <th scope="col">Total Items</th>-->
+            <!--                    <th scope="col">Total Amount</th>-->
+            <!--                    <th scope="col">Status</th>-->
+            <!--                    <th scope="col" th:if="${permissions.contains('MANAGE_TRX')}">Action</th>-->
+            <!--                </tr>-->
+            <!--                </thead>-->
+            <!--                <tbody>-->
+            <!--                <tr class="text-black align-content-center" th:each="trx : ${transactions}">-->
+            <!--                    <td><a href="#" th:text="${trx.id}"></a></td>-->
+            <!--                    <td th:text="${trx.orderDate}"></td>-->
+            <!--                    <td th:text="${trx.name}"></td>-->
+            <!--                    <td th:text="${trx.orderItems.size()}"></td>-->
+            <!--                    <td th:text="'Rp ' + ${#numbers.formatDecimal(trx.totalPrice, 0, 'COMMA', 2, 'POINT')}"></td>-->
+            <!--                    <td>-->
+            <!--                        <span class="badge badge-warning col-8 p-2"-->
+            <!--                              th:if="${trx.orderStatus.equalsIgnoreCase('pending') }">Pending</span>-->
+            <!--                        <span class="badge badge-success col-8 p-2"-->
+            <!--                              th:if="${trx.orderStatus.equalsIgnoreCase('complete') }">Completed</span>-->
+            <!--                        <span class="badge badge-success col-8 p-2"-->
+            <!--                              th:if="${trx.orderStatus.equalsIgnoreCase('cancelled') }">Cancelled</span>-->
+            <!--                    </td>-->
+            <!--                    <td th:if="${permissions.contains('MANAGE_TRX')}">-->
+            <!--                        <button class="btn btn-sm btn-primary">View</button>-->
+            <!--                        <button class="btn btn-sm btn-success">Process</button>-->
+            <!--                    </td>-->
+            <!--                </tr>-->
+
+            <!--                </tbody>-->
+            <!--            </table>-->
+
+            <div class="site-section-sm mb-5">
+                <div class="container">
+                    <div class="row align-items-center mb-3" th:if="${permissions.contains('MANAGE_TRX')}">
+                        <div class="col-12 col-md-7 order-3 order-md-2 site-search-icon border-1">
+                            <form class="form-inline site-search-icon center" action="/action_page.php">
+                                <input type="Search" name="search" class="form-control border col-6 col-md-7 rounded-0"
+                                       placeholder="Search" required>
+                                <select id="filter" name="filterBy"
+                                        class="form-control col-4 col-md-3 border border-left-0 rounded-0">
+                                    <option value="order_id">Order ID</option>
+                                    <option value="customer">Customer</option>
+                                    <option value="status">Status</option>
+                                    <option value="date">Date</option>
+                                </select>
+                                <button type="submit" class="btn btn-outline-info ml-auto">Apply</button>
+                            </form>
+                        </div>
+
+                        <div class="col-6 col-md-2 order-2 order-md-3 mt-3 text-right">
+                            <form method="get" action="/orders" class="float-right float-md-right form-inline mb-3">
+                                <label>Show:</label>
+                                <select class="form-control" name="size" onchange="this.form.submit()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Order Table -->
+                    <table class="table table-hover">
+                        <thead>
+                        <tr class="text-primary">
+                            <th scope="col"></th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Total Items</th>
+                            <th scope="col">Total Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" th:if="${permissions.contains('MANAGE_TRX')}">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="trx : ${transactions}">
+                            <tr class="text-black align-content-center">
+                                <td><span class="expand-button" th:onclick="'toggleOrderItems(' + ${trx.id} +')'"><i class="icon icon-plus"></i></span>
+                                </td>
+                                <td><a href="#" th:text="${trx.id}"></a></td>
+                                <td th:text="${trx.orderDate}"></td>
+                                <td th:text="${trx.name}"></td>
+                                <td th:text="${trx.orderItems.size()}"></td>
+                                <td th:text="'Rp ' + ${#numbers.formatDecimal(trx.totalPrice, 0, 'COMMA', 2, 'POINT')}"></td>
+                                <td>
+                                <span class="badge badge-warning col-8 p-2"
+                                      th:if="${trx.orderStatus.equalsIgnoreCase('pending') }">Pending</span>
+                                    <span class="badge badge-success col-8 p-2"
+                                          th:if="${trx.orderStatus.equalsIgnoreCase('complete') }">Completed</span>
+                                    <span class="badge badge-success col-8 p-2"
+                                          th:if="${trx.orderStatus.equalsIgnoreCase('cancelled') }">Cancelled</span>
+                                </td>
+                                <td th:if="${permissions.contains('MANAGE_TRX')}">
+                                    <button class="btn btn-sm btn-primary">View</button>
+                                    <button class="btn btn-sm btn-success">Process</button>
+                                </td>
+                            </tr>
+                            <!-- Order Items Row -->
+                            <tr th:id="'order-items-'+ ${trx.id}" id="order-items-1" class="order-items">
+                                <td colspan="8">
+                                    <div class="p-3">
+                                        <h6 class="mb-3 text-black">Order Items</h6>
+                                        <table class="table table-sm text-black">
+                                            <thead>
+                                            <tr>
+                                                <th>Product Id</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="orderItem : ${trx.orderItems}">
+                                                <td th:text="${orderItem.productId}"></td>
+                                                <td th:text="'Rp ' + ${#numbers.formatDecimal(orderItem.productPrice, 0, 'COMMA', 2, 'POINT')}"></td>
+                                                <td th:text="${orderItem.quantity}"></td>
+                                                <td th:text="'Rp ' + ${#numbers.formatDecimal(orderItem.subTotalPrice, 0, 'COMMA', 2, 'POINT')}"></td>
+                                            </tr>
+<!--                                            <tr>-->
+<!--                                                <td>Polo Shirt</td>-->
+<!--                                                <td>-->
+<!--                                                    <img src="images/cloth_2.jpg" alt="Image" style="max-width: 50px;">-->
+<!--                                                </td>-->
+<!--                                                <td>$25.00</td>-->
+<!--                                                <td>2</td>-->
+<!--                                                <td>$50.00</td>-->
+<!--                                            </tr>-->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </div>
+
+<!--                        &lt;!&ndash; Repeat for other orders &ndash;&gt;-->
+<!--                        <tr class="text-black align-content-center">-->
+<!--                            <td>-->
+<!--                            <span class="expand-button" onclick="toggleOrderItems(2)">-->
+<!--                                <i class="icon icon-plus"></i>-->
+<!--                            </span>-->
+<!--                            </td>-->
+<!--                            <td><a href="#">ORD-002</a></td>-->
+<!--                            <td>2024-03-14</td>-->
+<!--                            <td>Jane Smith</td>-->
+<!--                            <td>2</td>-->
+<!--                            <td>$75.00</td>-->
+<!--                            <td><span class="badge badge-success col-8 p-2">Completed</span></td>-->
+<!--                            <td>-->
+<!--                                <button class="btn btn-sm btn-primary">View</button>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash; Order Items Row &ndash;&gt;-->
+<!--                        <tr id="order-items-2" class="order-items">-->
+<!--                            <td colspan="8">-->
+<!--                                <div class="p-3">-->
+<!--                                    <h6 class="mb-3">Order Items</h6>-->
+<!--                                    <table class="table table-sm">-->
+<!--                                        <thead>-->
+<!--                                        <tr>-->
+<!--                                            <th>Product</th>-->
+<!--                                            <th>Image</th>-->
+<!--                                            <th>Price</th>-->
+<!--                                            <th>Quantity</th>-->
+<!--                                            <th>Subtotal</th>-->
+<!--                                        </tr>-->
+<!--                                        </thead>-->
+<!--                                        <tbody>-->
+<!--                                        <tr>-->
+<!--                                            <td>T-Shirt</td>-->
+<!--                                            <td>-->
+<!--                                                <img src="images/cloth_3.jpg" alt="Image" style="max-width: 50px;">-->
+<!--                                            </td>-->
+<!--                                            <td>$35.00</td>-->
+<!--                                            <td>1</td>-->
+<!--                                            <td>$35.00</td>-->
+<!--                                        </tr>-->
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation" class="mt-4" th:if="${permissions.contains('VIEW_TRX')}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="mt-4" th:if="${permissions.contains('VIEW_TRX')}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div th:replace="~{fragment/footer::footer}"></div>
+</div>
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script>
+    function toggleOrderItems(orderId) {
+        const itemsRow = document.getElementById(`order-items-${orderId}`);
+        const button = event.currentTarget.querySelector('i');
+
+        if (itemsRow.style.display === 'none' || itemsRow.style.display === '') {
+            itemsRow.style.display = 'table-row';
+            button.classList.remove('icon-plus');
+            button.classList.add('icon-minus');
+        } else {
+            itemsRow.style.display = 'none';
+            button.classList.remove('icon-minus');
+            button.classList.add('icon-plus');
+        }
+    }
+</script>
+</body>
+</html>

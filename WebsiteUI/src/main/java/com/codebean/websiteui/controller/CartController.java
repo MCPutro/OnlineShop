@@ -139,7 +139,7 @@ public class CartController {
                                            WebRequest webRequest
     ){
 
-        System.out.println(dto);
+//        System.out.println(dto);
         if (bindingResult.hasErrors()) {
             List<String> list = bindingResult.getFieldErrors().stream().map(err -> {
                 return err.getField() + " " + err.getDefaultMessage();
