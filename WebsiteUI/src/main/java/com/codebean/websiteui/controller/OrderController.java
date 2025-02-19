@@ -46,7 +46,9 @@ public class OrderController {
             Response<pageAttribute<OrderDto>> transactionByToken = this.transactionClient.getTransactionByToken(auth, 0, 1000);
 
             model.addAttribute("transactions", transactionByToken.getData().getContent());
-
+            model.addAttribute(Constans.CURRENT_PAGE, 1);
+            model.addAttribute(Constans.TOTAL_PAGES, 1);
+            model.addAttribute(Constans.NAV_PAGINATION, "transactions");
         } catch (ForbiddenException e) {
             redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
             return "redirect:/";
