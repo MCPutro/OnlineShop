@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Download Report - Shoppers</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" th:href="@{/fonts/icomoon/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/aos.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        .report-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .date-range {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="site-wrap">
+    <!-- Header -->
+    <header th:replace="~{fragment/header::header}"></header>
+
+    <div class="bg-light py-3 ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black" th:text="${isManagement}"></strong></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Form -->
+    <div class="site-section">
+        <div class="container">
+            <div class="report-form">
+                <h4 class="mb-4">Transaction reports</h4>
+                <form id="reportForm" action="http://localhost:8084/api/report/download" method="GET">
+                    <div class="date-range">
+                        <div class="form-group flex-grow-1">
+                            <label for="startDate">Start Date</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate" required>
+                        </div>
+                        <div class="form-group flex-grow-1">
+                            <label for="endDate">End Date</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate" required>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Download Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div th:replace="~{fragment/footer::footer}"></div>
+
+</div>
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/aos.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', function() {-->
+<!--        // Set default dates-->
+<!--        const today = new Date();-->
+<!--        const startDateInput = document.getElementById('startDate');-->
+<!--        const endDateInput = document.getElementById('endDate');-->
+
+<!--        // Format date to YYYY-MM-DD-->
+<!--        startDateInput.value = today.toISOString().split('T')[0];-->
+<!--        endDateInput.value = today.toISOString().split('T')[0];-->
+
+<!--        // Validate end date is not before start date-->
+<!--        startDateInput.addEventListener('change', function() {-->
+<!--            if (endDateInput.value < startDateInput.value) {-->
+<!--                endDateInput.value = startDateInput.value;-->
+<!--            }-->
+<!--            endDateInput.min = startDateInput.value;-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+</body>
+</html>
