@@ -16,5 +16,6 @@
         <module>ShareModule</module>
         <module>TransactionService</module>
         <module>WebsiteUI</module>
+        <module>AnalyticServices</module>
     </modules>
 </project>
