@@ -14,6 +14,8 @@ import com.codebean.websiteui.dto.client.product.CategoryDto;
 import com.codebean.websiteui.dto.client.product.CategoryReqDto;
 import com.codebean.websiteui.dto.pageAttribute;
 import com.codebean.websiteui.dto.response.Response;
+import com.codebean.websiteui.util.Constans;
+import com.codebean.websiteui.util.GlobalFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +36,7 @@ public class ProductManagement {
     @Autowired
     private ProductClient productClient;
 
-    private String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk2ODgzNzksImV4cCI6MTczOTcyNDM3OX0.pneKPoEsjO4luw3cZn3JG011ttyT9Fu3uvzegqCXDB4";
+    private String token = "Bearer xxx";
 
 //    @GetMapping("/product-management")
 //    public String productManagement(Model model, WebRequest webRequest) {
@@ -45,9 +47,12 @@ public class ProductManagement {
 
     // ini untuk tampilin ui add category
     @GetMapping
-    public String productManagement(Model model) {
-        model.addAttribute("newCategory", new CategoryReqDto());
-        return "productManagement/Category/add";
+    public String productManagement(Model model, WebRequest webRequest) {
+//        model.addAttribute("newCategory", new CategoryReqDto());
+//        return "productManagement/Category/add";
+        GlobalFunction.setGlobalFragment(model, webRequest);
+        model.addAttribute(Constans.IS_MANAGEMENT, "Product Management");
+        return "commingSoon";
     }
 
     @PostMapping("/save")
@@ -74,16 +79,18 @@ public class ProductManagement {
             Map<String, Object> data = (Map<String, Object>) activeCategory.get("data");
             List<Map<String, Object>> listContent = (List<Map<String, Object>>) data.get("content");
 
-            for (Map<String, Object> map : listContent) {
-                System.out.println(map);
-            }
+//            for (Map<String, Object> map : listContent) {
+//                System.out.println(map);
+//            }
 
             model.addAttribute("listContent", listContent);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            return "commingSoon";
         }
-        return "productManagement/Category/view";
+//        return "productManagement/Category/view";
+        return "commingSoon";
     }
 }

@@ -201,7 +201,7 @@ public class ProductService implements iService<Product> {
             Page<Product> pageProduct;
             switch (columnName.toLowerCase()) {
                 case "productname":
-                    pageProduct = this.productRepository.findAllByNameContainingIgnoreCase(value, pageable);
+                    pageProduct = this.productRepository.findAllByNameContainingIgnoreCaseAndIsActive(value, true, pageable);
                     break;
                 case "categoryname":
                     pageProduct = this.productRepository.findProductsByCategoryName(value, pageable);

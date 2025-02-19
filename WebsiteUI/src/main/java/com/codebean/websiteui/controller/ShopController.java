@@ -45,6 +45,7 @@ public class ShopController {
                        @RequestParam(defaultValue = "15") Integer size,
                        @RequestParam(required = false, defaultValue = "") String sortType, // asc or desc
                        @RequestParam(required = false, defaultValue = "") String sortBy, // kolom yang di sorting
+                       @RequestParam(required = false) String search,
                        Model model, RedirectAttributes redirectAttributes,
                        WebRequest webRequest
     ) {
@@ -61,7 +62,7 @@ public class ShopController {
 
             //get product
             page = page > 0 ? page - 1 : page;
-            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size, sortType, sortBy);
+            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size, sortType, sortBy, search);
             Map<String, Object> mapProductsData = (Map<String, Object>) activeProducts.get("data");
             List<Map<String, Object>> ltProducts = (List<Map<String, Object>>) mapProductsData.get("content");
 

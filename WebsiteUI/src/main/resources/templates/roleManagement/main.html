@@ -35,7 +35,16 @@
 <div class="site-wrap">
     <!-- Header -->
     <header th:replace="~{fragment/header::header}"></header>
-    <br>
+
+    <div class="bg-light py-3 mb-3 mb-md-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                        class="text-black" th:text="${isManagement}"></strong></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Content Section -->
     <div class="site-section-sm mb-5">
         <div class="container">

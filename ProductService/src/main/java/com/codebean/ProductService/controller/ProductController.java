@@ -92,6 +92,7 @@ public class ProductController {
                                                   @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
                                                   @RequestParam(required = false) String sortType, // asc or desc
                                                   @RequestParam(required = false) String sortBy, // kolom yang di sorting
+                                                  @RequestParam(required = false) String search, // kolom yang di sorting
                                                   HttpServletRequest request
     ) {
         PageRequest pageRequest;//= PageRequest.of(page, sizePerPage);
@@ -106,7 +107,12 @@ public class ProductController {
             }
             pageRequest = PageRequest.of(page, sizePerPage, sort);
         }
-        return this.productService.findByParam(pageRequest, "status", "active", request);
+        if (search == null) {
+            return this.productService.findByParam(pageRequest, "status", "active", request);
+        } else {
+            return this.productService.findByParam(pageRequest, "productname", search, request);
+        }
+
     }
 
 

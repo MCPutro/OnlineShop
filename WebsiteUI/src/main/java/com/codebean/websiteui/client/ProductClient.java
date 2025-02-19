@@ -30,7 +30,8 @@ public interface ProductClient {
     Map<String, Object> getActiveProducts(@RequestParam(value = "page") Integer page,
                                           @RequestParam(value = "sizePerPage") Integer sizePerPage,
                                           @RequestParam(required = false) String sortType, // asc or desc
-                                          @RequestParam(required = false) String sortBy // kolom yang di sorting
+                                          @RequestParam(required = false) String sortBy, // kolom yang di sorting
+                                          @RequestParam(required = false) String search
                                           );
 
     @PostMapping("/api/v1/category")
