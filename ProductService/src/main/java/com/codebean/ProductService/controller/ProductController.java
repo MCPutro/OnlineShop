@@ -29,6 +29,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -89,9 +90,22 @@ public class ProductController {
     @GetMapping(path = "/shop/products")
     public ResponseEntity<?> getAllActiveProducts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+                                                  @RequestParam(required = false) String sortType, // asc or desc
+                                                  @RequestParam(required = false) String sortBy, // kolom yang di sorting
                                                   HttpServletRequest request
     ) {
-        PageRequest pageRequest = PageRequest.of(page, sizePerPage);
+        PageRequest pageRequest;//= PageRequest.of(page, sizePerPage);
+        Sort sort;
+        if (sortType == null || "".equals(sortType) || sortBy == null || "".equals(sortBy)) {
+            pageRequest = PageRequest.of(page, sizePerPage);
+        } else {
+            if (sortType.equalsIgnoreCase("asc")) {
+                sort = Sort.by(Sort.Order.asc(sortBy));
+            } else {
+                sort = Sort.by(Sort.Order.desc(sortBy));
+            }
+            pageRequest = PageRequest.of(page, sizePerPage, sort);
+        }
         return this.productService.findByParam(pageRequest, "status", "active", request);
     }
 
@@ -134,7 +148,6 @@ public class ProductController {
     ) {
         return this.productService.delete(productId, request);
     }
-
 
 
     @GetMapping(path = "/shop/product/ids")

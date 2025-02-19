@@ -57,12 +57,12 @@
                                     id="dropdownMenuReference" data-toggle="dropdown">Reference
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                                <a class="dropdown-item" href="#">Relevance</a>
-                                <a class="dropdown-item" href="#">Name, A to Z</a>
-                                <a class="dropdown-item" href="#">Name, Z to A</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Price, low to high</a>
-                                <a class="dropdown-item" href="#">Price, high to low</a>
+<!--                                <a class="dropdown-item" href="#">Relevance</a>-->
+                                <a class="dropdown-item" href="#" onclick="sortBy('Name', 'asc')">Name, A to Z</a>
+                                <a class="dropdown-item" href="#" onclick="sortBy('Name', 'desc')">Name, Z to A</a>
+<!--                                <div class="dropdown-divider"></div>-->
+<!--                                <a class="dropdown-item" href="#">Price, low to high</a>-->
+<!--                                <a class="dropdown-item" href="#">Price, high to low</a>-->
                             </div>
                         </div>
                         <div class="dropdown ml-2">
@@ -239,7 +239,57 @@
         //     form.appendChild(pageInput);
         // }
 
+        // Add current page parameter if it exists
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('sortType')) {
+            const pageInput = document.createElement('input');
+            pageInput.type = 'hidden';
+            pageInput.name = 'sortType';
+            pageInput.value = urlParams.get('sortType');
+            form.appendChild(pageInput);
+
+            const pageInput2 = document.createElement('input');
+            pageInput2.type = 'hidden';
+            pageInput2.name = 'sortBy';
+            pageInput2.value = urlParams.get('sortBy');
+            form.appendChild(pageInput2);
+        }
+
         form.appendChild(sizeInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function sortBy(sortBy, sortType){
+        // Create form and submit
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = '/shop';
+
+        // Add sortBy parameter
+        const sortByInput = document.createElement('input');
+        sortByInput.type = 'hidden';
+        sortByInput.name = 'sortBy';
+        sortByInput.value = sortBy;
+
+        // Add sortBy parameter
+        const sortTypeInput = document.createElement('input');
+        sortTypeInput.type = 'hidden';
+        sortTypeInput.name = 'sortType';
+        sortTypeInput.value = sortType;
+
+        // Add current page parameter if it exists
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('size')) {
+            const sizeInput = document.createElement('input');
+            sizeInput.type = 'hidden';
+            sizeInput.name = 'size';
+            sizeInput.value = urlParams.get('size');
+            form.appendChild(sizeInput);
+        }
+
+        form.appendChild(sortByInput);
+        form.appendChild(sortTypeInput);
         document.body.appendChild(form);
         form.submit();
     }

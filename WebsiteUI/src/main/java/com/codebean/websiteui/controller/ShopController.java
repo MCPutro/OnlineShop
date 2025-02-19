@@ -43,6 +43,8 @@ public class ShopController {
     @GetMapping
     public String shop(@RequestParam(defaultValue = "0") Integer page,
                        @RequestParam(defaultValue = "15") Integer size,
+                       @RequestParam(required = false, defaultValue = "") String sortType, // asc or desc
+                       @RequestParam(required = false, defaultValue = "") String sortBy, // kolom yang di sorting
                        Model model, RedirectAttributes redirectAttributes,
                        WebRequest webRequest
     ) {
@@ -59,7 +61,7 @@ public class ShopController {
 
             //get product
             page = page > 0 ? page - 1 : page;
-            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size);
+            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size, sortType, sortBy);
             Map<String, Object> mapProductsData = (Map<String, Object>) activeProducts.get("data");
             List<Map<String, Object>> ltProducts = (List<Map<String, Object>>) mapProductsData.get("content");
 
@@ -111,7 +113,7 @@ public class ShopController {
             return ResponseEntity.badRequest().body(list.toString());
         }
 
-        if(GlobalFunction.cekSession(webRequest) == null){
+        if (GlobalFunction.cekSession(webRequest) == null) {
             return ResponseEntity.badRequest().body("Please login to your account!");
         }
 

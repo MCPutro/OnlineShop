@@ -28,7 +28,10 @@ public interface ProductClient {
 
     @GetMapping("/api/v1/shop/products")
     Map<String, Object> getActiveProducts(@RequestParam(value = "page") Integer page,
-                                          @RequestParam(value = "sizePerPage") Integer sizePerPage);
+                                          @RequestParam(value = "sizePerPage") Integer sizePerPage,
+                                          @RequestParam(required = false) String sortType, // asc or desc
+                                          @RequestParam(required = false) String sortBy // kolom yang di sorting
+                                          );
 
     @PostMapping("/api/v1/category")
     void createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
