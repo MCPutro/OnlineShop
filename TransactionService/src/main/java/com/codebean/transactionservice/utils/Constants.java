@@ -20,6 +20,7 @@ public class Constants {
 
     // Transaction-related messages
     public static final String TRANSACTION_SUCCESSFUL = "Transaction successful";
+    public static final String TRANSACTION_SUCCESS_UPDATE = "Transaction successful update";
     public static final String TRANSACTION_FAILED = "Transaction failed";
     public static final String TRANSACTION_NOT_FOUND = "Transaction not found";
     public static final String TRANSACTION_FAILED_TO_CREATE = "Transaction creation failed";

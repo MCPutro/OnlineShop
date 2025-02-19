@@ -23,6 +23,6 @@ public interface UserServiceClient {
     @GetMapping("/api/v1/user")
     ResponseClient<UserDto> getUserByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
 
-//    @GetMapping("/api/v1/user/{userId}")
-//    ResponseClient<UserDto> getUserById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
+    @GetMapping("/api/v1/user/{userId}")
+    ResponseClient<UserDto> getUserById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable Long userId);
 }

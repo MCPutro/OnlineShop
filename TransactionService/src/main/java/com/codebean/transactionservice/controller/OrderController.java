@@ -10,6 +10,7 @@ Version 1.0
 */
 
 import com.codebean.transactionservice.dto.request.OrderAdd;
+import com.codebean.transactionservice.dto.request.OrderProsessDto;
 import com.codebean.transactionservice.handler.Response;
 import com.codebean.transactionservice.service.OrderService;
 import com.codebean.transactionservice.service.ValidationService;
@@ -73,6 +74,19 @@ public class OrderController {
         return this.orderService.findById(orderId, request);
     }
 
+    @PreAuthorize("hasAuthority('VIEW_TRX')")
+    @GetMapping(path = "/order/by/status",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> getOrdersByStatus(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                               @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+                                               @RequestParam(value = "search") String search,
+                                               HttpServletRequest request
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, sizePerPage);
+        return this.orderService.findByParam(pageRequest,"status" ,search,request);
+    }
+
 
     @GetMapping(path = "/my/order",
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -104,5 +118,11 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('MANAGE_TRX')")
+    @PostMapping("/order/process")
+    public ResponseEntity<?> processOrder(@RequestBody OrderProsessDto dto, HttpServletRequest request) {
+        this.validationService.validate(dto, "FVCTRLTRX09061", request);
+        return this.orderService.processOrder(dto, request);
+    }
 
 }

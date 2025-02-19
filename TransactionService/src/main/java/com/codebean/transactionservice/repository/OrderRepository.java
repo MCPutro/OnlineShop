@@ -25,4 +25,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     
     Optional<Order> findFirstByIdAndUserId(Long id, Long userId);
 
+    Page<Order> findAllByOrderStatusContainingIgnoreCase(String orderStatus, Pageable pageable);
 }

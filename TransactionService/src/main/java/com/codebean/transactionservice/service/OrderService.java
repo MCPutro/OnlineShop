@@ -25,6 +25,7 @@ import com.codebean.transactionservice.dto.client.ResponseClient;
 import com.codebean.transactionservice.dto.client.product.ProductStock;
 import com.codebean.transactionservice.dto.client.user.UserDto;
 import com.codebean.transactionservice.dto.request.OrderAdd;
+import com.codebean.transactionservice.dto.request.OrderProsessDto;
 import com.codebean.transactionservice.handler.Response;
 import com.codebean.transactionservice.model.Cart;
 import com.codebean.transactionservice.model.Order;
@@ -77,6 +78,8 @@ public class OrderService {
     private final List<ProductStock> productStockList = new ArrayList<>();
 
     private final ModelMapper modelMapper = new ModelMapper();
+
+    private final List<OrderDto> listOrdersDto = new ArrayList<>();
 
     @Transactional
     public ResponseEntity<Object> createOrder(Long userId, OrderAdd orderAdd, HttpServletRequest request) {
@@ -151,13 +154,26 @@ public class OrderService {
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         try {
+            this.listOrdersDto.clear();
             Page<Order> pageOrders = this.orderRepository.findAll(pageable);
 
             List<Order> content = pageOrders.getContent();
 
-            List<OrderDto> ordersDto = this.listModelOrderToDto(content);
+            // List<OrderDto> ordersDto = this.listModelOrderToDto(content);
+            // List<OrderDto> temp = new ArrayList<>();
+            String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
+            for (Order o : content) {
+                ResponseClient<UserDto> userById = this.userServiceClient.getUserById(auth, o.getUserId());
 
-            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(ordersDto, pageOrders, "id", ""), request);
+                if (Objects.equals(o.getUserId(), userById.getData().getId())) {
+                    OrderDto dto = this.modelMapper.map(o, OrderDto.class);
+                    dto.setName(userById.getData().getName());
+                    listOrdersDto.add(dto);
+                }
+            }
+
+
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(listOrdersDto, pageOrders, "id", ""), request);
         } catch (Exception e) {
             return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09031", request);
         }
@@ -188,7 +204,7 @@ public class OrderService {
             Page<Order> page;
             switch (columnName.toLowerCase()) {
                 case "status":
-                    page = this.orderRepository.findAllByUserId(Long.parseLong(value), pageable);
+                    page = this.orderRepository.findAllByOrderStatusContainingIgnoreCase(value, pageable);
                     break;
                 case "userid":
                     page = this.orderRepository.findAllByUserId(Long.parseLong(value), pageable);
@@ -203,21 +219,31 @@ public class OrderService {
                 return Response.badRequest(Constants.TRANSACTION_NOT_FOUND, "FVTRX09051", request);
             }
 
-            List<OrderDto> temp = new ArrayList<>();
+            this.listOrdersDto.clear();
+            //List<OrderDto> temp = new ArrayList<>();
             String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
             for (Order o : listOrder) {
-                ResponseClient<UserDto> userById = this.userServiceClient.getUserByToken(auth);
+                ResponseClient<UserDto> userById = null;
+                switch (columnName.toLowerCase()){
+                    case "status":
+                        userById = this.userServiceClient.getUserById(auth, o.getUserId());
+                        break;
+                    case "userid":
+                        userById = this.userServiceClient.getUserByToken(auth);
+                        break;
+                }
+//                ResponseClient<UserDto> userById = this.userServiceClient.getUserByToken(auth);
 
-                if(Objects.equals(o.getUserId(), userById.getData().getId())){
+                if (Objects.equals(o.getUserId(), userById.getData().getId())) {
                     OrderDto dto = this.modelMapper.map(o, OrderDto.class);
                     dto.setName(userById.getData().getName());
-                    temp.add(dto);
+                    listOrdersDto.add(dto);
                 }
             }
 
 //            List<OrderDto> ordersDto = this.listModelOrderToDto(listOrder);
 
-            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(temp, page, columnName, value), request);
+            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(listOrdersDto, page, columnName, value), request);
         } catch (Exception e) {
             return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09051", request);
         }
@@ -240,6 +266,28 @@ public class OrderService {
     private List<OrderDto> listModelOrderToDto(List<Order> orders) {
         return this.modelMapper.map(orders, new TypeToken<List<OrderDto>>() {
         }.getType());
+    }
+
+    @Transactional
+    public ResponseEntity<?> processOrder(OrderProsessDto dto, HttpServletRequest request) {
+        try {
+            if (dto == null) {
+                return Response.internalServerError(Constants.BAD_DATA, "FVTRX09071", request);
+            }
+
+            //find order data
+            Optional<Order> optionalOrder = this.orderRepository.findById(dto.getOrderId());
+            if (!optionalOrder.isPresent()){
+                return Response.badRequest(Constants.TRANSACTION_NOT_FOUND, "FVTRX09072", request);
+            }
+
+            Order order = optionalOrder.get();
+            order.setOrderStatus(dto.getOrderStatus());
+
+            return Response.success(Constants.TRANSACTION_SUCCESS_UPDATE, null, request);
+        } catch (Exception e) {
+            return Response.internalServerError(Constants.TRANSACTION_FAILED_TO_GET, "FETRX09071", request);
+        }
     }
 
 //    @Transactional
