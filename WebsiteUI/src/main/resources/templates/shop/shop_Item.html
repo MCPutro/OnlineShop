@@ -67,7 +67,7 @@
                     </div>
                     <p>
 <!--                        <button class="buy-now btn btn-sm btn-primary" th:if="${userId != null}" onclick="addToCart()">Add To Cart</button>-->
-                        <button class="buy-now btn btn-sm btn-primary" onclick="addToCart()">Add To Cart</button>
+                        <button class="buy-now btn btn-sm btn-primary" onclick="addToCart()"  th:disabled="${product.stock < 1}">Add To Cart</button>
                     </p>
                 </div>
             </div>
