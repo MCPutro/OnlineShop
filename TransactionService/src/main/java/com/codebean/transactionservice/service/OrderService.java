@@ -22,6 +22,7 @@ import com.codebean.transactionservice.client.ProductServiceClient;
 import com.codebean.transactionservice.client.UserServiceClient;
 import com.codebean.transactionservice.dto.OrderDto;
 import com.codebean.transactionservice.dto.client.ResponseClient;
+import com.codebean.transactionservice.dto.client.product.ProductDto;
 import com.codebean.transactionservice.dto.client.product.ProductStock;
 import com.codebean.transactionservice.dto.client.user.UserDto;
 import com.codebean.transactionservice.dto.request.OrderAdd;
@@ -49,10 +50,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -96,12 +94,36 @@ public class OrderService {
                 return Response.badRequest(Constants.CART_NOT_FOUND, "FVTRX09002", request);
             }
 
-            double TotalPrice = 0;
+            Map<Long, ProductDto> tmp = new HashMap<>();
+            try {
+                String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
+                ResponseClient<List<ProductDto>> allProductByIds = this.productServiceClient.getAllProductByIds(auth,
+                        listCart.stream().map(Cart::getProductId).toList());
+                for (ProductDto productDto : allProductByIds.getData()) {
+                    tmp.put(productDto.getId(), productDto);
+                }
+            } catch (Exception e) {
+//                return Response.badRequest(Constants.FAILED_TO_GET_PRODUCT, "FVTRX09003", request);
+                throw new RuntimeException(Constants.FAILED_TO_GET_PRODUCT);
+            }
 
+            double TotalPrice = 0;
+            Order order = new Order(userId, orderAdd.getAddressId());
             for (Cart cart : listCart) {
-                TotalPrice += cart.getQuantity() * cart.getPrice();
+                ProductDto productDto = tmp.get(cart.getProductId());
+                TotalPrice += cart.getQuantity() * productDto.getPrice();
+
+                OrderItem orderItem = new OrderItem();
+                orderItem.setProductId(cart.getProductId());
+                orderItem.setProductPrice(productDto.getPrice());
+                orderItem.setQuantity(cart.getQuantity());
+                orderItem.setSubTotalPrice(productDto.getPrice() * orderItem.getQuantity());
+
+                order.addOrderItem(orderItem);
+
                 productStockList.add(new ProductStock(cart.getProductId(), cart.getQuantity()));
             }
+            order.setTotalPrice(TotalPrice);
 
             // Kirim semua produk dalam satu request ke product-service
 //            try {
@@ -118,26 +140,26 @@ public class OrderService {
             String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
             this.productServiceClient.deductProducts(auth, this.productStockList);
 
-            Order order = new Order();
-            order.setUserId(userId);
-            order.setOrderDate(LocalDate.now());
-            order.setTotalPrice(TotalPrice);
-            order.setAddressId(orderAdd.getAddressId());
-            order.setOrderStatus("PENDING");
-            List<OrderItem> orderItems = new ArrayList<>();
-            for (Cart cart : listCart) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setOrder(order);
-                orderItem.setProductId(cart.getProductId());
-                orderItem.setProductPrice(cart.getPrice());
-                orderItem.setQuantity(cart.getQuantity());
-                orderItem.setSubTotalPrice(cart.getPrice() * orderItem.getQuantity());
-                orderItems.add(orderItem);
-            }
-            order.setOrderItems(orderItems);
+//            Order order = new Order();
+//            order.setUserId(userId);
+//            order.setOrderDate(LocalDate.now());
+//            order.setTotalPrice(TotalPrice);
+//            order.setAddressId(orderAdd.getAddressId());
+//            order.setOrderStatus("PENDING");
+//            List<OrderItem> orderItems = new ArrayList<>();
+//            for (Cart cart : listCart) {
+//                OrderItem orderItem = new OrderItem();
+//                orderItem.setOrder(order);
+//                orderItem.setProductId(cart.getProductId());
+//                orderItem.setProductPrice(cart.getPrice());
+//                orderItem.setQuantity(cart.getQuantity());
+//                orderItem.setSubTotalPrice(cart.getPrice() * orderItem.getQuantity());
+//                orderItems.add(orderItem);
+//            }
+//            order.setOrderItems(orderItems);
 
             this.orderRepository.save(order);
-            this.orderItemRepository.saveAll(orderItems);
+            this.orderItemRepository.saveAll(order.getOrderItems());
 
             this.cartRepository.deleteAllById(orderAdd.getCartIds());
 
@@ -171,7 +193,6 @@ public class OrderService {
                     listOrdersDto.add(dto);
                 }
             }
-
 
             return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(listOrdersDto, pageOrders, "id", ""), request);
         } catch (Exception e) {
@@ -224,7 +245,7 @@ public class OrderService {
             String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
             for (Order o : listOrder) {
                 ResponseClient<UserDto> userById = null;
-                switch (columnName.toLowerCase()){
+                switch (columnName.toLowerCase()) {
                     case "status":
                         userById = this.userServiceClient.getUserById(auth, o.getUserId());
                         break;
@@ -277,7 +298,7 @@ public class OrderService {
 
             //find order data
             Optional<Order> optionalOrder = this.orderRepository.findById(dto.getOrderId());
-            if (!optionalOrder.isPresent()){
+            if (!optionalOrder.isPresent()) {
                 return Response.badRequest(Constants.TRANSACTION_NOT_FOUND, "FVTRX09072", request);
             }
 

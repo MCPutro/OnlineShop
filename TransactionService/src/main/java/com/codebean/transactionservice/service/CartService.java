@@ -89,10 +89,10 @@ public class CartService {
 
                 cartDB.setQuantity(cart.getQuantity() + cartDB.getQuantity());
 //                cartDB.setProductId(productDto.getId());
-                cartDB.setPrice(productDto.getPrice());
+//                cartDB.setPrice(productDto.getPrice());
             } else {
                 cart.setUserId(userDto.getId());
-                cart.setPrice(productDto.getPrice());
+//                cart.setPrice(productDto.getPrice());
                 this.cartRepository.save(cart);
             }
 
@@ -238,6 +238,7 @@ public class CartService {
     }
 
     private final List<CartReview> cartReviewList = new ArrayList<>();
+    Map<Long, ProductDto> tmp = new HashMap<>();
     @Transactional(readOnly = true)
     public ResponseEntity<Object> cartReview(List<Long> cartIds, HttpServletRequest request) {
         try {
@@ -248,25 +249,46 @@ public class CartService {
 
             ResponseClient<List<ProductDto>> allProductByIds = this.productServiceClient.getAllProductByIds(auth, list);
 
+            this.tmp.clear();
+            for (ProductDto productDto : allProductByIds.getData()){
+                tmp.put(productDto.getId(), productDto);
+            }
+
             cartReviewList.clear();
             double totalPrice = 0.0;
             for (Cart cart : listCartById) {
-                for (ProductDto productDto : allProductByIds.getData()) {
-                    if (productDto.getId().equals(cart.getProductId())) {
-                        double v = productDto.getPrice() * cart.getQuantity();
-                        totalPrice += v;
-                        CartReview cartReview = new CartReview();
-                        cartReview.setProductId(cart.getProductId());
-                        cartReview.setProductName(productDto.getName());
-                        cartReview.setQuantity(cart.getQuantity());
-                        cartReview.setPrice(productDto.getPrice());
-                        cartReview.setTotalPrice(v);
+                ProductDto productDto = tmp.get(cart.getProductId());
+                double v = productDto.getPrice() * cart.getQuantity();
+                totalPrice += v;
+                CartReview cartReview = new CartReview();
+                cartReview.setProductId(cart.getProductId());
+                cartReview.setProductName(productDto.getName());
+                cartReview.setQuantity(cart.getQuantity());
+                cartReview.setPrice(productDto.getPrice());
+                cartReview.setTotalPrice(v);
 
-                        cartReviewList.add(cartReview);
-
-                    }
-                }
+                cartReviewList.add(cartReview);
             }
+
+//            cartReviewList.clear();
+//            double totalPrice = 0.0;
+//            for (Cart cart : listCartById) {
+//                for (ProductDto productDto : allProductByIds.getData()) {
+//                    if (productDto.getId().equals(cart.getProductId())) {
+//                        double v = productDto.getPrice() * cart.getQuantity();
+//                        totalPrice += v;
+//                        CartReview cartReview = new CartReview();
+//                        cartReview.setProductId(cart.getProductId());
+//                        cartReview.setProductName(productDto.getName());
+//                        cartReview.setQuantity(cart.getQuantity());
+//                        cartReview.setPrice(productDto.getPrice());
+//                        cartReview.setTotalPrice(v);
+//
+//                        cartReviewList.add(cartReview);
+//
+//                    }
+//                }
+//            }
 //            System.out.println(totalPrice);
             Map<String, Object> data = new HashMap<>();
             data.put("totalPrice", totalPrice);

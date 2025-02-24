@@ -70,15 +70,17 @@
                             <div class="p-3 p-lg-5 border">
                                 <table class="table site-block-order-table mb-5">
                                     <thead>
-                                    <th>Product</th>
+                                    <th colspan="2">Product</th>
                                     <th>Total</th>
                                     </thead>
                                     <tbody>
                                     <div>
                                         <tr th:each="item : ${cartReview}">
-                                            <td th:text="${ item['productName'] + '  &nbsp; x &nbsp;  ' + item['quantity'] }">
+                                            <td th:text="${ item['productName'] + '&nbsp; x &nbsp;' + item['quantity'] }">
 <!--                                                <strong class="mx-2">x</strong>-->
                                             </td>
+<!--                                            <td th:text="${'@' + item['price']}"></td>-->
+                                            <td th:text="${'@ Rp ' + #numbers.formatDecimal(item['price'], 0, 'COMMA', 2, 'POINT')}"></td>
 <!--                                            <td th:text="${item['totalPrice']}"></td>-->
                                             <td th:text="'Rp ' + ${#numbers.formatDecimal(item['totalPrice'], 0, 'COMMA', 2, 'POINT')}"></td>
                                         </tr>
@@ -86,6 +88,7 @@
 
                                     <tr>
                                         <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                                        <td></td>
 <!--                                        <td class="text-black font-weight-bold"><strong th:text="${totalPrice}"></strong></td>-->
                                         <td class="text-black font-weight-bold"><strong th:text="'Rp ' + ${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 2, 'POINT')}"></strong></td>
                                     </tr>
@@ -185,8 +188,26 @@
         let checkedValuesByName = getCheckedValuesByName('selectedItems');
         // console.log(selectedAddressId);
         // console.log(checkedValuesByName);
+        var val = $("#selectedAddressId").val();
+        if (val === '' || val === null){
+            swal({
+                title: "Error!",
+                text: "pilih alamat dulu",
+                icon: "error",
+                buttons: {
+                    // cancel: "Batal",
+                    confirm: "Ok",
+                },
+                // dangerMode: true,
+            }).then((userConfirmed) => {
+                if (userConfirmed) {
+                    // window.location.href = "/";
+                }
+            });
+        }
+
         const newOrder = {
-            addressId: $("#selectedAddressId").val(),
+            addressId: val,
             cartIds: checkedValuesByName
         }
         // console.log(newOrder);

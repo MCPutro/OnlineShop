@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -67,4 +68,27 @@ public class Order {
     @LastModifiedDate
     @Column(name = "UpdatedDate", insertable = false)
     private LocalDateTime updatedDate;
+
+    public Order() {}
+
+    public Order(Long userId, Long addressId, Double totalPrice) {
+        this.userId = userId;
+        this.addressId = addressId;
+        this.totalPrice = totalPrice;
+        this.orderStatus = "PENDING";
+        this.orderDate = LocalDate.now();
+    }
+
+    public Order(Long userId, Long addressId) {
+        this.userId = userId;
+        this.addressId = addressId;
+        this.orderStatus = "PENDING";
+        this.orderDate = LocalDate.now();
+        this.orderItems = new ArrayList<>();
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 }

@@ -44,8 +44,8 @@ public class Cart {
     @Column(name = "Quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "Price", nullable = false)
-    private Double price;
+//    @Column(name = "Price", nullable = false)
+//    private Double price;
 
     @Column(name = "IsAvailable", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isAvailable = true;
