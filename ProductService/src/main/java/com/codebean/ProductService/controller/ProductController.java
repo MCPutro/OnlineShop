@@ -20,6 +20,7 @@ Version 1.0
 import com.codebean.ProductService.dto.request.ProductAdd;
 import com.codebean.ProductService.dto.request.ProductStock;
 import com.codebean.ProductService.dto.request.ProductUpdate;
+import com.codebean.ProductService.dto.request.SearchProductDto;
 import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Product;
 import com.codebean.ProductService.service.ProductService;
@@ -37,6 +38,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -86,34 +88,34 @@ public class ProductController {
     }
 
 
-    //    @PreAuthorize("hasAuthority('SHOP')")
-    @GetMapping(path = "/shop/products")
-    public ResponseEntity<?> getAllActiveProducts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                  @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
-                                                  @RequestParam(required = false) String sortType, // asc or desc
-                                                  @RequestParam(required = false) String sortBy, // kolom yang di sorting
-                                                  @RequestParam(required = false) String search, // kolom yang di sorting
-                                                  HttpServletRequest request
-    ) {
-        PageRequest pageRequest;//= PageRequest.of(page, sizePerPage);
-        Sort sort;
-        if (sortType == null || "".equals(sortType) || sortBy == null || "".equals(sortBy)) {
-            pageRequest = PageRequest.of(page, sizePerPage);
-        } else {
-            if (sortType.equalsIgnoreCase("asc")) {
-                sort = Sort.by(Sort.Order.asc(sortBy));
-            } else {
-                sort = Sort.by(Sort.Order.desc(sortBy));
-            }
-            pageRequest = PageRequest.of(page, sizePerPage, sort);
-        }
-        if (search == null) {
-            return this.productService.findByParam(pageRequest, "status", "active", request);
-        } else {
-            return this.productService.findByParam(pageRequest, "productname", search, request);
-        }
-
-    }
+//    //    @PreAuthorize("hasAuthority('SHOP')")
+//    @GetMapping(path = "/shop/products")
+//    public ResponseEntity<?> getAllActiveProducts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+//                                                  @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+//                                                  @RequestParam(required = false) String sortType, // asc or desc
+//                                                  @RequestParam(required = false) String sortBy, // kolom yang di sorting
+//                                                  @RequestParam(required = false) String search, // kolom yang di sorting
+//                                                  HttpServletRequest request
+//    ) {
+//        PageRequest pageRequest;//= PageRequest.of(page, sizePerPage);
+//        Sort sort;
+//        if (sortType == null || "".equals(sortType) || sortBy == null || "".equals(sortBy)) {
+//            pageRequest = PageRequest.of(page, sizePerPage);
+//        } else {
+//            if (sortType.equalsIgnoreCase("asc")) {
+//                sort = Sort.by(Sort.Order.asc(sortBy));
+//            } else {
+//                sort = Sort.by(Sort.Order.desc(sortBy));
+//            }
+//            pageRequest = PageRequest.of(page, sizePerPage, sort);
+//        }
+//        if (search == null) {
+//            return this.productService.findByParam(pageRequest, "status", "active", request);
+//        } else {
+//            return this.productService.findByParam(pageRequest, "productname", search, request);
+//        }
+//
+//    }
 
 
     //    @PreAuthorize("hasAuthority('SHOP')")
@@ -155,7 +157,7 @@ public class ProductController {
         return this.productService.delete(productId, request);
     }
 
-
+    @PreAuthorize("hasAnyAuthority('SHOP')")
     @GetMapping(path = "/shop/product/ids")
     public ResponseEntity<?> getAllActiveProductByIds(@RequestParam(value = "productId") List<Long> productIds,
                                                       HttpServletRequest request
@@ -163,7 +165,7 @@ public class ProductController {
         return this.productService.findByIdsAndStatus(productIds, true, request);
     }
 
-
+    @PreAuthorize("hasAnyAuthority('SHOP')")
     @PostMapping("/shop/deduct")
     public ResponseEntity<?> deductStock(@RequestBody List<ProductStock> stockRequests, HttpServletRequest request) {
         try {
@@ -173,6 +175,41 @@ public class ProductController {
             return Response.badRequest(e.getMessage(), "FVSTOCK001", request);
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+
+    @GetMapping(path = "/shop/products")
+    public ResponseEntity<?> search(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                    @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+                                    @RequestParam(required = false) String sortType, // asc or desc
+                                    @RequestParam(required = false) String sortBy, // kolom yang di sorting
+                                    @RequestParam(required = false) String productName, // search by product name
+                                    @RequestParam(required = false) Double minPrice, // search by min price
+                                    @RequestParam(required = false) Double maxPrice, // search by max price
+                                    @RequestParam(required = false) Set<Long> categoryIds, // search by max price
+                                    HttpServletRequest request
+    ) {
+        PageRequest pageRequest;
+        Sort sort;
+        if (sortType == null || "".equals(sortType) || sortBy == null || "".equals(sortBy)) {
+            pageRequest = PageRequest.of(page, sizePerPage);
+        } else {
+            if (sortType.equalsIgnoreCase("asc")) {
+                sort = Sort.by(Sort.Order.asc(sortBy));
+            } else {
+                sort = Sort.by(Sort.Order.desc(sortBy));
+            }
+            pageRequest = PageRequest.of(page, sizePerPage, sort);
+        }
+
+        SearchProductDto searchProductDto = SearchProductDto.builder()
+                .productName(productName)
+                .minPrice(minPrice)
+                .maxPrice(maxPrice)
+                .categoryId(categoryIds)
+                .build();
+
+        return this.productService.searchProduct(pageRequest, searchProductDto, request);
     }
 
 }

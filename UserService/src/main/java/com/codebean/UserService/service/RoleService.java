@@ -21,6 +21,7 @@ import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.PermissionDto;
 import com.codebean.UserService.dto.RoleDetailDto;
 import com.codebean.UserService.dto.RoleDto;
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Permission;
 import com.codebean.UserService.model.Role;
@@ -99,7 +100,7 @@ public class RoleService implements iService<Role> {
             return Response.success(Constants.ROLE_ADDED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
             // NEED SAVE TO LOG
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_ADD, "FEROL03001", request);
+            throw new ApiException(Constants.ROLE_FAILED_TO_ADD, "FEROL03001", request);
         }
     }
 
@@ -175,7 +176,7 @@ public class RoleService implements iService<Role> {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_ADD, "FEROL03013", request);
+            throw new ApiException(Constants.ROLE_FAILED_TO_ADD, "FEROL03013", request);
         }
     }
 
@@ -200,7 +201,7 @@ public class RoleService implements iService<Role> {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_DELETE, "FEROL03021", request);
+            throw new ApiException(Constants.ROLE_FAILED_TO_DELETE, "FEROL03021", request);
         }
     }
 
@@ -218,7 +219,7 @@ public class RoleService implements iService<Role> {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_DELETE, "FEROL03031", request);
+            throw new ApiException(Constants.ROLE_FAILED_TO_DELETE, "FEROL03031", request);
         }
     }
 
@@ -251,7 +252,7 @@ public class RoleService implements iService<Role> {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_DELETE, "FEROL03041", request);
+            throw new ApiException(Constants.ROLE_FAILED_TO_DELETE, "FEROL03041", request);
         }
     }
 
@@ -289,7 +290,7 @@ public class RoleService implements iService<Role> {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_DELETE, "FEROL03051", request);
+            throw new ApiException(Constants.ROLE_FAILED_TO_DELETE, "FEROL03051", request);
         }
     }
 
@@ -307,7 +308,7 @@ public class RoleService implements iService<Role> {
 
             return Response.success(Constants.ROLE_UPDATED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.ROLE_FAILED_TO_UPDATE, "FEROL03061", request);
+            throw new ApiException(Constants.ROLE_FAILED_TO_UPDATE, "FEROL03061", request);
         }
     }
 

@@ -19,6 +19,7 @@ Version 1.0
 
 import com.codebean.UserService.dto.ModuleDto;
 import com.codebean.UserService.dto.PermissionDto;
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Module;
 import com.codebean.UserService.model.Permission;
@@ -62,7 +63,7 @@ public class ModuleService {
 
             return Response.success(Constants.SUCCESS, moduleDto, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04001", request);
+            throw new ApiException(Constants.MODULE_FAILED_TO_GET, "FEMDL04001", request);
         }
     }
 
@@ -79,7 +80,7 @@ public class ModuleService {
 
             return Response.success(Constants.SUCCESS, moduleDto, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04011", request);
+            throw new ApiException(Constants.MODULE_FAILED_TO_GET, "FEMDL04011", request);
         }
     }
 
@@ -102,7 +103,7 @@ public class ModuleService {
 
             return Response.success(Constants.SUCCESS, listModuleDto, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04021", request);
+            throw new ApiException(Constants.MODULE_FAILED_TO_GET, "FEMDL04021", request);
         }
     }
 
@@ -124,7 +125,7 @@ public class ModuleService {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04031", request);
+            throw new ApiException(Constants.MODULE_FAILED_TO_GET, "FEMDL04031", request);
         }
     }
 
@@ -146,7 +147,7 @@ public class ModuleService {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04031", request);
+            throw new ApiException(Constants.MODULE_FAILED_TO_GET, "FEMDL04031", request);
         }
     }
 
@@ -167,7 +168,7 @@ public class ModuleService {
         } catch (Exception e) {
             // NEED SAVE TO LOG
             e.printStackTrace();
-            return Response.internalServerError(Constants.MODULE_FAILED_TO_GET, "FEMDL04041", request);
+            throw new ApiException(Constants.MODULE_FAILED_TO_GET, "FEMDL04041", request);
         }
     }
 

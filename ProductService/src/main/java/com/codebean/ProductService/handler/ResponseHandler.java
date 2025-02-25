@@ -45,6 +45,6 @@ public class ResponseHandler {
             map.put("success", !status.isError());
         }
 
-        return new ResponseEntity<>(map, status);
+        return ResponseEntity.status(status).body(map);//<>(map, status);
     }
 }

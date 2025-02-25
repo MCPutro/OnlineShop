@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("shop")
@@ -45,8 +46,12 @@ public class ShopController {
                        @RequestParam(defaultValue = "15") Integer size,
                        @RequestParam(required = false, defaultValue = "") String sortType, // asc or desc
                        @RequestParam(required = false, defaultValue = "") String sortBy, // kolom yang di sorting
-                       @RequestParam(required = false) String search,
-                       Model model, RedirectAttributes redirectAttributes,
+                       @RequestParam(required = false) String search, // search by product name
+                       @RequestParam(required = false) Double minPrice, // search by min price
+                       @RequestParam(required = false) Double maxPrice, // search by max price
+                       @RequestParam(required = false) Set<Long> categoryIds, // search by max price
+                       Model model,
+                       RedirectAttributes redirectAttributes,
                        WebRequest webRequest
     ) {
 
@@ -62,7 +67,7 @@ public class ShopController {
 
             //get product
             page = page > 0 ? page - 1 : page;
-            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size, sortType, sortBy, search);
+            Map<String, Object> activeProducts = this.productClient.getActiveProducts(page, size, sortType, sortBy, search, minPrice, maxPrice, categoryIds);
             Map<String, Object> mapProductsData = (Map<String, Object>) activeProducts.get("data");
             List<Map<String, Object>> ltProducts = (List<Map<String, Object>>) mapProductsData.get("content");
 
@@ -73,10 +78,16 @@ public class ShopController {
             model.addAttribute(Constans.CURRENT_PAGE, currentPage + 1);
             model.addAttribute(Constans.TOTAL_PAGES, totalPage);
             model.addAttribute(Constans.NAV_PAGINATION, "shop");
+
+            // search data
             model.addAttribute("size", size);
-
+            model.addAttribute("sortType", sortType);
+            model.addAttribute("sortBy", sortBy);
+            model.addAttribute("search", search);
+            model.addAttribute("minPrice", minPrice);
+            model.addAttribute("maxPrice", maxPrice);
+            model.addAttribute("categoryIds", categoryIds);
         } catch (Exception e) {
-
             throw new RuntimeException(e);
         }
 

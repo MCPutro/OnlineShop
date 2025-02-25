@@ -10,6 +10,7 @@ Version 1.0
 */
 
 
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.exception.ValidateException;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.handler.ResponseHandler;
@@ -55,18 +56,10 @@ public class ErrorController {
         );
     }
 
-//    @ExceptionHandler(ApiException.class)
-//    public ResponseEntity<Object> apiException(ApiException exception) {
-//        this.errorList.clear();
-//        this.errorList.add(exception.getReason());
-//        return new ResponseHandler().handleResponse(
-//                "exception.getMessage()", // String message,
-//                HttpStatus.BAD_REQUEST,// HttpStatus status,
-//                this.errorList, // Object data,
-//                exception.getErrorCode(),// Object errorCode,
-//                exception.getRequest()// HttpServletRequest request
-//        );
-//    }
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Object> apiException(ApiException exception) {
+        return Response.internalServerError(exception.getMessage(), exception.getErrorCode(), exception.getRequest());
+    }
 
     // Menangani AccessDeniedException ketika pengguna tidak memiliki izin
     @ExceptionHandler(AccessDeniedException.class)

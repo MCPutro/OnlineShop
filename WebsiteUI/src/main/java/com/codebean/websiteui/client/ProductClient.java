@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Set;
 
 @FeignClient(name = "ProductService", url = "http://localhost:8082")
 public interface ProductClient {
@@ -31,8 +32,11 @@ public interface ProductClient {
                                           @RequestParam(value = "sizePerPage") Integer sizePerPage,
                                           @RequestParam(required = false) String sortType, // asc or desc
                                           @RequestParam(required = false) String sortBy, // kolom yang di sorting
-                                          @RequestParam(required = false) String search
-                                          );
+                                          @RequestParam(required = false) String productName, // search by product name
+                                          @RequestParam(required = false) Double minPrice, // search by min price
+                                          @RequestParam(required = false) Double maxPrice, // search by max price
+                                          @RequestParam(required = false) Set<Long> categoryIds // search by max price
+    );
 
     @PostMapping("/api/v1/category")
     void createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,

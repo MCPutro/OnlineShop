@@ -20,6 +20,7 @@ Version 1.0
 import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.UserDetailDto;
 import com.codebean.UserService.dto.UserDto;
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Role;
 import com.codebean.UserService.model.User;
@@ -98,7 +99,7 @@ public class UserService implements iService<User> {
 
         } catch (Exception e) {
             // NEED SAVE TO LOG
-            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_SAVE, "FEUSR01003", request);
+            throw new ApiException(Constants.ACCOUNT_FAILED_TO_SAVE, "FEUSR01003", request);
         }
     }
 
@@ -145,7 +146,7 @@ public class UserService implements iService<User> {
 
             return Response.success(Constants.UPDATES_SUCCESS, null, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_UPDATE, "FEUSR01011", request);
+            throw new ApiException(Constants.ACCOUNT_FAILED_TO_UPDATE, "FEUSR01011", request);
         }
     }
 
@@ -170,7 +171,7 @@ public class UserService implements iService<User> {
             return Response.success(Constants.ACCOUNT_DELETED_SUCCESSFULLY, null, request);
         } catch (Throwable t) {
             //NEED SAVE TO LOG
-            return Response.internalServerError(Constants.ACCOUNT_FAILED_TO_DELETE, "FEUSR01021", request);
+            throw new ApiException(Constants.ACCOUNT_FAILED_TO_DELETE, "FEUSR01021", request);
         }
     }
 
@@ -191,7 +192,7 @@ public class UserService implements iService<User> {
 
             return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Throwable e) {
-            return Response.internalServerError(Constants.FAILED_TO_GET_DATA, "FEUSR01031", request);
+            throw new ApiException(Constants.FAILED_TO_GET_DATA, "FEUSR01031", request);
         }
     }
 
@@ -211,7 +212,7 @@ public class UserService implements iService<User> {
             return Response.success(Constants.SUCCESS, userDto, request);
         } catch (Exception e) {
             //NEED SAVE TO LOG
-            return Response.internalServerError(Constants.ACCOUNT_NOT_FOUND, "FEUSR01041", request);
+            throw new ApiException(Constants.ACCOUNT_NOT_FOUND, "FEUSR01041", request);
         }
     }
 
@@ -251,7 +252,7 @@ public class UserService implements iService<User> {
 
             return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.FAILED_TO_GET_DATA, "FEUSR01051", request);
+            throw new ApiException(Constants.FAILED_TO_GET_DATA, "FEUSR01051", request);
         }
     }
 
@@ -291,7 +292,7 @@ public class UserService implements iService<User> {
 
             return Response.success(Constants.PASSWORD_CHANGED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.PASSWORD_CHANGED_FAILED, "FEUSR01061", request);
+            throw new ApiException(Constants.PASSWORD_CHANGED_FAILED, "FEUSR01061", request);
         }
     }
 

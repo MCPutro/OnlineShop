@@ -57,7 +57,7 @@ public class Product {
     @Version
     private int version;
 
-    @ManyToMany
+    @ManyToMany( fetch = FetchType.LAZY)
     @JoinTable(
             name = "ProductCategory",
             joinColumns = @JoinColumn(name = "ProductId"),

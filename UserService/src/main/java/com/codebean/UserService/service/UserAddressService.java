@@ -19,6 +19,7 @@ Version 1.0
 
 import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.UserAddressDto;
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.User;
 import com.codebean.UserService.model.UserAddress;
@@ -76,7 +77,7 @@ public class UserAddressService implements iService<UserAddress> {
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
             e.printStackTrace();
-            return Response.internalServerError(Constants.ADDRESS_FAILED_TO_CREATE, "FEADR02001", request);
+            throw new ApiException(Constants.ADDRESS_FAILED_TO_CREATE, "FEADR02001", request);
         }
     }
 
@@ -121,7 +122,7 @@ public class UserAddressService implements iService<UserAddress> {
 
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
-            return Response.internalServerError(Constants.ADDRESS_FAILED_TO_UPDATE, "FEADR02011", request);
+            throw new ApiException(Constants.ADDRESS_FAILED_TO_UPDATE, "FEADR02011", request);
         }
     }
 
@@ -148,7 +149,7 @@ public class UserAddressService implements iService<UserAddress> {
             return Response.success(Constants.ADDRESS_DELETED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
-            return Response.internalServerError(Constants.ADDRESS_FAILED_TO_DELETE, "FEADR02021", request);
+            throw new ApiException(Constants.ADDRESS_FAILED_TO_DELETE, "FEADR02021", request);
         }
     }
 
@@ -167,7 +168,7 @@ public class UserAddressService implements iService<UserAddress> {
             return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(userAddressDto, pageActiveUserAddress, "id", ""), request);
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
-            return Response.internalServerError(Constants.ADDRESS_FAILED_TO_GET, "FEADR02031", request);
+            throw new ApiException(Constants.ADDRESS_FAILED_TO_GET, "FEADR02031", request);
         }
     }
 
@@ -194,7 +195,7 @@ public class UserAddressService implements iService<UserAddress> {
             return Response.success(Constants.SUCCESS, addressDto, request);
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
-            return Response.internalServerError(Constants.ADDRESS_FAILED_TO_GET, "FEADR02041", request);
+            throw new ApiException(Constants.ADDRESS_FAILED_TO_GET, "FEADR02041", request);
         }
     }
 
@@ -228,7 +229,7 @@ public class UserAddressService implements iService<UserAddress> {
             return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(userAddressDto, page, columnName, value), request);
         } catch (Exception e) {
             // NEED SAVE TO LOG FILE
-            return Response.internalServerError(Constants.ADDRESS_FAILED_TO_GET, "FEADR02051", request);
+            throw new ApiException(Constants.ADDRESS_FAILED_TO_GET, "FEADR02051", request);
         }
     }
 

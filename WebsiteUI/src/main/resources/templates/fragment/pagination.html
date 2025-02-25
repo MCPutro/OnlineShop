@@ -3,30 +3,76 @@
 
 <div class="row" data-aos="fade-up" th:fragment="paginationFragment">
     <div class="col-md-12 text-center">
-        <div class="site-block-27">
+        <div class="site-block-27" th:if="${currentPage != null && totalPages != null }">
             <ul>
                 <li th:if="${currentPage > 1}">
-                    <a th:href="@{/{navPagination}(page=${currentPage - 1}, size=${size}, navPagination=${navPagination}
-                     , search=${search}, filterBy=${filterBy}
+                    <a th:href="@{/{navPagination}( navPagination=${navPagination},
+                                                     page=${currentPage - 1},
+                                                     size=${size},
+                                                     sortType=${sortType},
+                                                     sortBy=${sortBy},
+                                                     search=${search},
+                                                     minPrice=${minPrice},
+                                                     maxPrice=${maxPrice},
+                                                     categoryIds=${#strings.setJoin(categoryIds, ',')}
                      )}">&lt;</a>
                 </li>
 
-                <li th:class="${currentPage == 1} ? 'active' : ''" th:if="${totalPages != currentPage}"><a
-                        th:href="@{/{navPagination}(navPagination=${navPagination}, page=${1}, size=${size}, search=${search}, filterBy=${filterBy}  )}">1</a>
+                <li th:class="${currentPage == 1} ? 'active' : ''" th:if="${totalPages != 1}">
+                    <a th:href="@{/{navPagination}( navPagination=${navPagination},
+                                                     page=${1},
+                                                     size=${size},
+                                                     sortType=${sortType},
+                                                     sortBy=${sortBy},
+                                                     search=${search},
+                                                     minPrice=${minPrice},
+                                                     maxPrice=${maxPrice},
+                                                     categoryIds=${#strings.setJoin(categoryIds, ',')}
+                    )}">1</a>
                 </li>
+
                 <li th:if="${currentPage > 4}"><span>...</span></li>
 
                 <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
                     th:if="${i > 1 && i < totalPages}"
                     th:class="${i == currentPage} ? 'active' : ''">
-                    <a th:href="@{/{navPagination}(navPagination=${navPagination}, page=${i}, size=${size}, search=${search}, filterBy=${filterBy} )}"
-                       th:text="${i}"></a>
+                    <a th:href="@{/{navPagination}( navPagination=${navPagination},
+                                                    page=${i},
+                                                    size=${size},
+                                                    sortType=${sortType},
+                                                    sortBy=${sortBy},
+                                                    search=${search},
+                                                    minPrice=${minPrice},
+                                                    maxPrice=${maxPrice},
+                                                    categoryIds=${#strings.setJoin(categoryIds, ',')}
+                    )}" th:text="${i}"></a>
                 </li>
+
                 <li th:if="${currentPage < totalPages - 3}"><span>...</span></li>
 
-                <li  th:class="${totalPages == currentPage} ? 'active' : '' " ><a th:href="@{/{navPagination}(navPagination=${navPagination},page=${totalPages}, size=${size}, search=${search}, filterBy=${filterBy}  )}" th:text="${totalPages}" ></a></li>
-                <li th:if="${currentPage < totalPages}"><a
-                        th:href="@{/{navPagination}(navPagination=${navPagination}, page=${currentPage + 1}, size=${size}, search=${search}, filterBy=${filterBy} )}">&gt;</a></li>
+                <li  th:class="${totalPages == currentPage} ? 'active' : '' " >
+                    <a th:href="@{/{navPagination}( navPagination=${navPagination},
+                                                    page=${totalPages},
+                                                    size=${size},
+                                                    sortType=${sortType},
+                                                    sortBy=${sortBy},
+                                                    search=${search},
+                                                    minPrice=${minPrice},
+                                                    maxPrice=${maxPrice},
+                                                    categoryIds=${#strings.setJoin(categoryIds, ',')}
+                    )}" th:text="${totalPages}" ></a></li>
+
+                <li th:if="${currentPage < totalPages}">
+                    <a th:href="@{/{navPagination}( navPagination=${navPagination},
+                                                    page=${currentPage + 1},
+                                                    size=${size},
+                                                    sortType=${sortType},
+                                                    sortBy=${sortBy},
+                                                    search=${search},
+                                                    minPrice=${minPrice},
+                                                    maxPrice=${maxPrice},
+                                                    categoryIds=${#strings.setJoin(categoryIds, ',')}
+                    )}">&gt;</a></li>
 
             </ul>
         </div>

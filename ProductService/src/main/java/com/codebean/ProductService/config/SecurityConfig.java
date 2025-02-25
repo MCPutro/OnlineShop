@@ -43,6 +43,7 @@ public class SecurityConfig {
                                 ,"/api/v1/shop/category"
                                 ,"/api/v1/shop/products"
                                 ,"/api/v1/shop/product/**"
+                                ,"/api/v1/shop/search**"
                         ).permitAll() // Endpoint yang tidak memerlukan autentikasi
 
                         .anyRequest().authenticated() // Semua request lainnya memerlukan autentikasi

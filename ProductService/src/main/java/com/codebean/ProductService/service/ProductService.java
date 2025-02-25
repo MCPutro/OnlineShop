@@ -20,6 +20,8 @@ Version 1.0
 import com.codebean.ProductService.core.iService;
 import com.codebean.ProductService.dto.request.ProductDto;
 import com.codebean.ProductService.dto.request.ProductStock;
+import com.codebean.ProductService.dto.request.SearchProductDto;
+import com.codebean.ProductService.exception.ApiException;
 import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Category;
 import com.codebean.ProductService.model.Product;
@@ -27,21 +29,20 @@ import com.codebean.ProductService.repository.CategoryRepository;
 import com.codebean.ProductService.repository.ProductRepository;
 import com.codebean.ProductService.util.Constants;
 import com.codebean.ProductService.util.TransformPagination;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class ProductService implements iService<Product> {
@@ -82,9 +83,7 @@ public class ProductService implements iService<Product> {
 
             return Response.success(Constants.SUCCESS, null, request);
         } catch (Exception e) {
-//            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_ADD, "FEPDT07001", request);
+            throw new ApiException(Constants.PRODUCT_FAILED_TO_ADD, "FEPDT07001", request);
         }
     }
 
@@ -122,7 +121,7 @@ public class ProductService implements iService<Product> {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_ADD, "FEPDT07011", request);
+            throw new ApiException(Constants.PRODUCT_FAILED_TO_UPDATE, "FEPDT07011", request);
         }
     }
 
@@ -145,14 +144,9 @@ public class ProductService implements iService<Product> {
                 return Response.badRequest(Constants.PRODUCT_INACTIVE, "FVPDT07023", request);
             }
 
-//            optionalProduct.ifPresent(product1 -> {
-//                product1.setIsActive(false);
-//            });
-
             return Response.success(Constants.PRODUCT_DELETED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_DELETE, "FEPDT07021", request);
+            throw new ApiException(Constants.PRODUCT_FAILED_TO_DELETE, "FEPDT07021", request);
         }
     }
 
@@ -160,7 +154,7 @@ public class ProductService implements iService<Product> {
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         try {
-            Page<Product> pageProduct = this.productRepository.findAll(pageable);
+            Page<Product> pageProduct = this.productRepository.findAllByOrderByIdAsc(pageable);
 
             List<ProductDto> listProductDto = this.listModelProductDto(pageProduct.getContent());
 
@@ -168,8 +162,7 @@ public class ProductService implements iService<Product> {
                     this.transformPagination.transformPagination(listProductDto, pageProduct, "id", ""),
                     request);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07031", request);
+            throw new ApiException(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07031", request);
         }
     }
 
@@ -189,49 +182,90 @@ public class ProductService implements iService<Product> {
             ProductDto productDto = this.modelMapper.map(optionalProduct.get(), ProductDto.class);
             return Response.success(Constants.SUCCESS, productDto, request);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07041", request);
+            throw new ApiException(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07041", request);
         }
     }
 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findByParam(Pageable pageable, String columnName, String value, HttpServletRequest request) {
-        try {
-            Page<Product> pageProduct;
-            switch (columnName.toLowerCase()) {
-                case "productname":
-                    pageProduct = this.productRepository.findAllByNameContainingIgnoreCaseAndIsActive(value, true, pageable);
-                    break;
-                case "categoryname":
-                    pageProduct = this.productRepository.findProductsByCategoryName(value, pageable);
-                    break;
-                case "status":
-                    if (value.equalsIgnoreCase("active")) {
-                        pageProduct = this.productRepository.findAllByIsActive(true, pageable);
-                    } else if (value.equalsIgnoreCase("inactive")) {
-                        pageProduct = this.productRepository.findAllByIsActive(false, pageable);
-                    } else {
-                        return Response.badRequest(Constants.INPUT_ACTIVE_OR_INACTIVE, "FVPDT07051", request);
-                    }
-                    break;
-                default:
-                    pageProduct = this.productRepository.findAll(pageable);
-                    break;
+//        try {
+//            Page<Product> pageProduct;
+//            switch (columnName.toLowerCase()) {
+//                case "productname":
+//                    pageProduct = this.productRepository.findAllByNameContainingIgnoreCaseAndIsActive(value, true, pageable);
+//                    break;
+//                case "categoryname":
+//                    pageProduct = this.productRepository.findProductsByCategoryName(value, pageable);
+//                    break;
+//                case "status":
+//                    if (value.equalsIgnoreCase("active")) {
+//                        pageProduct = this.productRepository.findAllByIsActive(true, pageable);
+//                    } else if (value.equalsIgnoreCase("inactive")) {
+//                        pageProduct = this.productRepository.findAllByIsActive(false, pageable);
+//                    } else {
+//                        return Response.badRequest(Constants.INPUT_ACTIVE_OR_INACTIVE, "FVPDT07051", request);
+//                    }
+//                    break;
+//                default:
+//                    pageProduct = this.productRepository.findAll(pageable);
+//                    break;
+//            }
+//
+//            List<Product> listProduct = pageProduct.getContent();
+//            if (listProduct == null || listProduct.isEmpty()) {
+//                return Response.success(Constants.PRODUCT_NOT_FOUND, null, request);
+//            }
+//
+//            List<ProductDto> listModelProductDto = this.listModelProductDto(listProduct);
+//
+//            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(listModelProductDto, pageProduct, columnName, value), request);
+//        } catch (Exception e) {
+        throw new ApiException(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07051", request);
+//        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> searchProduct(Pageable pageable, SearchProductDto dto, HttpServletRequest request) {
+        Specification<Product> specification = ((root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(criteriaBuilder.equal(root.get("isActive"), true));
+            predicates.add(criteriaBuilder.greaterThan(root.get("stock"), 0));
+
+            if (Objects.nonNull(dto.getProductName())) {
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + dto.getProductName() + "%"));
+            }
+            if (Objects.nonNull(dto.getMinPrice())) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), dto.getMinPrice()));
+            }
+            if (Objects.nonNull(dto.getMaxPrice())) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), dto.getMaxPrice()));
+            }
+            if (Objects.nonNull(dto.getCategoryId()) && !dto.getCategoryId().isEmpty()) {
+//                Join<Product, Category> categories = root.join("categories", JoinType.LEFT);
+//                predicates.add(categories.get("id").in(dto.getCategoryId()));
+
+                Path<Long> objectPath = root.get("categories").get("id");
+                predicates.add(objectPath.in(dto.getCategoryId()));
             }
 
-            List<Product> listProduct = pageProduct.getContent();
-            if (listProduct == null || listProduct.isEmpty()) {
-                return Response.success(Constants.PRODUCT_NOT_FOUND, null, request);
-            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        });
 
-            List<ProductDto> listModelProductDto = this.listModelProductDto(listProduct);
-
-            return Response.success(Constants.SUCCESS, this.transformPagination.transformPagination(listModelProductDto, pageProduct, columnName, value), request);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07051", request);
+        Page<Product> pageProduct = this.productRepository.findAll(specification, pageable);
+        List<Product> listProduct = pageProduct.getContent();
+        if (listProduct == null || listProduct.isEmpty()) {
+            return Response.success(Constants.PRODUCT_NOT_FOUND, null, request);
         }
+
+        List<ProductDto> listModelProductDto = this.listModelProductDto(listProduct);
+
+        return Response.success(Constants.SUCCESS,
+                this.transformPagination.transformPagination(listModelProductDto, pageProduct, "", ""),
+                request);
+
     }
 
     @Transactional(readOnly = true)
@@ -250,7 +284,7 @@ public class ProductService implements iService<Product> {
             return Response.success(Constants.SUCCESS, productDto, request);
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07061", request);
+            throw new ApiException(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07061", request);
         }
     }
 
@@ -268,8 +302,7 @@ public class ProductService implements iService<Product> {
 
             return Response.success(Constants.SUCCESS, this.listModelProductDto(products), request);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Response.internalServerError(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07071", request);
+            throw new ApiException(Constants.PRODUCT_FAILED_TO_GET, "FEPDT07071", request);
         }
     }
 

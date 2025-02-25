@@ -9,7 +9,9 @@ Created on 13 Jan 2025 14:01
 Version 1.0
 */
 
+import com.codebean.ProductService.exception.ApiException;
 import com.codebean.ProductService.exception.ValidateException;
+import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.handler.ResponseHandler;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -40,12 +42,12 @@ public class ErrorController {
     public ResponseEntity<Object> validationException(ValidateException exception) {
         this.errorList.clear();
         exception.getConstraintViolations().forEach(violation -> {
-            this.errorList.add("invalid "+violation.getPropertyPath()+" - "+violation.getMessage());
+            this.errorList.add("invalid " + violation.getPropertyPath() + " - " + violation.getMessage());
         });
         return new ResponseHandler().handleResponse(
                 "exception.getMessage()", // String message,
                 HttpStatus.BAD_REQUEST,// HttpStatus status,
-                String.join(", ",this.errorList), // Object data,
+                String.join(", ", this.errorList), // Object data,
                 exception.getErrorCode(),// Object errorCode,
                 exception.getRequest()// HttpServletRequest request
         );
@@ -61,5 +63,10 @@ public class ErrorController {
                 "FORBIDDEN",// Object errorCode,
                 null// HttpServletRequest request
         );
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Object> handleApiException(ApiException exception) {
+        return Response.internalServerError(exception.getMessage(), exception.getErrorCode(), exception.getRequest());
     }
 }

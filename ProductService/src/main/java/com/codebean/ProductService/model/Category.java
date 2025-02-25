@@ -37,7 +37,7 @@ public class Category {
     @Column(name = "Name", unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private Set<Product> products;
 
     @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER

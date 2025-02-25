@@ -16,6 +16,7 @@ Version 1.0
  * ex = FVAUT05001 -> [FV] [AUT] [05] 001 -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
  */
 
+import com.codebean.UserService.exception.ApiException;
 import com.codebean.sharemodule.Jwt.JwtUtil;
 import com.codebean.UserService.dto.response.UserLoginResp;
 import com.codebean.UserService.handler.Response;
@@ -87,7 +88,7 @@ public class AuthUserDetailService implements UserDetailsService {
                 return Response.badRequest(Constants.ACCOUNT_IS_NOT_ACTIVE, "FVAUT05003", request);
             }
 
-            if(userDB.getIsDelete()){
+            if (userDB.getIsDelete()) {
                 return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVAUT05004", request);
             }
 
@@ -107,7 +108,7 @@ public class AuthUserDetailService implements UserDetailsService {
 
             return Response.success(Constants.LOGIN_SUCCESS, userLoginResp, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.LOGIN_FAIL, "FEAUT05003", request);
+            throw new ApiException(Constants.LOGIN_FAIL, "FEAUT05003", request);
         }
     }
 
@@ -120,24 +121,27 @@ public class AuthUserDetailService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        try {
+            Optional<User> optionalUser = this.userRepository.findFirstByUsername(username);
+            if (!optionalUser.isPresent()) {
+                throw new UsernameNotFoundException("User not found");
+            }
 
-        Optional<User> optionalUser = this.userRepository.findFirstByUsername(username);
-        if (!optionalUser.isPresent()) {
-            throw new UsernameNotFoundException("User not found");
+            User userDB = optionalUser.get();
+
+            List<String> activePermissionsByRole = this.getActivePermissionsByRole(userDB.getRole());
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+            for (String permission : activePermissionsByRole) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(permission));
+            }
+
+            return new org.springframework.security.core.userdetails.User(
+                    userDB.getUsername(),
+                    userDB.getPassword(),
+                    grantedAuthorities
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        User userDB = optionalUser.get();
-
-        List<String> activePermissionsByRole = this.getActivePermissionsByRole(userDB.getRole());
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (String permission : activePermissionsByRole) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(permission));
-        }
-
-        return new org.springframework.security.core.userdetails.User(
-                userDB.getUsername(),
-                userDB.getPassword(),
-                grantedAuthorities
-        );
     }
 }

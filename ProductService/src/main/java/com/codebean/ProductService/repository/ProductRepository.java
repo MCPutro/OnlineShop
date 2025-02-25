@@ -14,10 +14,9 @@ import com.codebean.ProductService.model.Product;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.*;
 
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +25,10 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+
+    @EntityGraph(attributePaths = {"categories"})
+    Page<Product> findAllByOrderByIdAsc(Pageable pageable);
 
     Optional<Product> findFirstBySku(String sku);
 
@@ -47,6 +49,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByCategoryIds(@Param("categoryIds") Iterable<Long> categoryIds, Pageable pageable);
 
     // search by product's status
+    @EntityGraph(attributePaths = {"categories"})
     Page<Product> findAllByIsActive(Boolean isActive, Pageable pageable);
 
     // search by range price
@@ -81,4 +84,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 //    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.id IN :categoryIds")
 //    Page<Product> findAllByCategoryIds(@Param("categoryIds") List<Long> categoryIds, Pageable pageable);
 
+
+    @Override
+    @EntityGraph(attributePaths = {"categories"})
+    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 }

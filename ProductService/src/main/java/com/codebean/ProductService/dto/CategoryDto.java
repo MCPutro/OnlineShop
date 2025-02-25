@@ -17,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
-    private Long ID;
+    private Long id;
     private String name;
     private Boolean isActive;
 }

@@ -19,8 +19,10 @@ Version 1.0
 
 import com.codebean.ProductService.core.iService;
 import com.codebean.ProductService.dto.CategoryDto;
+import com.codebean.ProductService.exception.ApiException;
 import com.codebean.ProductService.handler.Response;
 import com.codebean.ProductService.model.Category;
+import com.codebean.ProductService.model.Product;
 import com.codebean.ProductService.repository.CategoryRepository;
 import com.codebean.ProductService.util.Constants;
 import com.codebean.ProductService.util.TransformPagination;
@@ -33,6 +35,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +68,8 @@ public class CategoryService implements iService<Category> {
 
             return Response.created(Constants.CATEGORY_CREATED_SUCCESSFULLY, this.modelMapper.map(category, CategoryDto.class), request);
         } catch (Exception e) {
-            return Response.internalServerError(e.getMessage(), "FECTG06001", request);
+//            return Response.internalServerError(e.getMessage(), "FECTG06001", request);
+            throw new ApiException(e.getMessage(), "FECTG06001", request);
         }
     }
 
@@ -91,7 +95,7 @@ public class CategoryService implements iService<Category> {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.internalServerError(e.getMessage(), "FECTG06011", request);
+            throw new ApiException(e.getMessage(), "FECTG06001", request);
         }
     }
 
@@ -104,13 +108,23 @@ public class CategoryService implements iService<Category> {
                 return Response.badRequest(Constants.CATEGORY_NOT_FOUND, "FVCTG06021", request);
             }
 
-            optionalCategory.ifPresent(category -> {
-                category.setIsActive(false);
-            });
+//            optionalCategory.ifPresent(category -> {
+//                category.setIsActive(false);
+//            });
+            Category category = optionalCategory.get();
+//            for (Product p : category.getProducts()){
+//                p.getCategories().remove(category);
+//            }
+//            category.getProducts().clear();
+            Integer i = this.categoryRepository.removeRelationCategoryById(category.getId());
+
+            this.categoryRepository.deleteById(id);
+
+//            throw new Exception("cxzxc");
 
             return Response.success(Constants.CATEGORY_DELETED_SUCCESSFULLY, null, request);
         } catch (Exception e) {
-            return Response.internalServerError(e.getMessage(), "FECTG06021", request);
+            throw new ApiException(e.getMessage(), "FECTG06021", request);
         }
 
     }
@@ -129,7 +143,7 @@ public class CategoryService implements iService<Category> {
 
             return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Exception e) {
-            return Response.internalServerError(e.getMessage(), "FECTG06031", request);
+            throw new ApiException(e.getMessage(), "FECTG06031", request);
         }
 
     }
@@ -145,7 +159,7 @@ public class CategoryService implements iService<Category> {
 
             return Response.success(Constants.SUCCESS, this.modelMapper.map(optionalCategory.get(), CategoryDto.class), request);
         } catch (Exception e) {
-            return Response.internalServerError(e.getMessage(), "FECTG06041", request);
+            throw new ApiException(e.getMessage(), "FECTG06041", request);
         }
     }
 
@@ -181,7 +195,7 @@ public class CategoryService implements iService<Category> {
 
             return Response.success(Constants.SUCCESS, stringObjectMap, request);
         } catch (Exception e) {
-            return Response.internalServerError(Constants.CATEGORY_FAILED_TO_GET, "FECTG06051", request);
+            throw new ApiException(e.getMessage(), "FECTG06051", request);
         }
 
     }
