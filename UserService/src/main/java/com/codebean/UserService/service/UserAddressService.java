@@ -63,7 +63,7 @@ public class UserAddressService implements iService<UserAddress> {
 
             //get user id from request
             Long userId = Long.valueOf(request.getAttribute(Constants.USER_ID).toString());
-            Optional<User> optionalUserByUserId = this.userRepository.findFirstByIDAndIsDelete(userId, false);
+            Optional<User> optionalUserByUserId = this.userRepository.findFirstByIdAndIsDelete(userId, false);
             if (!optionalUserByUserId.isPresent()) {
                 return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVADR02002", request);
             }
@@ -91,7 +91,7 @@ public class UserAddressService implements iService<UserAddress> {
             //get user id from request
             Long userId = Long.valueOf(request.getAttribute(Constants.USER_ID).toString());
 
-            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findFirstByIDAndIsActiveIsTrueAndUser_ID(id, userId);
+            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findFirstByIdAndIsActiveIsTrueAndUser_Id(id, userId);
             if (!optionalUserAddress.isPresent()) {
                 return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "FVADR02012", request);
             }
@@ -129,7 +129,7 @@ public class UserAddressService implements iService<UserAddress> {
     @Transactional
     public ResponseEntity<Object> delete(Long id, HttpServletRequest request) {
         try {
-            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findFirstByIDAndIsActive(id, true);
+            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findFirstByIdAndIsActive(id, true);
             if (!optionalUserAddress.isPresent()) {
                 return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "FVADR02021", request);
             }
@@ -137,7 +137,7 @@ public class UserAddressService implements iService<UserAddress> {
             //get user id from request
             Long userId = Long.valueOf(request.getAttribute(Constants.USER_ID).toString());
             UserAddress address = optionalUserAddress.get();
-            if (address.getUser().getID() != userId) {
+            if (address.getUser().getId() != userId) {
                 return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "FVADR02023", request);
             }
 
@@ -159,7 +159,7 @@ public class UserAddressService implements iService<UserAddress> {
             //get user id from request
             Long userId = Long.valueOf(request.getAttribute(Constants.USER_ID).toString());
 
-            Page<UserAddress> pageActiveUserAddress = this.userAddressRepository.findAllByUser_IDAndIsActive(userId, true, pageable);
+            Page<UserAddress> pageActiveUserAddress = this.userAddressRepository.findAllByUser_IdAndIsActive(userId, true, pageable);
             List<UserAddress> content = pageActiveUserAddress.getContent();
 
             List<UserAddressDto> userAddressDto = this.listModelToDto(content);
@@ -178,14 +178,14 @@ public class UserAddressService implements iService<UserAddress> {
             //get user id from request
             Long userId = Long.valueOf(request.getAttribute(Constants.USER_ID).toString());
 
-            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findFirstByIDAndIsActive(id, true);
+            Optional<UserAddress> optionalUserAddress = this.userAddressRepository.findFirstByIdAndIsActive(id, true);
             if (!optionalUserAddress.isPresent()) {
                 return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "FVADR02041", request);
             }
 
             UserAddress address = optionalUserAddress.get();
 
-            if (userId != address.getUser().getID()) {
+            if (userId != address.getUser().getId()) {
                 return Response.badRequest(Constants.ADDRESS_NOT_FOUND, "FVADR02042", request);
             }
 
@@ -208,19 +208,16 @@ public class UserAddressService implements iService<UserAddress> {
             Page<UserAddress> page;
             switch (columnName.toLowerCase()) {
                 case "name":
-                    page = this.userAddressRepository.findAllByUser_IDAndNameContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
+                    page = this.userAddressRepository.findAllByUser_IdAndNameContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
                     break;
                 case "address":
-                    page = this.userAddressRepository.findAllByUser_IDAndAddressContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
+                    page = this.userAddressRepository.findAllByUser_IdAndAddressContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
                     break;
-//                case "country":
-//                    page = this.userAddressRepository.findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
-//                    break;
                 case "postalcode":
-                    page = this.userAddressRepository.findAllByUser_IDAndPostalCodeContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
+                    page = this.userAddressRepository.findAllByUser_IdAndPostalCodeContainingIgnoreCaseAndIsActive(userId, value, true, pageable);
                     break;
                 default:
-                    page = this.userAddressRepository.findAllByUser_IDAndIsActive(userId, true, pageable);
+                    page = this.userAddressRepository.findAllByUser_IdAndIsActive(userId, true, pageable);
                     break;
             }
 

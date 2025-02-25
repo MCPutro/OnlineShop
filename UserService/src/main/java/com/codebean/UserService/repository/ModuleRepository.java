@@ -23,8 +23,10 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 
     List<Module> findAllByIsActive(Boolean isActive);
 
-    @Query("SELECT m FROM Module m JOIN m.permissions p WHERE m.isActive = :moduleStatus and p.isActive = :permissionStatus")
+    @Query("SELECT m FROM Module m INNER JOIN FETCH m.permissions p WHERE m.isActive = :moduleStatus and p.isActive = :permissionStatus")
     List<Module> findAllByModuleStatusAndPermissionsStatus(@Param("moduleStatus") Boolean moduleStatus,
                                                            @Param("permissionStatus") Boolean permissionStatus);
 
+    @Query("SELECT m FROM Module m INNER JOIN FETCH m.permissions")
+    List<Module> getAllModules();
 }

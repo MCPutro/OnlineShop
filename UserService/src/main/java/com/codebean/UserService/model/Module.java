@@ -31,7 +31,7 @@ public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long ID;
+    private Long id;
 
     @Column(name = "Name", nullable = false, unique = true)
     private String name;
@@ -45,7 +45,7 @@ public class Module {
     @Column(name = "IsActive", columnDefinition = "bit default 1 not null") //ONLY_SQL_SERVER
     private Boolean isActive = true;
 
-    @OneToMany(mappedBy = "module") // Relasi ke Permission
+    @OneToMany(mappedBy = "module", fetch = FetchType.LAZY) // Relasi ke Permission
     private List<Permission> permissions;
 
     @CreatedBy

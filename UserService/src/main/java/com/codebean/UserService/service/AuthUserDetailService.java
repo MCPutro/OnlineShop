@@ -94,7 +94,7 @@ public class AuthUserDetailService implements UserDetailsService {
             List<String> activePermissions = this.getActivePermissionsByRole(userDB.getRole());
 
             //generate token jwt
-            String token = this.jwtUtil.generateToken(userDB.getUsername(), userDB.getID(),
+            String token = this.jwtUtil.generateToken(userDB.getUsername(), userDB.getId(),
                     activePermissions
             );
 
@@ -102,7 +102,7 @@ public class AuthUserDetailService implements UserDetailsService {
             UserLoginResp userLoginResp = new UserLoginResp();
             BeanUtils.copyProperties(userDB, userLoginResp);
             userLoginResp.setToken(token);
-            userLoginResp.setId(userDB.getID());
+            userLoginResp.setId(userDB.getId());
             userLoginResp.setRole(userDB.getRole().getName());
 
             return Response.success(Constants.LOGIN_SUCCESS, userLoginResp, request);

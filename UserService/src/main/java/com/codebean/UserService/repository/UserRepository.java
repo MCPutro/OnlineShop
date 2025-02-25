@@ -12,6 +12,7 @@ Version 1.0
 import com.codebean.UserService.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,12 +23,15 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+//    @EntityGraph(attributePaths = {"role"})
     List<User> findAllByEmailOrUsername(String email, String username);
 
-    Optional<User> findFirstByIDAndIsDelete(Long id, boolean isDelete);
+    @EntityGraph(attributePaths = {"role", "addresses"})
+    Optional<User> findFirstByIdAndIsDelete(Long id, boolean isDelete);
 
     List<User> findAllByIsDelete(Boolean isDelete);
 
+    @EntityGraph(attributePaths = {"role"})
     Page<User> findAllByIsDelete(Pageable pageable, Boolean isDelete);
 
     Page<User> findAllByUsernameContainingIgnoreCaseAndIsDelete(Pageable pageable, String username, Boolean isDelete);
@@ -39,5 +43,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                                     @Param("roleName") String roleName,
                                                     Pageable pageable);
 
+    @EntityGraph(attributePaths = {"role"})
     Optional<User> findFirstByUsername(String username);
 }

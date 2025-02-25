@@ -45,6 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (token != null ) {
                 Map<String, Object> jwtClaims = this.jwtUtil.validateToken(token);
                 if (jwtClaims != null && jwtClaims.get(JwtConstants.VALID).equals(true)) {
+                    System.out.println(">>> JWT filter");
                     final UserDetails userDetails = this.authUserDetailService.loadUserByUsername(jwtClaims.get(JwtConstants.SUBJECT).toString());
                     final UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
@@ -69,7 +70,7 @@ public class JwtFilter extends OncePerRequestFilter {
             // ganti jadi log aja
             ex.printStackTrace();
         }
-
+        System.out.println(">>> JWT filter");
         // Lanjutkan ke filter berikutnya dalam chain
         filterChain.doFilter(request, response);
     }

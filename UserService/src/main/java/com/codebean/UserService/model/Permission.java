@@ -31,7 +31,7 @@ public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long ID;
+    private Long id;
 
     @Column(name = "Name", nullable = false, unique = true)
     private String name;
@@ -44,10 +44,10 @@ public class Permission {
 //    private Set<Role> roles;
 
     //cara manual
-    @OneToMany(mappedBy = "permission")
+    @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY)
     private Set<RolePermission> rolePermissions;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ModuleId", referencedColumnName = "ID")  // Kolom yang menghubungkan ke entitas Module
     private Module module;
 

@@ -102,7 +102,8 @@ public class UserAddressController {
     )
     public ResponseEntity<?> getAllAddressByToken(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
-                                                  HttpServletRequest request) {
+                                                  HttpServletRequest request
+    ) {
         try {
             Pageable Pageable = PageRequest.of(page, sizePerPage);
 

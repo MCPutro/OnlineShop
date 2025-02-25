@@ -19,6 +19,7 @@ Version 1.0
 
 import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.PermissionDto;
+import com.codebean.UserService.dto.RoleDetailDto;
 import com.codebean.UserService.dto.RoleDto;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Permission;
@@ -110,26 +111,32 @@ public class RoleService implements iService<Role> {
                 return Response.badRequest(Constants.BAD_DATA, "FVROL03011", request);
             }
 
+            System.out.println(">>>>>1");
             //find by id
             Optional<Role> optionalRoleById = this.roleRepository.findById(id);
             if (!optionalRoleById.isPresent()) {
                 return Response.badRequest(Constants.ROLE_NOT_FOUND, "FVROL03013", request);
             }
+            System.out.println(">>>>>1");
 
             Role roleDB = optionalRoleById.get();
 
             boolean roleNameIsSame = roleDB.getName().equals(role.getName());
             if (!roleNameIsSame) {
                 //check role name
+                System.out.println(">>>>>2");
                 Optional<Role> optionalRoleByName = this.roleRepository.findFirstByName(role.getName());
                 if (optionalRoleByName.isPresent()) {
                     return Response.badRequest(Constants.ROLE_ALREADY_EXISTS, "FVROL03012", request);
                 }
+                System.out.println(">>>>>2");
             }
 
+            System.out.println(">>>>>3");
             // set active permission
             List<RolePermission> rolePermissions = new ArrayList<>();
             List<Permission> listPermissionById = this.permissionRepository.findAllById(role.getPermissionIds());
+            System.out.println(">>>>>3");
             for (Permission permission : listPermissionById) {
                 RolePermission existingRolePermission = this.rolePermissionRepository.findByRoleAndPermission(roleDB, permission).orElse(null);
                 if (existingRolePermission == null) {
@@ -145,12 +152,8 @@ public class RoleService implements iService<Role> {
                 }
             }
 
-            // Save batch active permission to database
-//            this.rolePermissionRepository.saveAll(rolePermissions);
-
             //disable unused permission
-//            rolePermissions.clear();
-            List<RolePermission> disablePermission = this.rolePermissionRepository.findByRoleAndPermission_IDNotIn(roleDB, role.getPermissionIds());
+            List<RolePermission> disablePermission = this.rolePermissionRepository.findByRoleAndPermission_IdNotIn(roleDB, role.getPermissionIds());
             for (RolePermission rolePermission : disablePermission) {
                 if (rolePermission.getIsActive()) {
                     rolePermission.setIsActive(false);
@@ -240,7 +243,8 @@ public class RoleService implements iService<Role> {
             // get permission from listActivePermissionByRole
             Set<Permission> setPermission = listActivePermissionByRole.stream().map(RolePermission::getPermission).collect(Collectors.toSet());
 
-            RoleDto roleDto = this.modelMapper.map(role, RoleDto.class);
+            RoleDetailDto roleDto = new RoleDetailDto(role.getId(), role.getName(), role.getIsActive()); //this.modelMapper.map(role, RoleDto.class);
+
             roleDto.setPermissions(this.setPermissionModelToDto(setPermission));
 
             return Response.success(Constants.SUCCESS, roleDto, request);
@@ -316,10 +320,10 @@ public class RoleService implements iService<Role> {
         List<RoleDto> listRoleDto = new ArrayList<>();
         for (Role role : listRole) {
             RoleDto roleDto = this.modelMapper.map(role, RoleDto.class);// role
-            Set<Permission> collect = role.getPermissions().stream()
-                    .filter(rolePermission -> rolePermission.getIsActive().equals(true))
-                    .map(RolePermission::getPermission).collect(Collectors.toSet());
-            roleDto.setPermissions(this.setPermissionModelToDto(collect));
+//            Set<Permission> collect = role.getPermissions().stream()
+//                    .filter(rolePermission -> rolePermission.getIsActive().equals(true))
+//                    .map(RolePermission::getPermission).collect(Collectors.toSet());
+//            roleDto.setPermissions(this.setPermissionModelToDto(collect));
 
             listRoleDto.add(roleDto);
         }

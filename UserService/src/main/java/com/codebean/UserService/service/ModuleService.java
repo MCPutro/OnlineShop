@@ -56,7 +56,7 @@ public class ModuleService {
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findAllModules(HttpServletRequest request) {
         try {
-            List<Module> modules = moduleRepository.findAll();
+            List<Module> modules = moduleRepository.getAllModules();
 
             List<ModuleDto> moduleDto = this.listModelModulesToDto(modules);
 
@@ -97,15 +97,6 @@ public class ModuleService {
                 List<Permission> list = module.getPermissions().stream().filter(permission -> permission.getIsActive().equals(permissionStatus)).toList();
                 module.setPermissions(list);
             });
-
-//            List<Module> temp = new ArrayList<>();
-//            for (Module module : allByModuleStatusAndPermissionsStatus) {
-//                List<Permission> list = module.getPermissions().stream().filter(permission -> permission.getIsActive().equals(permissionStatus)).toList();
-//                module.setPermissions(list);
-//                temp.add(module);
-//            }
-//            allByModuleStatusAndPermissionsStatus.clear();
-//            allByModuleStatusAndPermissionsStatus.addAll(temp);
 
             List<ModuleDto> listModuleDto = this.listModelModulesToDto(allByModuleStatusAndPermissionsStatus);
 
@@ -191,16 +182,16 @@ public class ModuleService {
                 Permission permission = rolePermission.getPermission();
                 Module module = permission.getModule();
 
-                ModuleDto moduleDto = mapModuleDto.get(module.getID());
+                ModuleDto moduleDto = mapModuleDto.get(module.getId());
 
                 if (moduleDto == null) {
-                    moduleDto = new ModuleDto(module.getID(), module.getName(), module.getPath(), module.getDescription(), module.getIsActive());
+                    moduleDto = new ModuleDto(module.getId(), module.getName(), module.getPath(), module.getDescription(), module.getIsActive());
                     PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
                     moduleDto.addPermission(permissionDto);
-                    mapModuleDto.put(module.getID(), moduleDto);
+                    mapModuleDto.put(module.getId(), moduleDto);
                 } else {
                     PermissionDto permissionDto = this.modelMapper.map(permission, PermissionDto.class);
-                    mapModuleDto.get(module.getID()).addPermission(permissionDto);
+                    mapModuleDto.get(module.getId()).addPermission(permissionDto);
                 }
             }
 

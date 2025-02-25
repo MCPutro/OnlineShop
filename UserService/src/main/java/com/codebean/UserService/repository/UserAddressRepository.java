@@ -27,25 +27,16 @@ import java.util.Optional;
 @Repository
 public interface UserAddressRepository extends JpaRepository<UserAddress, Long> {
 
-    Optional<UserAddress> findFirstByIDAndIsActiveIsTrueAndUser_ID(Long addressId, Long userID);
+    Optional<UserAddress> findFirstByIdAndIsActiveIsTrueAndUser_Id(Long addressId, Long userID);
 
-    Optional<UserAddress> findFirstByIDAndIsActive(Long id, Boolean isActive);
+    Optional<UserAddress> findFirstByIdAndIsActive(Long id, Boolean isActive);
 
-    Page<UserAddress> findAllByUser_IDAndIsActive(Long userID, Boolean isActive, Pageable pageable);
+    Page<UserAddress> findAllByUser_IdAndIsActive(Long userID, Boolean isActive, Pageable pageable);
 
-    Page<UserAddress> findAllByNameContainingIgnoreCaseAndIsActive(String name, Boolean isActive, Pageable pageable);
+    Page<UserAddress> findAllByUser_IdAndNameContainingIgnoreCaseAndIsActive(Long userID, String name, Boolean isActive, Pageable pageable);
 
-    Page<UserAddress> findAllByAddressContainingIgnoreCaseAndIsActive(String address, Boolean isActive, Pageable pageable);
+    Page<UserAddress> findAllByUser_IdAndAddressContainingIgnoreCaseAndIsActive(Long userID, String address, Boolean isActive, Pageable pageable);
 
-    Page<UserAddress> findAllByPostalCodeContainingIgnoreCaseAndIsActive(String postalCode, Boolean isActive, Pageable pageable);
+    Page<UserAddress> findAllByUser_IdAndPostalCodeContainingIgnoreCaseAndIsActive(Long userID, String postalCode, Boolean isActive, Pageable pageable);
 
-//    Page<UserAddress> findAllByCountryContainingIgnoreCaseAndIsActive(String country, Boolean isActive, Pageable pageable);
-
-    Page<UserAddress> findAllByUser_IDAndNameContainingIgnoreCaseAndIsActive(Long userID, String name, Boolean isActive, Pageable pageable);
-
-    Page<UserAddress> findAllByUser_IDAndAddressContainingIgnoreCaseAndIsActive(Long userID, String address, Boolean isActive, Pageable pageable);
-
-    Page<UserAddress> findAllByUser_IDAndPostalCodeContainingIgnoreCaseAndIsActive(Long userID, String postalCode, Boolean isActive, Pageable pageable);
-
-//    Page<UserAddress> findAllByUser_IDAndCountryContainingIgnoreCaseAndIsActive(Long userID, String country, Boolean isActive, Pageable pageable);
 }

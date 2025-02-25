@@ -18,6 +18,7 @@ Version 1.0
  */
 
 import com.codebean.UserService.core.iService;
+import com.codebean.UserService.dto.UserDetailDto;
 import com.codebean.UserService.dto.UserDto;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Role;
@@ -66,6 +67,7 @@ public class UserService implements iService<User> {
                 return Response.badRequest(Constants.BAD_DATA, "FVUSR01001", request);
             }
 
+            // existing data
             List<User> listUserByEmailOrUsername = this.userRepository.findAllByEmailOrUsername(user.getEmail(), user.getUsername());
             if (listUserByEmailOrUsername != null && !listUserByEmailOrUsername.isEmpty()) {
                 for (User u : listUserByEmailOrUsername) {
@@ -79,7 +81,7 @@ public class UserService implements iService<User> {
                 }
             }
 
-            //role
+            // set role
             Optional<Role> optionalRoleByName = this.roleRepository.findFirstByName(user.getRole().getName());
             if (!optionalRoleByName.isPresent()) {
                 return Response.badRequest(Constants.ROLE_NOT_FOUND, "FVUSR01003", request);
@@ -118,7 +120,7 @@ public class UserService implements iService<User> {
             List<User> listUserByEmailOrUsername = this.userRepository.findAllByEmailOrUsername(user.getEmail(), user.getUsername());
             if (listUserByEmailOrUsername != null && !listUserByEmailOrUsername.isEmpty()) {
                 for (User u : listUserByEmailOrUsername) {
-                    if (u.getID().equals(id)) {
+                    if (u.getId().equals(id)) {
                         continue;
                     }
                     if (u.getEmail().equals(user.getEmail())) {
@@ -156,7 +158,7 @@ public class UserService implements iService<User> {
             }
 
             // validate user by id
-            Optional<User> optionalUserByIDAndIsDelete = this.userRepository.findFirstByIDAndIsDelete(id, false);
+            Optional<User> optionalUserByIDAndIsDelete = this.userRepository.findFirstByIdAndIsDelete(id, false);
             if (!optionalUserByIDAndIsDelete.isPresent()) {
                 return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01021", request);
             }
@@ -197,13 +199,13 @@ public class UserService implements iService<User> {
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findById(Long id, HttpServletRequest request) {
         try {
-            Optional<User> optionalUserById = this.userRepository.findFirstByIDAndIsDelete(id, false);
+            Optional<User> optionalUserById = this.userRepository.findFirstByIdAndIsDelete(id, false);
             if (!optionalUserById.isPresent()) {
                 return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01041", request);
             }
 
             User user = optionalUserById.get();
-            UserDto userDto = this.modelMapper.map(user, UserDto.class);
+            UserDetailDto userDto = this.modelMapper.map(user, UserDetailDto.class);
             userDto.setRole(user.getRole().getName());
 
             return Response.success(Constants.SUCCESS, userDto, request);
@@ -239,8 +241,8 @@ public class UserService implements iService<User> {
             }
 
 //            List<UserDto> listUserDto = this.listUserModelToDto(list);
-            List<UserDto> listUserDto = list.stream().map(user -> {
-                UserDto userDto = this.modelMapper.map(user, UserDto.class);
+            List<UserDetailDto> listUserDto = list.stream().map(user -> {
+                UserDetailDto userDto = this.modelMapper.map(user, UserDetailDto.class);
                 userDto.setRole(user.getRole().getName());
                 return userDto;
             }).toList();
@@ -293,13 +295,13 @@ public class UserService implements iService<User> {
         }
     }
 
-    private List<UserDto> listUserModelToDto(List<User> listUser) {
-        return this.modelMapper.map(listUser, new TypeToken<List<UserDto>>() {
+    private List<UserDetailDto> listUserModelToDto(List<User> listUser) {
+        return this.modelMapper.map(listUser, new TypeToken<List<UserDetailDto>>() {
 
         }.getType());
     }
 
-    public User dtoToModel(UserDto dto) {
+    public User dtoToModel(UserDetailDto dto) {
         return this.modelMapper.map(dto, User.class);
     }
 }

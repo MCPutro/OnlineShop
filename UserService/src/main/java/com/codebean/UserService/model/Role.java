@@ -31,7 +31,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long ID;
+    private Long id;
 
     @Column(name = "Name", nullable = false, unique = true)
     private String name;
@@ -50,7 +50,7 @@ public class Role {
 //    private Set<Permission> permissions;
 
     //cara manual
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<RolePermission> permissions;
 
     @Transient

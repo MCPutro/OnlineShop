@@ -31,10 +31,10 @@ public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long ID;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_Address_User")) // Kolom userId pada tabel UserAddress(saat ini) akan menyimpan referensi ke ID user, Parameter referencedColumnName dalam anotasi @JoinColumn digunakan untuk menentukan nama kolom yang akan dirujuk oleh foreign key di entitas yang sedang didefinisikan
+    @JoinColumn(name = "UserId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_Address_User")) // Kolom userId pada tabel UserAddress(saat ini) akan menyimpan referensi ke ID user, Parameter referencedColumnName dalam anotasi @JoinColumn digunakan untuk menentukan nama kolom yang akan dirujuk oleh foreign key di entitas yang sedang didefinisikan
     private User user; // beberapa alamat bisa dimiliki oleh user yang sama, jadi relasinya banyak alamat menuju ke 1 user
 
     @Column(name = "Name", nullable = false)
