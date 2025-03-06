@@ -79,4 +79,37 @@
     </div>
 </div>
 
+<div class="row" data-aos="fade-up" th:fragment="paginationFragment4">
+    <div class="col-md-12 text-center">
+        <div class="site-block-27" th:if="${currentPage != null && totalPages != null }">
+            <ul>
+                <li th:if="${currentPage > 1}">
+                    <button class="btn border circle-button-37" th:onclick="'nextPage('+${currentPage - 1}+')' ">&lt;</button>
+                </li>
+
+                <li th:class="${currentPage == 1} ? 'active' : ''" th:if="${totalPages != 1}">
+                    <button class="btn border circle-button-37" th:onclick="'nextPage('+${1}+')' " >1</button>
+                </li>
+
+                <li th:if="${currentPage > 4}"><span class="border circle-button-37">...</span></li>
+
+                <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+                    th:if="${i > 1 && i < totalPages}"
+                    th:class="${i == currentPage} ? 'active' : ''">
+                    <button class="btn border circle-button-37" th:onclick="'nextPage('+${i}+')' " th:text="${i}"></button>
+                </li>
+
+                <li th:if="${currentPage < totalPages - 3}"><span class="border circle-button-37">...</span></li>
+
+                <li  th:class="${totalPages == currentPage} ? 'active' : '' " >
+                    <button class="btn border circle-button-37" th:onclick="'nextPage('+${totalPages}+')' " th:text="${totalPages}" ></button></li>
+
+                <li th:if="${currentPage < totalPages}">
+                    <button class="btn border circle-button-37" th:onclick="'nextPage('+${currentPage + 1}+')' ">&gt;</button></li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
 </html>

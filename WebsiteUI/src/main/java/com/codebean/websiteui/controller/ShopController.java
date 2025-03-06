@@ -49,7 +49,7 @@ public class ShopController {
                        @RequestParam(required = false) String search, // search by product name
                        @RequestParam(required = false) Double minPrice, // search by min price
                        @RequestParam(required = false) Double maxPrice, // search by max price
-                       @RequestParam(required = false) Set<Long> categoryIds, // search by max price
+                       @RequestParam(value = "category", required = false) Set<Long> categoryIds, // search by max price
                        Model model,
                        RedirectAttributes redirectAttributes,
                        WebRequest webRequest
@@ -79,17 +79,20 @@ public class ShopController {
             model.addAttribute(Constans.TOTAL_PAGES, totalPage);
             model.addAttribute(Constans.NAV_PAGINATION, "shop");
 
-            // search data
-            model.addAttribute("size", size);
-            model.addAttribute("sortType", sortType);
-            model.addAttribute("sortBy", sortBy);
-            model.addAttribute("search", search);
-            model.addAttribute("minPrice", minPrice);
-            model.addAttribute("maxPrice", maxPrice);
-            model.addAttribute("categoryIds", categoryIds);
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+
         }
+
+        //sent data search
+        model.addAttribute("size", size);
+        model.addAttribute("sortType", sortType);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("search", search);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("categoryIds", categoryIds);
 
         return "shop/shop";
     }

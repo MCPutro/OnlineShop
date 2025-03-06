@@ -18,6 +18,7 @@
     <link rel="stylesheet" th:href="@{/css/aos.css}">
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/custom/custom.css}">
     <style>
         figure {
             min-width: 200px; /* Set your desired minimum width */
@@ -32,7 +33,6 @@
     <!-- Header -->
     <header th:replace="~{fragment/header::header}"></header>
 
-    <!--content-->
     <div class="bg-light py-3">
         <div class="container">
             <div class="row">
@@ -86,10 +86,9 @@
                 <!-- tampilin product list -->
                 <div class="col-md-9 order-2">
                     <!--                    th:value="${search != null ? search : ''}"-->
-                    <div class="alert-success"
-                         th:text=" ${search != null} ? 'Search results for '+${search} : ''  "></div>
-                    <div class="row mb-5">
+<!--                    <div class="alert-success" th:text=" ${search != null} ? 'Search results for '+${search} : ''  "></div>-->
 
+                    <div class="row mb-5">
                         <!-- Item -->
                         <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" th:each="product : ${ltProducts}">
                             <div class="block-4 text-center border">
@@ -113,7 +112,7 @@
                     </div>
 
                     <!-- pagination -->
-                    <div th:replace="~{fragment/pagination::paginationFragment}"></div>
+                    <div th:replace="~{fragment/pagination::paginationFragment4}"></div>
 
                 </div>
 
@@ -122,79 +121,39 @@
                     <div class="border p-4 rounded mb-4">
                         <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter Products</h3>
                         <form id="filter-form" method="get" th:action="@{shop}">
-                            <input type="hidden" name="search" th:value="${search != null ? search : ''}"
-                                   placeholder="cari nama product">
+                            <input type="hidden" name="search" th:value="${search != null ? search : ''}" readonly >
+
                             <div class="mb-4">
                                 <label class="mb-3 h6  text-black d-block ">Category :</label>
-
                                 <label class="d-flex" th:each="ctgr : ${ltCategory}">
-                                    <input type="checkbox" name="category" class="mr-2 mt-1" th:value="${ctgr['id']}">
+                                    <input type="checkbox" name="category" class="mr-2 mt-1" th:value="${ctgr['id']}"
+                                           th:checked="${#lists.contains(categoryIds, T(java.lang.Long).parseLong(ctgr['id'].toString()))}"
+
+                                    >
                                     <span class="text-black" th:text="${ctgr['name']}"></span>
                                 </label>
-
                             </div>
+
                             <div class="mb-3 mt-3">
                                 <label class="mb-3 h6  text-black d-block">Price Range</label>
-                                <div class="d-flex">
-                                    <input type="number" id="price-min" class="form-control mr-2" placeholder="Min"
-                                           min="0" step="10" name="minPrice" th:value="${minPrice}">
-                                    <input type="number" id="price-max" class="form-control" placeholder="Max" min="0"
-                                           step="10" name="maxPrice" th:value="${maxPrice}">
-                                </div>
+                                <input type="number" id="price-min" class="form-control mb-2" placeholder="Min"
+                                       min="0" step="10" name="minPrice" th:value="${minPrice}">
+                                <input type="number" id="price-max" class="form-control" placeholder="Max" min="0"
+                                       step="10" name="maxPrice" th:value="${maxPrice}">
                             </div>
+
+                            <input type="hidden" name="sortType" th:value="${sortType != null ? sortType : ''}" readonly >
+
+                            <input type="hidden" name="sortBy" th:value="${sortBy != null ? sortBy : ''}" readonly >
+
+
                             <button type="submit" class="btn btn-primary mt-4 mt-md-4 btn-block">Apply Filters</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="site-section site-blocks-2">
-                        <div class="row justify-content-center text-center mb-5">
-                            <div class="col-md-7 site-section-heading pt-4">
-                                <h2>Categories</h2>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                                <a class="block-2-item" href="#">
-                                    <figure class="image">
-                                        <img src="images/women.jpg" alt="" class="img-fluid">
-                                    </figure>
-                                    <div class="text">
-                                        <span class="text-uppercase">Collections</span>
-                                        <h3>Women</h3>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                                <a class="block-2-item" href="#">
-                                    <figure class="image">
-                                        <img src="images/children.jpg" alt="" class="img-fluid">
-                                    </figure>
-                                    <div class="text">
-                                        <span class="text-uppercase">Collections</span>
-                                        <h3>Children</h3>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-                                <a class="block-2-item" href="#">
-                                    <figure class="image">
-                                        <img src="images/men.jpg" alt="" class="img-fluid">
-                                    </figure>
-                                    <div class="text">
-                                        <span class="text-uppercase">Collections</span>
-                                        <h3>Men</h3>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
 
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>
@@ -353,6 +312,6 @@
     pertama(sizeShow);
 
 </script>
-
+<script th:src="@{/js/custom/pagination-and-size.js}"></script>
 </body>
 </html>
