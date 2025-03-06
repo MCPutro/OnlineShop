@@ -47,7 +47,7 @@
                      )}">Previous</a>
         </li>
 
-        <li th:class="${currentPage == 1} ? 'page-item active' : 'page-item'" th:if="${totalPages != currentPage}">
+        <li th:class="${currentPage == 1} ? 'page-item active' : 'page-item'" th:if="${totalPages != 1}">
             <a class="page-link" th:href="@{/{navPagination}(navPagination=${navPagination}, page=${1}, size=${size}, search=${search}, filterBy=${filterBy}  )}">1</a>
         </li>
 

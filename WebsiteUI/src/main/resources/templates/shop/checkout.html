@@ -147,7 +147,9 @@
                         <td th:text="${address.postalCode}"></td>
                         <td>
                             <button class="btn btn-primary btn-sm"
-                                    th:attr="onclick='selectAddress(\'' + ${address.address} + ', ' + ${address.regency} + ', ' + ${address.province} + ', ' + ${address.postalCode} + '\' ,\''+${address.id}+'\')'">
+                                    th:data-addr="${address.address} + ', ' + ${address.regency} + ', ' + ${address.province} + ', ' + ${address.postalCode}"
+                                    th:data-addr-id="${address.id}"
+                                    onclick="selectAddress(this)">
                                 Pilih
                             </button>
                         </td>
@@ -176,10 +178,12 @@
         $("#addressModal").modal("show");
     }
 
-    function selectAddress(address, id) {
+    function selectAddress(button) {
+        const address = button.getAttribute("data-addr");
+        const addressId = button.getAttribute("data-addr-id");
         // console.log(id);
         document.getElementById("selectedAddress").value = address;
-        document.getElementById("selectedAddressId").value = id;
+        document.getElementById("selectedAddressId").value = addressId;
         $("#addressModal").modal("hide");
     }
     
