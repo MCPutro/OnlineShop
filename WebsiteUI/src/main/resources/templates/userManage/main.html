@@ -48,50 +48,39 @@
     <!--Isi content-->
     <div class="site-section-sm mb-5" >
         <div class="container">
-            <!-- Filter -->
-            <div class="row align-items-center mb-3">
-                <!--Tombol add-->
-                <div class="col-6 col-md-3 order-1 order-md-1 mb-3 mb-md-0 text-left " th:if="${permissions.contains('MANAGE_USER')}">
-                    <div class="site-logo">
-                        <btn onclick="loadAddUserForm2('#userCreateModal','user-management/add','Add User')"
-                             class="btn btn-primary">Add
-                            User
-                        </btn>
+            <!-- filter -->
+            <div class="row mb-4 align-items-center">
+                <div class="col-auto col-md-auto order-1 order-md-1 my-1">
+                    <!--Tombol add-->
+                    <button onclick="loadAddUserForm2('#userCreateModal','user-management/add','Add User')"
+                            class="btn btn-primary">Add User
+                    </button>
+                    <!--Tombol filter-->
+                    <button class="btn btn-outline-primary text-center position-relative" data-toggle="modal"
+                            data-target="#filterModal">
+                        <span class="d-none d-md-inline">Filter</span>
+                        <span class="icon icon-filter"></span>
+                        <span class="badge badge-danger position-absolute"
+                              style="top: -5px; right: -5px; width: 10px; height: 10px; border-radius: 50%; padding: 0; display: none;"
+                              id="filterIndicator"></span>
+                    </button>
+                </div>
+                <div class="col col-md order-3 my-1">
+                    <div class="row float-right align-items-center">
+                        <strong class="float-right">Show :</strong>
+                        <form class="col-auto">
+                            <select class="form-control custom-select" name="size"
+                                    onchange="updateSize(this.options[this.selectedIndex].value)">
+                                <option value="5" th:selected="${size == 5}">5</option>
+                                <option value="10" th:selected="${size == 10}">10</option>
+                                <option value="15" th:selected="${size == 15}">15</option>
+                                <option value="20" th:selected="${size == 20}">20</option>
+                                <option value="50" th:selected="${size == 50}">50</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
-
-                <!-- Pencarian -->
-                <div class="col-12 col-md-7 order-3 order-md-2 site-search-icon border-1 ">
-                    <form class="form-inline site-search-icon center" action="/user-management">
-                        <!--<span class="icon icon-search2"></span>-->
-                        <input type="Search" name="search" class="form-control border col-6 col-md-7 rounded-0"
-                               placeholder="Search" th:value="${search}" required>
-                        <select id="filter" name="filterBy"
-                                class="form-control col-4 col-md-3 border border-left-0 rounded-0">
-                            <option th:selected="${filterBy == 'username'}" value="username">Username</option>
-                            <option th:selected="${filterBy == 'email'}" value="email">Email</option>
-                            <option th:selected="${filterBy == 'rolename'}" value="rolename">Role</option>
-                        </select>
-                        <input type="hidden" name="size" class=" "
-                               th:value="${size}">
-                        <!--                        <input type="text" name="size" th:value="${size}" disabled>-->
-                        <button type="submit" class="btn btn-outline-info ml-auto ">Apply</button>
-                    </form>
-                </div>
-                <div class="col-6 col-md-2 order-2 order-md-3 mt-3 text-right">
-                    <!-- Dropdown untuk jumlah data per halaman -->
-                    <form method="get" action="/user-management" class="float-right float-md-right form-inline mb-3">
-                        <label>Show :</label>
-                        <select class="form-control" name="size" onchange="this.form.submit()">
-                            <option value="5" th:selected="${size == 5}">5</option>
-                            <option value="10" th:selected="${size == 10}">10</option>
-                            <option value="20" th:selected="${size == 20}">20</option>
-                            <option value="50" th:selected="${size == 50}">50</option>
-                        </select>
-                    </form>
-                </div>
             </div>
-
 
             <table class="table table-hover mt-4 mt-md-4" data-aos="fade-up">
                 <thead>
@@ -130,8 +119,7 @@
         </div>
 
         <!-- pagination -->
-<!--        <div th:replace="~{fragment/pagination::paginationFragment}"></div>-->
-        <div th:replace="~{fragment/pagination2::paginationFragment2}"></div>
+        <div th:replace="~{fragment/pagination2::paginationFragment3}"></div>
     </div>
 
     <!--Footer-->
@@ -140,19 +128,65 @@
 
 <!-- Modal -->
 <div th:replace="~{fragment/modalA::modalA('userCreateModal')}"></div>
-<!--<div class="modal fade" id="userCreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
-<!--    <div class="modal-dialog modal-dialog-centered block" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title text-black" id="modalTitle">Add Data</h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-<!--            </div>-->
-<!--            <div class="modal-body" id="modal-content">-->
-<!--                Loading...-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-0" >
+            <div class="modal-header rounded-top " style="background-color: #7971ea">
+                <h5 class="modal-title text-white" id="filterModalLabel">Filter Users</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="icon icon-close2"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="get" th:action="@{/{navPagination}(navPagination=${navPagination})}"
+                      id="filter-user-form">
+                    <div class="form-group">
+                        <label for="username" class="font-weight-bold">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               th:value="${username}">
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="font-weight-bold">Name</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               th:value="${name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail" class="font-weight-bold">Email</label>
+                        <input type="text" class="form-control" id="userEmail" name="email"
+                               th:value="${email}">
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole" class="font-weight-bold">Role</label>
+                        <select class="form-control" id="userRole" name="userRole">
+                            <option value="">All Roles</option>
+                            <option value="admin" th:selected="${userRole == 'admin'}">Admin</option>
+                            <option value="customer" th:selected="${userRole == 'customer'}">Customer
+                            </option>
+                            <option value="staff" th:selected="${userRole == 'staff'}">Staff</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="userStatus" class="font-weight-bold">Status</label>
+                        <select class="form-control" id="userStatus" name="status">
+                            <option value="">All Status</option>
+                            <option value="true" th:selected="${status == true}">Active</option>
+                            <option value="false" th:selected="${status == false}">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group d-flex justify-content-between border-top pt-3">
+                        <button type="button" class="btn btn-outline-primary"
+                                onclick="window.location.href='/user-management'">reset
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="applyFilter">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     // function loadAddUserForm(url, title) {
@@ -174,28 +208,6 @@
 
 <!--untuk pop up alert error-->
 <script th:inline="javascript">
-
-    // let errors  = /*[[${errors}]]*/ {};
-    // console.log(errors)
-    // if (errors.length > 0) {
-    //     let msg = "";
-    //     for (let i = 0; i < errors.length; i++) {
-    //         msg += errors[i] + "\n";
-    //     }
-    //     console.log(msg)
-    //     swal("Error!", msg, "error");
-    // }
-    //
-    //
-    // let successMessage = /*[[${successMessage}]]*/ '';
-    // console.log(successMessage);
-    // if (successMessage !== '') {
-    //     swal(
-    //         "Success!",
-    //         successMessage,
-    //         "success"
-    //     );
-    // }
 
     let successMessage = /*[[${successMessage}]]*/ '';
     if (successMessage) {
@@ -219,6 +231,6 @@
 <script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
 <script th:src="@{/js/aos.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-
+<script th:src="@{/js/custom/pagination-and-size.js}"></script>
 </body>
 </html>

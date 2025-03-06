@@ -62,11 +62,17 @@ public interface UserClient {
     );
 
     @GetMapping("/api/v1/find/user")
-    Map<String, Object> findAllBy(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                  @RequestParam(value = "by") String by,
-                                  @RequestParam(value = "search") String search,
-                                  @RequestParam(value = "page") Integer page,
-                                  @RequestParam(value = "sizePerPage") Integer sizePerPage
+    Map<String, Object> findAllBy(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+            @RequestParam(required = false) String sortType, // asc or desc
+            @RequestParam(required = false) String sortBy, // kolom yang di sorting
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) Boolean isActive
     );
 
     @GetMapping("/api/v1/roles/active")
@@ -131,7 +137,7 @@ public interface UserClient {
     Response<String> changePassword(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody ChangePassDto dto);
 
     @PostMapping("/api/v1/user/address")
-    Response<String> addNewAddress(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,  @RequestBody UserAddressDto dto);
+    Response<String> addNewAddress(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAddressDto dto);
 
     @PutMapping("/api/v1/user/address/{addressId}")
     Response<String> updateAddress(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestBody UserAddressDto dto, @PathVariable Long addressId);
@@ -144,7 +150,7 @@ public interface UserClient {
 
     @GetMapping("/api/v1/user/address")
     Response<pageAttribute<UserAddressDto>> getAddressByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                                    @RequestParam(value = "page") Integer page,
-                                                                    @RequestParam(value = "sizePerPage") Integer sizePerPage);
+                                                              @RequestParam(value = "page") Integer page,
+                                                              @RequestParam(value = "sizePerPage") Integer sizePerPage);
 
 }

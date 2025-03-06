@@ -80,4 +80,34 @@
 <!--        </li>-->
     </ul>
 </nav>
+
+<nav aria-label="Page navigation" class="mt-4" data-aos="fade-up" th:fragment="paginationFragment3">
+    <ul class="pagination justify-content-center">
+        <li th:class="${currentPage > 1} ? 'page-item ' : 'page-item disabled'">
+            <button class="page-link" th:onclick="'nextPage('+${currentPage - 1}+')' ">Previous</button>
+        </li>
+
+        <li th:class="${currentPage == 1} ? 'page-item active' : 'page-item'" th:if="${totalPages != 1}">
+            <button class="page-link" th:onclick="'nextPage('+${1}+')' ">1</button>
+        </li>
+
+        <li class="page-item" th:if="${currentPage > 4}"><span class="page-link">...</span></li>
+
+        <li th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+            th:if="${i > 1 && i < totalPages}"
+            th:class="${i == currentPage} ? 'page-item active' : 'page-item'">
+            <button class="page-link" th:onclick="'nextPage('+${i}+')' " th:text="${i}"></button>
+        </li>
+
+        <li class="page-item" th:if="${currentPage < totalPages - 3}"><span class="page-link">...</span></li>
+
+        <li th:class="${totalPages == currentPage} ? 'page-item active' : 'page-item' ">
+            <button class="page-link" th:onclick="'nextPage('+${totalPages}+')' " th:text="${totalPages}"></button>
+        </li>
+
+        <li th:class="${currentPage < totalPages} ? 'page-item ' : 'page-item disabled' ">
+            <button class="page-link" th:onclick="'nextPage('+${currentPage + 1}+')' ">Next</button>
+        </li>
+    </ul>
+</nav>
 </html>

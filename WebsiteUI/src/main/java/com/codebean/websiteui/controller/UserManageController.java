@@ -41,10 +41,13 @@ public class UserManageController {
     // 🔹 Fungsi untuk membuka ui web untuk menampilkan semua user
     @GetMapping
     public String findAll(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) String filterBy,
+            @RequestParam(defaultValue = "0", required = false) Integer page,
+            @RequestParam(defaultValue = "15", required = false) Integer size,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String userRole,
+            @RequestParam(required = false) Boolean status,
             Model model, WebRequest webRequest,
             RedirectAttributes redirectAttributes
     ) {
@@ -57,28 +60,12 @@ public class UserManageController {
         model.addAttribute(Constans.IS_MANAGEMENT, "User Management");
 
         try {
-            String auth = webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+            String auth = Constans.BEARER + webRequest.getAttribute(Constans.TOKEN, WebRequest.SCOPE_SESSION).toString();
+
+            userRole = (userRole == null || userRole.equalsIgnoreCase("")) ? null : userRole;
 
             page = page > 0 ? page - 1 : page;
-            Map<String, Object> allUser;
-            if (search != null && filterBy != null) {
-                switch (filterBy) {
-                    case "username":
-                        allUser = this.userClient.findAllBy(Constans.BEARER + auth, "username", search, page, size);
-                        break;
-                    case "email":
-                        allUser = this.userClient.findAllBy(Constans.BEARER + auth, "email", search, page, size);
-                        break;
-                    case "rolename":
-                        allUser = this.userClient.findAllBy(Constans.BEARER + auth, "rolename", search, page, size);
-                        break;
-                    default:
-                        allUser = this.userClient.findAll(Constans.BEARER + auth, page, size);
-                        break;
-                }
-            } else {
-                allUser = this.userClient.findAll(Constans.BEARER + auth, page, size);
-            }
+            Map<String, Object> allUser = this.userClient.findAllBy(auth, page, size, null, null, username, email, name, userRole, status);
 
             Map<String, Object> dataUser = (Map<String, Object>) allUser.get("data");
             List<Map<String, Object>> content = (List<Map<String, Object>>) dataUser.get("content");
@@ -87,31 +74,30 @@ public class UserManageController {
             model.addAttribute(Constans.CURRENT_PAGE, (Integer) dataUser.get("current-page") + 1);
             model.addAttribute(Constans.TOTAL_PAGES, dataUser.get("total-page"));
             model.addAttribute(Constans.NAV_PAGINATION, "user-management");
-            model.addAttribute(Constans.FILTER_BY, filterBy); //kirim data pencarian
-            model.addAttribute(Constans.SEARCH, search); //kirim data pencarian
 
-            model.addAttribute("size", size);
 
         } catch (ForbiddenException fe) {
-            System.out.println("masuk  A");
             redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList(fe.getMessage()));
             return "redirect:";
         } catch (RuntimeException e) {
-            System.out.println("masuk  B");
             model.addAttribute(Constans.CURRENT_PAGE, 0);
             model.addAttribute(Constans.TOTAL_PAGES, 0);
 
-//            model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
             redirectAttributes.addFlashAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
             return "redirect:/user-management";
         } catch (Exception e) {
-            System.out.println("masuk  C");
             model.addAttribute(Constans.CURRENT_PAGE, 0);
             model.addAttribute(Constans.TOTAL_PAGES, 0);
             model.addAttribute(Constans.ERRORS, Collections.singletonList(e.getMessage()));
-//            return "/";
         }
 
+        //data search
+        model.addAttribute("username", username);
+        model.addAttribute("email", email);
+        model.addAttribute("userRole", userRole);
+        model.addAttribute("status", status);
+        model.addAttribute("name", name);
+        model.addAttribute("size", size);
         return "userManage/main";
     }
 
@@ -500,9 +486,9 @@ public class UserManageController {
     // 🔹 Fungsi untuk soft delete user
     @GetMapping("/address/delete/{addressId}")
     public String deleteAddressById(@PathVariable("addressId") Long addressId,
-                             Model model,
-                             RedirectAttributes redirectAttributes,
-                             WebRequest webRequest
+                                    Model model,
+                                    RedirectAttributes redirectAttributes,
+                                    WebRequest webRequest
     ) {
         //validate session
         if (GlobalFunction.cekSession(webRequest) == null) {
