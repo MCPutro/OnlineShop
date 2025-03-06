@@ -16,6 +16,7 @@ do
     # Menambahkan nomor iterasi pada username dan email
     USERNAME="${BASE_USERNAME}00${i}"
     EMAIL="${BASE_EMAIL}.${i}"
+    NAME="NAME-$USERNAME"
 
     echo "Mengirim request ke-$i dengan username: $USERNAME dan email: $EMAIL..."
 
@@ -24,6 +25,7 @@ do
         \"username\": \"$USERNAME\",
         \"password\": \"12345678\",
         \"confirmPassword\": \"12345678\",
+        \"name\": \"$NAME\",
         \"email\": \"$EMAIL\"
     }"
 

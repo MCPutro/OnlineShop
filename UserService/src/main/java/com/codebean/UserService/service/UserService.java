@@ -20,6 +20,7 @@ Version 1.0
 import com.codebean.UserService.core.iService;
 import com.codebean.UserService.dto.UserDetailDto;
 import com.codebean.UserService.dto.UserDto;
+import com.codebean.UserService.dto.request.UserSearchDto;
 import com.codebean.UserService.exception.ApiException;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Role;
@@ -28,20 +29,21 @@ import com.codebean.UserService.repository.RoleRepository;
 import com.codebean.UserService.repository.UserRepository;
 import com.codebean.UserService.utils.Constants;
 import com.codebean.UserService.utils.TransformPagination;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService implements iService<User> {
@@ -219,46 +221,98 @@ public class UserService implements iService<User> {
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Object> findByParam(Pageable pageable, String columnName, String value, HttpServletRequest request) {
-        try {
-            Page<User> page;
-            switch (columnName.toLowerCase()) {
-                case "username":
-                    page = this.userRepository.findAllByUsernameContainingIgnoreCaseAndIsDelete(pageable, value, false);
-                    break;
-                case "email":
-                    page = this.userRepository.findAllByEmailContainingIgnoreCaseAndIsDelete(pageable, value, false);
-                    break;
-                case "rolename":
-                    page = this.userRepository.findAllUserByStatusDeleteAndRoleName(false, value, pageable);
-                    break;
-                default:
-                    page = this.userRepository.findAllByIsDelete(pageable, false);
-                    break;
+//        try {
+//            Page<User> page;
+//            switch (columnName.toLowerCase()) {
+//                case "username":
+//                    page = this.userRepository.findAllByUsernameContainingIgnoreCaseAndIsDelete(pageable, value, false);
+//                    break;
+//                case "email":
+//                    page = this.userRepository.findAllByEmailContainingIgnoreCaseAndIsDelete(pageable, value, false);
+//                    break;
+//                case "rolename":
+//                    page = this.userRepository.findAllUserByStatusDeleteAndRoleName(false, value, pageable);
+//                    break;
+//                default:
+//                    page = this.userRepository.findAllByIsDelete(pageable, false);
+//                    break;
+//            }
+//
+//            List<User> list = page.getContent();
+//            if (list.isEmpty()) {
+//                return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01051", request);
+//            }
+//
+////            List<UserDto> listUserDto = this.listUserModelToDto(list);
+//            List<UserDetailDto> listUserDto = list.stream().map(user -> {
+//                UserDetailDto userDto = this.modelMapper.map(user, UserDetailDto.class);
+//                userDto.setRole(user.getRole().getName());
+//                return userDto;
+//            }).toList();
+//
+//            Map<String, Object> stringObjectMap = this.transformPagination.transformPagination(listUserDto, page, columnName, value);
+//
+//            return Response.success(Constants.SUCCESS, stringObjectMap, request);
+//        } catch (Exception e) {
+//            throw new ApiException(Constants.FAILED_TO_GET_DATA, "FEUSR01051", request);
+//        }
+        throw new ApiException(Constants.FAILED_TO_GET_DATA, "FEUSR01051", request);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> search(Pageable pageable, UserSearchDto dto, HttpServletRequest request) {
+        Specification<User> specification = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(criteriaBuilder.equal(root.get("isDelete"), false));
+
+            if (Objects.nonNull(dto.getUsername())) {
+                predicates.add(criteriaBuilder.like(root.get("username"), "%" + dto.getUsername() + "%"));
             }
 
-            List<User> list = page.getContent();
-            if (list.isEmpty()) {
-                return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01051", request);
+            if (Objects.nonNull(dto.getName())) {
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + dto.getName() + "%"));
             }
 
-//            List<UserDto> listUserDto = this.listUserModelToDto(list);
-            List<UserDetailDto> listUserDto = list.stream().map(user -> {
-                UserDetailDto userDto = this.modelMapper.map(user, UserDetailDto.class);
-                userDto.setRole(user.getRole().getName());
-                return userDto;
-            }).toList();
+            if (Objects.nonNull(dto.getEmail())) {
+                predicates.add(criteriaBuilder.like(root.get("email"), "%" + dto.getEmail() + "%"));
+            }
 
-            Map<String, Object> stringObjectMap = this.transformPagination.transformPagination(listUserDto, page, columnName, value);
+            if (Objects.nonNull(dto.getRole())) {
+                System.out.println(dto.getRole());
+                Path<String> rolePath = root.get("role").get("name");
+                predicates.add(criteriaBuilder.equal(rolePath, dto.getRole()));
+            }
 
-            return Response.success(Constants.SUCCESS, stringObjectMap, request);
-        } catch (Exception e) {
-            throw new ApiException(Constants.FAILED_TO_GET_DATA, "FEUSR01051", request);
+            if (Objects.nonNull(dto.getStatus())) {
+                predicates.add(criteriaBuilder.equal(root.get("isActive"), dto.getStatus()));
+            }
+
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<User> pageUser = this.userRepository.findAll(specification, pageable);
+        List<User> listUser = pageUser.getContent();
+        if (listUser.isEmpty()) {
+            return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01051", request);
         }
+
+        List<UserDto> listUserDto = listUser.stream().map(user -> {
+            UserDto userDto = this.modelMapper.map(user, UserDto.class);
+            userDto.setRole(user.getRole().getName());
+            return userDto;
+        }).toList();
+
+        Map<String, Object> stringObjectMap = this.transformPagination.transformPagination(listUserDto, pageUser, "", "");
+
+        return Response.success(Constants.SUCCESS, stringObjectMap, request);
+
     }
 
     @Transactional
     public ResponseEntity<Object> changePassword(Long id, String currentPassword, String password, HttpServletRequest request) {
-        try{
+        try {
             if (id == null || currentPassword == null || password == null) {
                 return Response.badRequest(Constants.BAD_DATA, "FVUSR01061", request);
             }
@@ -276,7 +330,7 @@ public class UserService implements iService<User> {
                 return Response.badRequest(Constants.ACCOUNT_IS_NOT_ACTIVE, "FVUSR01063", request);
             }
 
-            if(userDB.getIsDelete()){
+            if (userDB.getIsDelete()) {
                 return Response.badRequest(Constants.ACCOUNT_NOT_FOUND, "FVUSR01064", request);
             }
 

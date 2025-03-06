@@ -17,8 +17,10 @@ Version 1.0
  * ex = FVUSRCTRL01001 -> [FV] [USR] [CTRL01] 001 -> [JENIS ERROR] [Platform Code] [MODUL CODE] [seq]
  */
 
+import com.codebean.UserService.dto.UserDetailDto;
 import com.codebean.UserService.dto.request.ChangePasswordDto;
 import com.codebean.UserService.dto.request.UserRegister;
+import com.codebean.UserService.dto.request.UserSearchDto;
 import com.codebean.UserService.dto.request.UserUpdate;
 import com.codebean.UserService.handler.Response;
 import com.codebean.UserService.model.Role;
@@ -31,6 +33,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -161,21 +164,45 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> searchUsers(
-            @RequestParam(value = "by", required = false, defaultValue = "0") String by,
-            @RequestParam(value = "search", required = false, defaultValue = "0") String search,
             @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-            @RequestParam(value = "sizePerPage", required = false, defaultValue = "50") Integer sizePerPage,
+            @RequestParam(value = "sizePerPage", required = false, defaultValue = "10") Integer sizePerPage,
+            @RequestParam(required = false) String sortType, // asc or desc
+            @RequestParam(required = false) String sortBy, // kolom yang di sorting
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) Boolean isActive,
             HttpServletRequest request
     ) {
-
-//        ResponseEntity<Object> response;
-        Pageable Pageable = PageRequest.of(page, sizePerPage);
-
-        if (by.equalsIgnoreCase("username") || by.toLowerCase().equals("email") || by.toLowerCase().equals("rolename")) {
-            return this.userService.findByParam(Pageable, by, search, request);
+        PageRequest pageRequest;
+        Sort sort;
+        if (sortType == null || "".equals(sortType) || sortBy == null || "".equals(sortBy)) {
+            pageRequest = PageRequest.of(page, sizePerPage);
+        } else {
+            if (sortType.equalsIgnoreCase("asc")) {
+                sort = Sort.by(Sort.Order.asc(sortBy));
+            } else {
+                sort = Sort.by(Sort.Order.desc(sortBy));
+            }
+            pageRequest = PageRequest.of(page, sizePerPage, sort);
         }
 
-        return this.userService.findAll(Pageable, request);
+        UserSearchDto build = UserSearchDto.builder()
+                .username(username)
+                .email(email)
+                .name(name)
+                .role(role == null || role.equalsIgnoreCase("") ? null : role)
+                .status(isActive)
+                .build();
+
+        return this.userService.search(pageRequest, build, request);
+
+//        if (by.equalsIgnoreCase("username") || by.toLowerCase().equals("email") || by.toLowerCase().equals("rolename")) {
+//            return this.userService.findByParam(Pageable, by, search, request);
+//        }
+//
+//        return this.userService.findAll(Pageable, request);
     }
 
 

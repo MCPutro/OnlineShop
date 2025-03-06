@@ -112,32 +112,27 @@ public class RoleService implements iService<Role> {
                 return Response.badRequest(Constants.BAD_DATA, "FVROL03011", request);
             }
 
-            System.out.println(">>>>>1");
             //find by id
             Optional<Role> optionalRoleById = this.roleRepository.findById(id);
             if (!optionalRoleById.isPresent()) {
                 return Response.badRequest(Constants.ROLE_NOT_FOUND, "FVROL03013", request);
             }
-            System.out.println(">>>>>1");
 
             Role roleDB = optionalRoleById.get();
 
             boolean roleNameIsSame = roleDB.getName().equals(role.getName());
             if (!roleNameIsSame) {
                 //check role name
-                System.out.println(">>>>>2");
                 Optional<Role> optionalRoleByName = this.roleRepository.findFirstByName(role.getName());
                 if (optionalRoleByName.isPresent()) {
                     return Response.badRequest(Constants.ROLE_ALREADY_EXISTS, "FVROL03012", request);
                 }
-                System.out.println(">>>>>2");
             }
 
-            System.out.println(">>>>>3");
             // set active permission
             List<RolePermission> rolePermissions = new ArrayList<>();
             List<Permission> listPermissionById = this.permissionRepository.findAllById(role.getPermissionIds());
-            System.out.println(">>>>>3");
+
             for (Permission permission : listPermissionById) {
                 RolePermission existingRolePermission = this.rolePermissionRepository.findByRoleAndPermission(roleDB, permission).orElse(null);
                 if (existingRolePermission == null) {

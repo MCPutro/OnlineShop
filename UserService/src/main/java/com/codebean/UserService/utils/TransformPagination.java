@@ -39,6 +39,7 @@ public class TransformPagination {
         map.put("column-name", column);
         map.put("sort-by", sortByColumn);
         map.put("value", value);
+        map.put("current-size-per-page", ls.size());
         return map;
     }
 }
