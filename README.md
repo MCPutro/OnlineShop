@@ -1,6 +1,6 @@
 # Online Shop
 
-### Demo : http://185.201.8.139:808
+### Live Demo : http://185.201.8.139:8080
 ### Gambaran Struktur Projek
 
 ```
@@ -136,7 +136,7 @@ Online-Shop
     - **ShareModule**:
         - berisi utilitas atau komponen yang digunakan bersama di seluruh layanan lainnya. Seperti Jwt
 
-    - **WebsiteUI**:
+    - **WebsiteUI** (masih dalam tahap pengembangan) :
         - Mengelola komponen antarmuka pengguna dari aplikasi.
 
 ### Teknologi yang digunakan
@@ -148,6 +148,7 @@ Online-Shop
  - IDE : IntelliJ IDEA
  - Keamanan API : JWT
  - Cache Session : redis
+ - Tamplate html : https://themewagon.github.io/free-bundle-2022/v1.0.0/
 
 ### Initial data ada di folder [InitDatabse/Migrate](InitDatabase/Migrate)
 
