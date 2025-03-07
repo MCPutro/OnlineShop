@@ -1,5 +1,6 @@
 # Online Shop
 
+### Demo : http://185.201.8.139:808
 ### Gambaran Struktur Projek
 
 ```
