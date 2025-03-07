@@ -43,7 +43,88 @@
 											]
 										}
 									},
-									"response": []
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"username\": \"admin001\",\r\n    \"password\": \"12345678\"\r\n}   ",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/auth/v1/login",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"auth",
+														"v1",
+														"login"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 14 Feb 2025 12:35:56 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"username\": \"admin001\",\n        \"email\": \"admin@001.com\",\n        \"isActive\": true,\n        \"role\": \"Admin\",\n        \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk1MzY1NTYsImV4cCI6MTczOTU3MjU1Nn0.t_JPWDDo5_ZVbxl_UVJsK6a7xxD1OmIaEq8jjbVK3Yo\"\n    },\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-14T19:35:56.8990436\"\n}"
+										}
+									]
 								},
 								{
 									"name": "customer register",
@@ -52,7 +133,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"username\": \"customer002\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"email\": \"customer@com.002\"\r\n}",
+											"raw": "{\r\n    \"username\": \"customer0A2\",\r\n    \"password\": \"12345678\",\r\n    \"name\" : \"name customer\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"email\": \"customer@com.0A2\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -82,7 +163,7 @@
 												"header": [],
 												"body": {
 													"mode": "raw",
-													"raw": "{\r\n    \"username\": \"customer002\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"email\": \"customer@com.002\"\r\n}",
+													"raw": "{\r\n    \"username\": \"customer002\",\r\n    \"password\": \"12345678\",\r\n    \"name\" : \"name customer\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"email\": \"customer@com.002\"\r\n}",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -180,7 +261,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"username\": \"admin001\",\r\n    \"email\": \"admin@001.com\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"role\": \"Admin\"\r\n}",
+											"raw": "{\r\n    \"username\": \"admin001\",\r\n    \"email\": \"admin@001.com\",\r\n    \"name\" : \"name customer\",\r\n    \"password\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\",\r\n    \"role\": \"Admin\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -419,10 +500,20 @@
 								{
 									"name": "get user by id [VIEW_USER]",
 									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+													"type": "string"
+												}
+											]
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "http://localhost:8081/api/v1/user/3",
+											"raw": "http://localhost:8081/api/v1/user/2",
 											"protocol": "http",
 											"host": [
 												"localhost"
@@ -432,7 +523,7 @@
 												"api",
 												"v1",
 												"user",
-												"3"
+												"2"
 											]
 										}
 									},
@@ -487,7 +578,7 @@
 												"method": "GET",
 												"header": [],
 												"url": {
-													"raw": "http://localhost:8081/api/v1/user/3",
+													"raw": "http://localhost:8081/api/v1/user/2",
 													"protocol": "http",
 													"host": [
 														"localhost"
@@ -497,7 +588,7 @@
 														"api",
 														"v1",
 														"user",
-														"3"
+														"2"
 													]
 												}
 											},
@@ -505,6 +596,30 @@
 											"code": 200,
 											"_postman_previewlanguage": "json",
 											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
 												{
 													"key": "Content-Type",
 													"value": "application/json"
@@ -515,7 +630,7 @@
 												},
 												{
 													"key": "Date",
-													"value": "Thu, 06 Feb 2025 13:55:49 GMT"
+													"value": "Tue, 25 Feb 2025 03:05:48 GMT"
 												},
 												{
 													"key": "Keep-Alive",
@@ -527,7 +642,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n    \"data\": {\n        \"username\": \"a1231231233212\",\n        \"email\": \"haha@hihi.com2\",\n        \"phoneNumber\": null,\n        \"isActive\": true,\n        \"isDelete\": false,\n        \"role\": \"admin\",\n        \"name\": null,\n        \"dateOfBirth\": null,\n        \"gender\": null,\n        \"profilePicture\": null,\n        \"addresses\": [],\n        \"id\": 3\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T20:55:49.5150545\"\n}"
+											"body": "{\n    \"data\": {\n        \"id\": 2,\n        \"username\": \"customer001\",\n        \"email\": \"email@gmail.com221\",\n        \"phoneNumber\": \"2222222\",\n        \"isActive\": true,\n        \"isDelete\": false,\n        \"role\": \"Customer\",\n        \"name\": \"123456789qwerty13\",\n        \"dateOfBirth\": \"2025-01-03\",\n        \"gender\": \"Perempuan\",\n        \"profilePicture\": null,\n        \"addresses\": [\n            {\n                \"address\": \"di lapangan bola\",\n                \"province\": \"disono\",\n                \"regency\": \"disono\",\n                \"postalCode\": \"32145ad\",\n                \"isActive\": false,\n                \"id\": 2,\n                \"address_name\": \"lapangan bola\"\n            },\n            {\n                \"address\": \"gedung tua\",\n                \"province\": \"jatim\",\n                \"regency\": \"jatim\",\n                \"postalCode\": \"123465\",\n                \"isActive\": false,\n                \"id\": 10,\n                \"address_name\": \"Kantor\"\n            },\n            {\n                \"address\": \"gedung tua\",\n                \"province\": \"jatim\",\n                \"regency\": \"jabar\",\n                \"postalCode\": \"123465\",\n                \"isActive\": true,\n                \"id\": 11,\n                \"address_name\": \"gedung tua\"\n            }\n        ]\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-25T10:05:48.6190078\"\n}"
 										}
 									]
 								},
@@ -539,7 +654,7 @@
 											"bearer": [
 												{
 													"key": "token",
-													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MzM4OTg0LCJleHAiOjE3MzkzNzQ5ODR9.yguo9SCNTQF9Tw9Iw_lXnMc7Sbt-VvM_2tJg1h593cE",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 													"type": "string"
 												}
 											]
@@ -663,7 +778,7 @@
 											"bearer": [
 												{
 													"key": "token",
-													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIiwidXNlcklkIjo3LCJpYXQiOjE3Mzg5MjQ0NjcsImV4cCI6MTczODk2MDQ2N30.1HZ2I_1uFfSGHMyDuKO0MXcIb9ao_ptVPtuxDg0siXA",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 													"type": "string"
 												}
 											]
@@ -685,7 +800,12 @@
 											"query": [
 												{
 													"key": "sizePerPage",
-													"value": "2",
+													"value": "20",
+													"disabled": true
+												},
+												{
+													"key": "page",
+													"value": null,
 													"disabled": true
 												}
 											]
@@ -712,7 +832,12 @@
 													"query": [
 														{
 															"key": "sizePerPage",
-															"value": "2",
+															"value": "20",
+															"disabled": true
+														},
+														{
+															"key": "page",
+															"value": null,
 															"disabled": true
 														}
 													]
@@ -723,6 +848,30 @@
 											"_postman_previewlanguage": "json",
 											"header": [
 												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
 													"key": "Content-Type",
 													"value": "application/json"
 												},
@@ -732,7 +881,7 @@
 												},
 												{
 													"key": "Date",
-													"value": "Thu, 06 Feb 2025 13:35:27 GMT"
+													"value": "Tue, 25 Feb 2025 02:57:14 GMT"
 												},
 												{
 													"key": "Keep-Alive",
@@ -744,18 +893,28 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n    \"data\": [\n        {\n            \"username\": \"a123123123321\",\n            \"email\": \"haha@hihi.com\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 1\n        },\n        {\n            \"username\": \"a1231231233211\",\n            \"email\": \"haha@hihi.com1\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 2\n        },\n        {\n            \"username\": \"a1231231233212\",\n            \"email\": \"haha@hihi.com2\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 3\n        },\n        {\n            \"username\": \"a1231231233213\",\n            \"email\": \"haha@hihi.co4\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 4\n        },\n        {\n            \"username\": \"a12312312332123\",\n            \"email\": \"haha@hihi.co24\",\n            \"phoneNumber\": null,\n            \"isActive\": true,\n            \"isDelete\": false,\n            \"role\": \"admin.super\",\n            \"name\": null,\n            \"dateOfBirth\": null,\n            \"gender\": null,\n            \"profilePicture\": null,\n            \"addresses\": [],\n            \"id\": 5\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-06T20:35:27.1495536\"\n}"
+											"body": "{\n    \"data\": {\n        \"sort-by\": \"id\",\n        \"current-page\": 0,\n        \"column-name\": \"id\",\n        \"total-page\": 2,\n        \"sort\": \"asc\",\n        \"size-per-page\": 50,\n        \"value\": \"\",\n        \"content\": [\n            {\n                \"id\": 1,\n                \"username\": \"admin001\",\n                \"email\": \"admin@00.com32s1\",\n                \"phoneNumber\": \"087778960669\",\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Admin\",\n                \"name\": \"1name admin0013\"\n            },\n            {\n                \"id\": 2,\n                \"username\": \"customer001\",\n                \"email\": \"email@gmail.com221\",\n                \"phoneNumber\": \"2222222\",\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"123456789qwerty13\"\n            },\n            {\n                \"id\": 19,\n                \"username\": \"customer0018\",\n                \"email\": \"customer@com.18\",\n                \"phoneNumber\": \"222\",\n                \"isActive\": false,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0018\"\n            },\n            {\n                \"id\": 27,\n                \"username\": \"customer0026\",\n                \"email\": \"customer@com.26\",\n                \"phoneNumber\": \"087778960669\",\n                \"isActive\": false,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0026\"\n            },\n            {\n                \"id\": 31,\n                \"username\": \"customer0030\",\n                \"email\": \"customer@com.30\",\n                \"phoneNumber\": \"1\",\n                \"isActive\": false,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0030\"\n            },\n            {\n                \"id\": 32,\n                \"username\": \"customer0031\",\n                \"email\": \"customer@com.31\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0031\"\n            },\n            {\n                \"id\": 33,\n                \"username\": \"customer0032\",\n                \"email\": \"customer@com.32\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0032\"\n            },\n            {\n                \"id\": 34,\n                \"username\": \"customer0033\",\n                \"email\": \"customer@com.33\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0033\"\n            },\n            {\n                \"id\": 35,\n                \"username\": \"customer0034\",\n                \"email\": \"customer@com.34\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0034\"\n            },\n            {\n                \"id\": 36,\n                \"username\": \"customer0035\",\n                \"email\": \"customer@com.35\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0035\"\n            },\n            {\n                \"id\": 37,\n                \"username\": \"customer0036\",\n                \"email\": \"customer@com.36\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0036\"\n            },\n            {\n                \"id\": 38,\n                \"username\": \"customer0037\",\n                \"email\": \"customer@com.37\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0037\"\n            },\n            {\n                \"id\": 39,\n                \"username\": \"customer0038\",\n                \"email\": \"customer@com.38\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0038\"\n            },\n            {\n                \"id\": 40,\n                \"username\": \"customer0039\",\n                \"email\": \"customer@com.39\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0039\"\n            },\n            {\n                \"id\": 41,\n                \"username\": \"customer0040\",\n                \"email\": \"customer@com.40\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0040\"\n            },\n            {\n                \"id\": 42,\n                \"username\": \"customer0041\",\n                \"email\": \"customer@com.41\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0041\"\n            },\n            {\n                \"id\": 43,\n                \"username\": \"customer0042\",\n                \"email\": \"customer@com.42\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0042\"\n            },\n            {\n                \"id\": 44,\n                \"username\": \"customer0043\",\n                \"email\": \"customer@com.43\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0043\"\n            },\n            {\n                \"id\": 45,\n                \"username\": \"customer0044\",\n                \"email\": \"customer@com.44\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0044\"\n            },\n            {\n                \"id\": 46,\n                \"username\": \"customer0045\",\n                \"email\": \"customer@com.45\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0045\"\n            },\n            {\n                \"id\": 47,\n                \"username\": \"customer0046\",\n                \"email\": \"customer@com.46\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0046\"\n            },\n            {\n                \"id\": 48,\n                \"username\": \"customer0047\",\n                \"email\": \"customer@com.47\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0047\"\n            },\n            {\n                \"id\": 49,\n                \"username\": \"customer0048\",\n                \"email\": \"customer@com.48\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0048\"\n            },\n            {\n                \"id\": 50,\n                \"username\": \"customer0049\",\n                \"email\": \"customer@com.49\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0049\"\n            },\n            {\n                \"id\": 51,\n                \"username\": \"customer0050\",\n                \"email\": \"customer@com.50\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0050\"\n            },\n            {\n                \"id\": 52,\n                \"username\": \"customer0051\",\n                \"email\": \"customer@com.51\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0051\"\n            },\n            {\n                \"id\": 53,\n                \"username\": \"customer0052\",\n                \"email\": \"customer@com.52\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0052\"\n            },\n            {\n                \"id\": 54,\n                \"username\": \"customer0053\",\n                \"email\": \"customer@com.53\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0053\"\n            },\n            {\n                \"id\": 55,\n                \"username\": \"customer0054\",\n                \"email\": \"customer@com.54\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0054\"\n            },\n            {\n                \"id\": 56,\n                \"username\": \"customer0055\",\n                \"email\": \"customer@com.55\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0055\"\n            },\n            {\n                \"id\": 57,\n                \"username\": \"customer0056\",\n                \"email\": \"customer@com.56\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0056\"\n            },\n            {\n                \"id\": 58,\n                \"username\": \"customer0057\",\n                \"email\": \"customer@com.57\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0057\"\n            },\n            {\n                \"id\": 59,\n                \"username\": \"customer0058\",\n                \"email\": \"customer@com.58\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0058\"\n            },\n            {\n                \"id\": 60,\n                \"username\": \"customer0059\",\n                \"email\": \"customer@com.59\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0059\"\n            },\n            {\n                \"id\": 61,\n                \"username\": \"customer0060\",\n                \"email\": \"customer@com.60\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0060\"\n            },\n            {\n                \"id\": 62,\n                \"username\": \"customer0061\",\n                \"email\": \"customer@com.61\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0061\"\n            },\n            {\n                \"id\": 63,\n                \"username\": \"customer0062\",\n                \"email\": \"customer@com.62\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0062\"\n            },\n            {\n                \"id\": 64,\n                \"username\": \"customer0063\",\n                \"email\": \"customer@com.63\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0063\"\n            },\n            {\n                \"id\": 65,\n                \"username\": \"customer0064\",\n                \"email\": \"customer@com.64\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0064\"\n            },\n            {\n                \"id\": 66,\n                \"username\": \"customer0065\",\n                \"email\": \"customer@com.65\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0065\"\n            },\n            {\n                \"id\": 67,\n                \"username\": \"customer0066\",\n                \"email\": \"customer@com.66\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0066\"\n            },\n            {\n                \"id\": 68,\n                \"username\": \"customer0067\",\n                \"email\": \"customer@com.67\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0067\"\n            },\n            {\n                \"id\": 69,\n                \"username\": \"customer0068\",\n                \"email\": \"customer@com.68\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0068\"\n            },\n            {\n                \"id\": 70,\n                \"username\": \"customer0069\",\n                \"email\": \"customer@com.69\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0069\"\n            },\n            {\n                \"id\": 71,\n                \"username\": \"customer0070\",\n                \"email\": \"customer@com.70\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0070\"\n            },\n            {\n                \"id\": 72,\n                \"username\": \"customer0071\",\n                \"email\": \"customer@com.71\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0071\"\n            },\n            {\n                \"id\": 73,\n                \"username\": \"customer0072\",\n                \"email\": \"customer@com.72\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0072\"\n            },\n            {\n                \"id\": 74,\n                \"username\": \"customer0073\",\n                \"email\": \"customer@com.73\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0073\"\n            },\n            {\n                \"id\": 75,\n                \"username\": \"customer0074\",\n                \"email\": \"customer@com.74\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0074\"\n            },\n            {\n                \"id\": 76,\n                \"username\": \"customer0075\",\n                \"email\": \"customer@com.75\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"name customer0075\"\n            }\n        ],\n        \"total-data\": 93\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-25T09:57:14.5521954\"\n}"
 										}
 									]
 								},
 								{
 									"name": "update profile by token",
 									"request": {
-										"method": "PATCH",
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"email\": \"email@gmail.com\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+											"raw": "{\r\n    \"email\": \"email@gmail.com\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\",\r\n    \"isActive\" : false\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -942,11 +1101,21 @@
 								{
 									"name": "update profile by user id [MANAGE_USER]",
 									"request": {
-										"method": "PATCH",
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"email\": \"email@gmail.com2\",\r\n    \"phoneNumber\": \"08123456789\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\"\r\n}",
+											"raw": "{\r\n    \"email\": \"email@gmail2.com221\",\r\n    \"phoneNumber\": \"081234567891111111111111\",\r\n    \"name\": \"123456789qwerty\",\r\n    \"dateOfBirth\": \"2025-01-03\",\r\n    \"gender\": \"gak tahu\",\r\n    \"isActive\" : false\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -954,7 +1123,7 @@
 											}
 										},
 										"url": {
-											"raw": "http://localhost:8081/api/v1/user/1",
+											"raw": "http://localhost:8081/api/v1/user/2",
 											"protocol": "http",
 											"host": [
 												"localhost"
@@ -964,7 +1133,7 @@
 												"api",
 												"v1",
 												"user",
-												"1"
+												"2"
 											]
 										}
 									},
@@ -1080,6 +1249,504 @@
 											"body": "{\n    \"path\": \"/api/v1/user/1\",\n    \"method\": \"PATCH\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Email address already exists\",\n    \"error_code\": \"FVUSR01012\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-06T21:25:07.5018641\"\n}"
 										}
 									]
+								},
+								{
+									"name": "search user [VIEW_USER]",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3NDExODAwMjEsImV4cCI6MTc0MTIxNjAyMX0.jzu5Q7xDXzXAPzvkyzLnpx_sqFDh5HAx7ZvzqlzlerE",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/find/user?page=0&sizePerPage=30",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"find",
+												"user"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "sizePerPage",
+													"value": "30"
+												},
+												{
+													"key": "sortBy",
+													"value": "name",
+													"disabled": true
+												},
+												{
+													"key": "sortType",
+													"value": "asc",
+													"disabled": true
+												},
+												{
+													"key": "username",
+													"value": "03",
+													"disabled": true
+												},
+												{
+													"key": "email",
+													"value": "03",
+													"disabled": true
+												},
+												{
+													"key": "name",
+													"value": "03",
+													"disabled": true
+												},
+												{
+													"key": "role",
+													"value": "customer",
+													"disabled": true
+												},
+												{
+													"key": "isActive",
+													"value": "false",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/api/v1/find/user?page=0&sizePerPage=20&email=com&name=n",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"find",
+														"user"
+													],
+													"query": [
+														{
+															"key": "page",
+															"value": "0"
+														},
+														{
+															"key": "sizePerPage",
+															"value": "20"
+														},
+														{
+															"key": "sortBy",
+															"value": "name",
+															"disabled": true
+														},
+														{
+															"key": "sortType",
+															"value": "asc",
+															"disabled": true
+														},
+														{
+															"key": "username",
+															"value": "us",
+															"disabled": true
+														},
+														{
+															"key": "email",
+															"value": "com"
+														},
+														{
+															"key": "name",
+															"value": "n"
+														},
+														{
+															"key": "role",
+															"value": "customer",
+															"disabled": true
+														},
+														{
+															"key": "isActive",
+															"value": "false",
+															"disabled": true
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Wed, 05 Mar 2025 10:07:20 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": {\n        \"sort-by\": \"id\",\n        \"current-page\": 0,\n        \"column-name\": \"\",\n        \"total-page\": 1,\n        \"sort\": \"asc\",\n        \"size-per-page\": 20,\n        \"value\": \"\",\n        \"content\": [\n            {\n                \"id\": 1,\n                \"username\": \"admin001\",\n                \"email\": \"admin@001.com\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Admin\",\n                \"name\": \"akun admin\"\n            },\n            {\n                \"id\": 2,\n                \"username\": \"customer001\",\n                \"email\": \"customer@com.001\",\n                \"phoneNumber\": null,\n                \"isActive\": true,\n                \"isDelete\": false,\n                \"role\": \"Customer\",\n                \"name\": \"contoh customer\"\n            }\n        ],\n        \"total-data\": 2\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-03-05T17:07:20.3443306\"\n}"
+										}
+									]
+								},
+								{
+									"name": "delete user by id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"2"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/2",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"2"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Sun, 16 Feb 2025 02:38:24 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Account deleted successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-16T09:38:24.7266708\"\n}"
+										}
+									]
+								},
+								{
+									"name": "change password by token",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5Nzc5MjkwLCJleHAiOjE3Mzk4MTUyOTB9._o-XguaZU5avZC7Po7XyEcrH9IkhLf-nPgsCaNGX-kQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"userId\": 1,\r\n    \"currentPassword\": \"11111111\",\r\n    \"newPassword\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8081/api/v1/user/change-password",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"change-password"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"userId\": 5,\r\n    \"currentPassword\": \"12345678\",\r\n    \"newPassword\": \"11111111\",\r\n    \"confirmPassword\": \"11111111\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/change-password",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"change-password"
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 17 Feb 2025 08:04:25 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"path\": \"/api/v1/user/change-password\",\n    \"method\": \"POST\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Bad data\",\n    \"error_code\": \"FVUSRCTRL01082\",\n    \"status\": 400,\n    \"timestamp\": \"2025-02-17T15:04:25.8591719\"\n}"
+										},
+										{
+											"name": "success",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"userId\": 1,\r\n    \"currentPassword\": \"12345678\",\r\n    \"newPassword\": \"11111111\",\r\n    \"confirmPassword\": \"11111111\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "http://localhost:8081/api/v1/user/change-password",
+													"protocol": "http",
+													"host": [
+														"localhost"
+													],
+													"port": "8081",
+													"path": [
+														"api",
+														"v1",
+														"user",
+														"change-password"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "X-Content-Type-Options",
+													"value": "nosniff"
+												},
+												{
+													"key": "X-XSS-Protection",
+													"value": "0"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, no-store, max-age=0, must-revalidate"
+												},
+												{
+													"key": "Pragma",
+													"value": "no-cache"
+												},
+												{
+													"key": "Expires",
+													"value": "0"
+												},
+												{
+													"key": "X-Frame-Options",
+													"value": "DENY"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 17 Feb 2025 08:04:37 GMT"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=60"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Password changed successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-17T15:04:37.8729305\"\n}"
+										}
+									]
 								}
 							]
 						}
@@ -1091,11 +1758,21 @@
 						{
 							"name": "add address by token",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBTSE9QIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk3OTAyMjAsImV4cCI6MTczOTgyNjIyMH0.pgYZq76LVyK5TtZy4FKlGPfgZ-2hQxxuV18-3z73LM8",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"address_name\": \"lapangan bola\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"country\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
+									"raw": "{\r\n    \"address_name\": \"lapangan bola\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"province\": \"disono\",\r\n    \"regency\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1231,8 +1908,18 @@
 							]
 						},
 						{
-							"name": "get lilst address by token",
+							"name": "get list address by token",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1247,6 +1934,18 @@
 										"v1",
 										"user",
 										"address"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": "100",
+											"disabled": true
+										}
 									]
 								}
 							},
@@ -1304,10 +2003,20 @@
 						{
 							"name": "get address by token",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8081/api/v1/user/address/3",
+									"raw": "http://localhost:8081/api/v1/user/address/2",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1318,7 +2027,7 @@
 										"v1",
 										"user",
 										"address",
-										"3"
+										"2"
 									]
 								}
 							},
@@ -1422,11 +2131,21 @@
 						{
 							"name": "update address by token",
 							"request": {
-								"method": "PATCH",
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBTSE9QIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk3OTAyMjAsImV4cCI6MTczOTgyNjIyMH0.pgYZq76LVyK5TtZy4FKlGPfgZ-2hQxxuV18-3z73LM8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"address_name\": \"lapangan bola bulu\",\r\n    \"address\": \"di lapangan bola  bulu\",\r\n    \"country\": \"disono  bulu\",\r\n    \"postalCode\": \"32145ad  bulu\"\r\n}",
+									"raw": "{\r\n    \"address_name\": \"lapangan bola kecil\",\r\n    \"address\": \"di lapangan bola\",\r\n    \"province\": \"disono\",\r\n    \"regency\": \"disono\",\r\n    \"postalCode\": \"32145ad\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1434,7 +2153,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/v1/user/address/2",
+									"raw": "http://localhost:8081/api/v1/user/address/1",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1445,7 +2164,7 @@
 										"v1",
 										"user",
 										"address",
-										"2"
+										"1"
 									]
 								}
 							},
@@ -1565,6 +2284,16 @@
 						{
 							"name": "delete address by token",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBTSE9QIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk3OTAyMjAsImV4cCI6MTczOTgyNjIyMH0.pgYZq76LVyK5TtZy4FKlGPfgZ-2hQxxuV18-3z73LM8",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1827,11 +2556,21 @@
 						{
 							"name": "update role [MANAGE_ROLE]",
 							"request": {
-								"method": "PATCH",
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"roleName\": \"tukang cuci kaki\",\r\n    \"permissionIds\": [\r\n        6,\r\n        3\r\n    ]\r\n}",
+									"raw": "{\r\n    \"roleName\": \"super admin\",\r\n    \"permissionIds\": [\r\n        8,\r\n        11,\r\n        2\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1839,7 +2578,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/v1/role/9",
+									"raw": "http://localhost:8081/api/v1/role/1",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1849,7 +2588,7 @@
 										"api",
 										"v1",
 										"role",
-										"9"
+										"1"
 									]
 								}
 							},
@@ -1993,6 +2732,16 @@
 						{
 							"name": "get all role [VIEW_ROLE]",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3NDExNDEyMjIsImV4cCI6MTc0MTE3NzIyMn0.WVNGHcuX3brjvHfTCP28cb_TZcFkG_BlMe8IHvBuOPc",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -2006,57 +2755,22 @@
 										"api",
 										"v1",
 										"roles"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": null,
+											"disabled": true
+										}
 									]
 								}
 							},
 							"response": [
-								{
-									"name": "success",
-									"originalRequest": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "http://localhost:8081/api/v1/roles",
-											"protocol": "http",
-											"host": [
-												"localhost"
-											],
-											"port": "8081",
-											"path": [
-												"api",
-												"v1",
-												"roles"
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										},
-										{
-											"key": "Transfer-Encoding",
-											"value": "chunked"
-										},
-										{
-											"key": "Date",
-											"value": "Fri, 07 Feb 2025 02:09:47 GMT"
-										},
-										{
-											"key": "Keep-Alive",
-											"value": "timeout=60"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"data\": [\n        {\n            \"name\": \"admin\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_USER\",\n                    \"description\": \"View user\",\n                    \"isActive\": true,\n                    \"id\": 1\n                }\n            ],\n            \"id\": 5\n        },\n        {\n            \"name\": \"admin2\",\n            \"isActive\": false,\n            \"permissions\": [\n                {\n                    \"name\": \"MANAGE_USER\",\n                    \"description\": \"Add/Edit user\",\n                    \"isActive\": true,\n                    \"id\": 2\n                }\n            ],\n            \"id\": 6\n        },\n        {\n            \"name\": \"admin.super\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product\",\n                    \"isActive\": true,\n                    \"id\": 3\n                },\n                {\n                    \"name\": \"MANAGE_PRODUCT\",\n                    \"description\": \"Add/Edit product\",\n                    \"isActive\": true,\n                    \"id\": 4\n                }\n            ],\n            \"id\": 7\n        },\n        {\n            \"name\": \"tukang cuci kaki\",\n            \"isActive\": true,\n            \"permissions\": [\n                {\n                    \"name\": \"VIEW_PRODUCT\",\n                    \"description\": \"View product\",\n                    \"isActive\": true,\n                    \"id\": 3\n                },\n                {\n                    \"name\": \"MANAGE_TRX\",\n                    \"description\": \"Add/Edit trx\",\n                    \"isActive\": true,\n                    \"id\": 6\n                }\n            ],\n            \"id\": 9\n        }\n    ],\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-07T09:09:47.8259188\"\n}"
-								},
 								{
 									"name": "error forbidden",
 									"originalRequest": {
@@ -2127,6 +2841,87 @@
 									],
 									"cookie": [],
 									"body": "{\n    \"path\": \"\",\n    \"method\": \"\",\n    \"path2\": \"\",\n    \"success\": false,\n    \"error_detail\": \"Access Denied\",\n    \"error_code\": \"FORBIDDEN\",\n    \"status\": 403,\n    \"timestamp\": \"2025-02-07T19:53:51.4501455\"\n}"
+								},
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/roles?page=0&sizePerPage=50",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"roles"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "sizePerPage",
+													"value": "50"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 25 Feb 2025 04:22:29 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"sort-by\": \"id\",\n        \"current-page\": 0,\n        \"column-name\": \"id\",\n        \"total-page\": 1,\n        \"sort\": \"asc\",\n        \"size-per-page\": 50,\n        \"value\": \"\",\n        \"content\": [\n            {\n                \"id\": 1,\n                \"name\": \"Admin\",\n                \"isActive\": true\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Customer\",\n                \"isActive\": true\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Test role A\",\n                \"isActive\": false\n            },\n            {\n                \"id\": 4,\n                \"name\": \"Customer B\",\n                \"isActive\": true\n            },\n            {\n                \"id\": 5,\n                \"name\": \"Customer C\",\n                \"isActive\": false\n            },\n            {\n                \"id\": 6,\n                \"name\": \"Customer D\",\n                \"isActive\": false\n            },\n            {\n                \"id\": 7,\n                \"name\": \"Customer E\",\n                \"isActive\": false\n            },\n            {\n                \"id\": 8,\n                \"name\": \"Customer F\",\n                \"isActive\": false\n            },\n            {\n                \"id\": 9,\n                \"name\": \"Customer G\",\n                \"isActive\": false\n            },\n            {\n                \"id\": 10,\n                \"name\": \"Customer H\",\n                \"isActive\": false\n            },\n            {\n                \"id\": 11,\n                \"name\": \"dropship\",\n                \"isActive\": true\n            }\n        ],\n        \"total-data\": 11\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-25T11:22:29.5846808\"\n}"
 								}
 							]
 						},
@@ -2134,12 +2929,19 @@
 							"name": "get role by id [VIEW_ROLE]",
 							"request": {
 								"auth": {
-									"type": "noauth"
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3NDExNDEyMjIsImV4cCI6MTc0MTE3NzIyMn0.WVNGHcuX3brjvHfTCP28cb_TZcFkG_BlMe8IHvBuOPc",
+											"type": "string"
+										}
+									]
 								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8081/api/v1/role/9",
+									"raw": "http://localhost:8081/api/v1/role/1",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -2149,7 +2951,7 @@
 										"api",
 										"v1",
 										"role",
-										"9"
+										"1"
 									]
 								}
 							},
@@ -2207,10 +3009,20 @@
 						{
 							"name": "delete role [MANAGE_ROLE]",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8081/api/v1/role/9",
+									"raw": "http://localhost:8081/api/v1/role/3",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -2220,7 +3032,7 @@
 										"api",
 										"v1",
 										"role",
-										"9"
+										"3"
 									]
 								}
 							},
@@ -2276,6 +3088,113 @@
 							]
 						},
 						{
+							"name": "reactivation role [MANAGE_ROLE]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/v1/role/reactivation/9",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"role",
+										"reactivation",
+										"9"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/api/v1/role/reactivation/9",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"api",
+												"v1",
+												"role",
+												"reactivation",
+												"9"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 17 Feb 2025 06:00:28 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Role updated successfully\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-17T13:00:28.5578353\"\n}"
+								}
+							]
+						},
+						{
 							"name": "get role active only [VIEW_ROLE | MANAGE_USER]",
 							"request": {
 								"auth": {
@@ -2283,7 +3202,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 											"type": "string"
 										}
 									]
@@ -2302,6 +3221,18 @@
 										"v1",
 										"roles",
 										"active"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
+											"value": "1",
+											"disabled": true
+										}
 									]
 								}
 							},
@@ -2393,7 +3324,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 											"type": "string"
 										}
 									]
@@ -2496,7 +3427,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 											"type": "string"
 										}
 									]
@@ -2601,7 +3532,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 											"type": "string"
 										}
 									]
@@ -2708,7 +3639,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTE2Mjg5MCwiZXhwIjoxNzM5MTk4ODkwfQ.6vGvmiFNYiQ41Qqq2geboSSh0B0H1K3sU18WYIMxd9I",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 											"type": "string"
 										}
 									]
@@ -3015,22 +3946,15 @@
 							]
 						},
 						{
-							"name": "Get Active Category [VIEW_PRODUCT | SHOP]",
+							"name": "Get Active Category",
 							"request": {
 								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTY1MTkzLCJleHAiOjE3MzkyMDExOTN9.a_zV1KsJ3vyu6i_pnbQfVXwwlejkPsKL5hl1jJrxau8",
-											"type": "string"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8082/api/v1/category?page=0&sizePerPage=10",
+									"raw": "http://localhost:8082/api/v1/shop/category",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -3039,16 +3963,19 @@
 									"path": [
 										"api",
 										"v1",
+										"shop",
 										"category"
 									],
 									"query": [
 										{
 											"key": "page",
-											"value": "0"
+											"value": "0",
+											"disabled": true
 										},
 										{
 											"key": "sizePerPage",
-											"value": "10"
+											"value": "1",
+											"disabled": true
 										}
 									]
 								}
@@ -3145,7 +4072,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19QUk9EVUNUIE1BTkFHRV9QUk9EVUNUIFZJRVdfUk9MRSIsInVzZXJJZCI6MSwiaWF0IjoxNzM5MTY1MTkzLCJleHAiOjE3MzkyMDExOTN9.a_zV1KsJ3vyu6i_pnbQfVXwwlejkPsKL5hl1jJrxau8",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIFJFUE9SVFMgVklFV19NWV9UUkFOU0FDVElPTiIsInVzZXJJZCI6MSwiaWF0IjoxNzQwNDQ3NDgzLCJleHAiOjE3NDA0ODM0ODN9.HcqS2wQonWfzTuskwcb2WoHcpIfiK76_NtFmsAZnNl0",
 											"type": "string"
 										}
 									]
@@ -3592,7 +4519,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUiLCJ1c2VySWQiOjEsImlhdCI6MTczOTI4NzAwOCwiZXhwIjoxNzM5MzIzMDA4fQ.kJkdhMfHkMkuuau3EQSvbQs4qQINvmtkiUipHZFo33A",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgTUFOQUdFX1RSWCBWSUVXX1RSWCBSRVBPUlRTIiwidXNlcklkIjoxLCJpYXQiOjE3NDA0Nzg4NTMsImV4cCI6MTc0MDUxNDg1M30.lon3PXbFOfkGvln70SXp8HT9zq7Ise-KG1jTmNaCwuA",
 											"type": "string"
 										}
 									]
@@ -3715,7 +4642,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5Mjg3NzExLCJleHAiOjE3MzkzMjM3MTF9.NQ_aCWQ3vQJzsaBIYk-HEOI6lMJnOMQJu62ZuBN6SOQ",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgTUFOQUdFX1RSWCBWSUVXX1RSWCBSRVBPUlRTIiwidXNlcklkIjoxLCJpYXQiOjE3NDA0Nzg4NTMsImV4cCI6MTc0MDUxNDg1M30.lon3PXbFOfkGvln70SXp8HT9zq7Ise-KG1jTmNaCwuA",
 											"type": "string"
 										}
 									]
@@ -3809,17 +4736,10 @@
 							]
 						},
 						{
-							"name": "Get Active Product [SHOP]",
+							"name": "Get Active Product | SHOP",
 							"request": {
 								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5Mjg3NzExLCJleHAiOjE3MzkzMjM3MTF9.NQ_aCWQ3vQJzsaBIYk-HEOI6lMJnOMQJu62ZuBN6SOQ",
-											"type": "string"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "GET",
 								"header": [],
@@ -3937,22 +4857,80 @@
 							]
 						},
 						{
-							"name": "get active product by id [SHOP]",
+							"name": "search",
 							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8082/api/v1/shop/products?page=1&sizePerPage=15&productName=1&minPrice=100000.0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"api",
+										"v1",
+										"shop",
+										"products"
+									],
+									"query": [
 										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCIsInVzZXJJZCI6MSwiaWF0IjoxNzM5Mjg3NzExLCJleHAiOjE3MzkzMjM3MTF9.NQ_aCWQ3vQJzsaBIYk-HEOI6lMJnOMQJu62ZuBN6SOQ",
-											"type": "string"
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "sizePerPage",
+											"value": "15"
+										},
+										{
+											"key": "sortType",
+											"value": "asc",
+											"disabled": true
+										},
+										{
+											"key": "sortBy",
+											"value": "price",
+											"disabled": true
+										},
+										{
+											"key": "productName",
+											"value": "1"
+										},
+										{
+											"key": "minPrice",
+											"value": "100000.0"
+										},
+										{
+											"key": "maxPrice",
+											"value": "2000",
+											"disabled": true
+										},
+										{
+											"key": "categoryIds",
+											"value": "25",
+											"disabled": true
+										},
+										{
+											"key": "categoryIds",
+											"value": "28",
+											"disabled": true
 										}
 									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get active product by id | SHOP",
+							"request": {
+								"auth": {
+									"type": "noauth"
 								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8082/api/v1/shop/product/62",
+									"raw": "http://localhost:8082/api/v1/shop/product/2",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -3963,14 +4941,14 @@
 										"v1",
 										"shop",
 										"product",
-										"62"
+										"2"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "get active product by ids [SHOP]",
+							"name": "get active product by ids | SHOP",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -3985,7 +4963,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8082/api/v1/shop/product/ids",
+									"raw": "http://localhost:8082/api/v1/shop/product/ids?productId=1&productId=2&productId=3",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -4001,18 +4979,15 @@
 									"query": [
 										{
 											"key": "productId",
-											"value": "1",
-											"disabled": true
+											"value": "1"
 										},
 										{
 											"key": "productId",
-											"value": "2",
-											"disabled": true
+											"value": "2"
 										},
 										{
 											"key": "productId",
-											"value": "3",
-											"disabled": true
+											"value": "3"
 										}
 									]
 								}
@@ -4430,7 +5405,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjAwMSIsInBlcm1pc3Npb25zIjoiU0hPUCIsInVzZXJJZCI6MiwiaWF0IjoxNzM5NDM2NTE4LCJleHAiOjE3Mzk0NzI1MTh9.ZFkmMNGGKE-Uw-GCe9ekVeDqlYYVrpMzO8YGeTg_Gto",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBTSE9QIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk4NTc4MDIsImV4cCI6MTczOTg5MzgwMn0.tYJ4l1cn1qBkvUJOZFcjPQbSKkGSt--SYFOI_N44aMo",
 											"type": "string"
 										}
 									]
@@ -4439,7 +5414,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"productId\": 3,\r\n    \"quantity\": 2\r\n}",
+									"raw": "{\r\n    \"productId\": 1,\r\n    \"quantity\": 2\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4764,6 +5739,129 @@
 							]
 						},
 						{
+							"name": "prosess order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk5MzA1MDUsImV4cCI6MTczOTk2NjUwNX0.T3vjRX8js6KpU1lQva2-Aqtg5b_fBIh9CsR31YpA1lA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"orderId\": 71,\r\n    \"orderStatus\" : \"COMPLETE\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/api/v1/order/process",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"order",
+										"process"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"orderId\": 71,\r\n    \"orderStatus\" : \"COMPLETE\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:8083/api/v1/order/process",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8083",
+											"path": [
+												"api",
+												"v1",
+												"order",
+												"process"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 19 Feb 2025 02:01:55 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": \"\",\n    \"success\": true,\n    \"message\": \"Transaction successful update\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-19T09:01:55.0828322\"\n}"
+								}
+							]
+						},
+						{
 							"name": "get all orders [VIEW_TRX]",
 							"request": {
 								"auth": {
@@ -4771,7 +5869,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk0NjQ3NTksImV4cCI6MTczOTUwMDc1OX0.Dri6Wmqjq8Gsz0fpc0lBFi724cjNEKbTYBjoSEuQjO4",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBTSE9QIE1BTkFHRV9UUlggVklFV19UUlgiLCJ1c2VySWQiOjEsImlhdCI6MTczOTkyNzUxMSwiZXhwIjoxNzM5OTYzNTExfQ.9EEA-SxjEeY7lTC1Z2VfVzsNavngTsbIPLYe6p2MohI",
 											"type": "string"
 										}
 									]
@@ -4798,7 +5896,57 @@
 										},
 										{
 											"key": "sizePerPage",
+											"value": "500",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get order by status [VIEW_TRX]",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk5MzA1MDUsImV4cCI6MTczOTk2NjUwNX0.T3vjRX8js6KpU1lQva2-Aqtg5b_fBIh9CsR31YpA1lA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/order/by/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"order",
+										"by",
+										"status"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "sizePerPage",
 											"value": "50",
+											"disabled": true
+										},
+										{
+											"key": "search",
+											"value": "pen",
 											"disabled": true
 										}
 									]
@@ -4858,7 +6006,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUFJPRFVDVCBNQU5BR0VfUFJPRFVDVCBWSUVXX1JPTEUgTUFOQUdFX1JPTEUgU0hPUCBNQU5BR0VfVFJYIFZJRVdfVFJYIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk0NjQ3NTksImV4cCI6MTczOTUwMDc1OX0.Dri6Wmqjq8Gsz0fpc0lBFi724cjNEKbTYBjoSEuQjO4",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBTSE9QIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk4OTgxMTQsImV4cCI6MTczOTkzNDExNH0.QqpQskW12IJrg2mpJW_2Qx1r8EiDnN3GrxzKMz0_dKg",
 											"type": "string"
 										}
 									]
@@ -4866,7 +6014,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8083/api/v1/my/order",
+									"raw": "http://localhost:8083/api/v1/my/order?page=0&sizePerPage=50",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -4881,13 +6029,11 @@
 									"query": [
 										{
 											"key": "page",
-											"value": null,
-											"disabled": true
+											"value": "0"
 										},
 										{
 											"key": "sizePerPage",
-											"value": null,
-											"disabled": true
+											"value": "50"
 										}
 									]
 								}
@@ -4938,6 +6084,131 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "get order review",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMSIsInBlcm1pc3Npb25zIjoiVklFV19VU0VSIE1BTkFHRV9VU0VSIFZJRVdfUk9MRSBNQU5BR0VfUk9MRSBTSE9QIiwidXNlcklkIjoxLCJpYXQiOjE3Mzk4NzQ1MzgsImV4cCI6MTczOTkxMDUzOH0.L4aVL11qS7-e7aG85IiFZJRZ0wz0_IrWG-k1_stWN-k",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/api/v1/cart/review?cartIds=23&cartIds=25",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"api",
+										"v1",
+										"cart",
+										"review"
+									],
+									"query": [
+										{
+											"key": "cartIds",
+											"value": "23"
+										},
+										{
+											"key": "cartIds",
+											"value": "25"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8083/api/v1/cart/review?cartIds=23&cartIds=25",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8083",
+											"path": [
+												"api",
+												"v1",
+												"cart",
+												"review"
+											],
+											"query": [
+												{
+													"key": "cartIds",
+													"value": "23"
+												},
+												{
+													"key": "cartIds",
+													"value": "25"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 18 Feb 2025 10:52:21 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"totalPrice\": 2997257,\n        \"list\": [\n            {\n                \"productId\": 9,\n                \"productName\": \"Product 9\",\n                \"quantity\": 2,\n                \"price\": 204163,\n                \"totalPrice\": 408326\n            },\n            {\n                \"productId\": 1,\n                \"productName\": \"Product 1\",\n                \"quantity\": 3,\n                \"price\": 862977,\n                \"totalPrice\": 2588931\n            }\n        ]\n    },\n    \"success\": true,\n    \"message\": \"Success\",\n    \"status\": 200,\n    \"timestamp\": \"2025-02-18T17:52:21.4785876\"\n}"
+								}
+							]
 						}
 					]
 				}

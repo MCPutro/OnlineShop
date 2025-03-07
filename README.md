@@ -53,7 +53,7 @@ Online-Shop
 │   │       └── resources
 │   └── .gitignore
 │
-├── TransactionService (Belum di buat)
+├── TransactionService
 │   ├── pom.xml
 │   ├── src
 │   │   ├── main
@@ -66,6 +66,20 @@ Online-Shop
 │   │   │   │       ├── controller
 │   │   │   │       ├── config
 │   │   │   │       ├── filter
+│   │   │   │       └── service
+│   │   │   └── resources
+│   │   │       └── application.properties
+│   │   └── test
+│   └── .gitignore
+│
+├── AnalyticServices
+│   ├── pom.xml
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── com.codebean.AnalyticServices
+│   │   │   │       ├── dto
+│   │   │   │       ├── controller
 │   │   │   │       └── service
 │   │   │   └── resources
 │   │   │       └── application.properties
@@ -115,11 +129,24 @@ Online-Shop
     - **TransactionService** (8083):
         - Mengelola operasi terkait cart, order/transaksi.
 
+    - **AnalyticServices** (8084):
+      - Mengelola proses terkait report.
+
     - **ShareModule**:
         - berisi utilitas atau komponen yang digunakan bersama di seluruh layanan lainnya. Seperti Jwt
 
     - **WebsiteUI**:
         - Mengelola komponen antarmuka pengguna dari aplikasi.
+
+### Teknologi yang digunakan
+ - Bahasa Pemrograman : Java dengan framework spring boot
+ - Java JDK : JDK versi 21
+ - Sistem Pengontrol Versi (Kode) : Git
+ - Dokumentasi API : Postman
+ - Database : MS SQL Server 2019 express
+ - IDE : IntelliJ IDEA
+ - Keamanan API : JWT
+ - Cache Session : redis
 
 ### Initial data ada di folder [InitDatabse/Migrate](InitDatabase/Migrate)
 

@@ -1,18 +1,18 @@
 /*
- Navicat Premium Data Transfer
+ Navicat Premium Dump SQL
 
- Source Server         : MS SQL Server
+ Source Server         : SQL Server
  Source Server Type    : SQL Server
- Source Server Version : 15002000 (15.00.2000)
+ Source Server Version : 15004430 (15.00.4430)
  Source Host           : localhost:1433
  Source Catalog        : OnlineShop
  Source Schema         : Transactions
 
  Target Server Type    : SQL Server
- Target Server Version : 15002000 (15.00.2000)
+ Target Server Version : 15004430 (15.00.4430)
  File Encoding         : 65001
 
- Date: 14/02/2025 09:06:54
+ Date: 07/03/2025 10:01:39
 */
 
 
@@ -28,7 +28,6 @@ CREATE TABLE [Transactions].[Carts] (
   [CreatedBy] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NOT NULL,
   [CreatedDate] datetime2(6)  NOT NULL,
   [IsAvailable] bit DEFAULT 1 NOT NULL,
-  [Price] float(53)  NOT NULL,
   [ProductId] bigint  NOT NULL,
   [Quantity] int  NOT NULL,
   [UpdatedBy] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
@@ -47,16 +46,13 @@ GO
 SET IDENTITY_INSERT [Transactions].[Carts] ON
 GO
 
-INSERT INTO [Transactions].[Carts] ([ID], [CreatedBy], [CreatedDate], [IsAvailable], [Price], [ProductId], [Quantity], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'3', N'system', N'2025-02-12 14:04:54.377720', N'1', N'80.7038985541801', N'2', N'5', N'system', N'2025-02-12 14:46:13.165961', N'1')
+INSERT INTO [Transactions].[Carts] ([ID], [CreatedBy], [CreatedDate], [IsAvailable], [ProductId], [Quantity], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'3', N'system', N'2025-02-12 14:04:54.377720', N'1', N'2', N'5', N'system', N'2025-02-12 14:46:13.165961', N'1')
 GO
 
-INSERT INTO [Transactions].[Carts] ([ID], [CreatedBy], [CreatedDate], [IsAvailable], [Price], [ProductId], [Quantity], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'4', N'system', N'2025-02-12 14:57:09.054546', N'1', N'135.89275476636', N'3', N'3', NULL, NULL, N'1')
+INSERT INTO [Transactions].[Carts] ([ID], [CreatedBy], [CreatedDate], [IsAvailable], [ProductId], [Quantity], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'4', N'system', N'2025-02-12 14:57:09.054546', N'1', N'3', N'3', NULL, NULL, N'1')
 GO
 
-INSERT INTO [Transactions].[Carts] ([ID], [CreatedBy], [CreatedDate], [IsAvailable], [Price], [ProductId], [Quantity], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'7', N'system', N'2025-02-12 17:09:34.182523', N'1', N'507.480173049904', N'1', N'3', N'system', N'2025-02-12 17:09:45.408497', N'1')
-GO
-
-INSERT INTO [Transactions].[Carts] ([ID], [CreatedBy], [CreatedDate], [IsAvailable], [Price], [ProductId], [Quantity], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'11', N'system', N'2025-02-13 16:27:51.433671', N'1', N'135.89275476636', N'3', N'2', NULL, NULL, N'2')
+INSERT INTO [Transactions].[Carts] ([ID], [CreatedBy], [CreatedDate], [IsAvailable], [ProductId], [Quantity], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'7', N'system', N'2025-02-12 17:09:34.182523', N'1', N'1', N'3', N'system', N'2025-02-12 17:09:45.408497', N'1')
 GO
 
 SET IDENTITY_INSERT [Transactions].[Carts] OFF
@@ -115,6 +111,15 @@ GO
 INSERT INTO [Transactions].[OrderItems] ([ID], [ProductId], [ProductPrice], [Quantity], [CreatedBy], [CreatedDate], [SubTotalPrice], [UpdatedBy], [UpdatedDate], [OrderId]) VALUES (N'11', N'1', N'135.89275476636', N'4', N'system', N'2025-02-13 16:25:56.102073', N'543.571019065441', NULL, NULL, N'64')
 GO
 
+INSERT INTO [Transactions].[OrderItems] ([ID], [ProductId], [ProductPrice], [Quantity], [CreatedBy], [CreatedDate], [SubTotalPrice], [UpdatedBy], [UpdatedDate], [OrderId]) VALUES (N'12', N'1', N'507.480173049904', N'1', N'customer001', N'2025-03-06 19:22:14.349382', N'507.480173049904', NULL, NULL, N'65')
+GO
+
+INSERT INTO [Transactions].[OrderItems] ([ID], [ProductId], [ProductPrice], [Quantity], [CreatedBy], [CreatedDate], [SubTotalPrice], [UpdatedBy], [UpdatedDate], [OrderId]) VALUES (N'13', N'2', N'80.7038985541801', N'4', N'customer001', N'2025-03-06 19:23:32.647188', N'322.81559421672', NULL, NULL, N'66')
+GO
+
+INSERT INTO [Transactions].[OrderItems] ([ID], [ProductId], [ProductPrice], [Quantity], [CreatedBy], [CreatedDate], [SubTotalPrice], [UpdatedBy], [UpdatedDate], [OrderId]) VALUES (N'14', N'2', N'80.7038985541801', N'5', N'customer001', N'2025-03-06 20:46:47.886366', N'403.5194927709', NULL, NULL, N'67')
+GO
+
 SET IDENTITY_INSERT [Transactions].[OrderItems] OFF
 GO
 
@@ -150,10 +155,10 @@ GO
 SET IDENTITY_INSERT [Transactions].[Orders] ON
 GO
 
-INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'60', N'1', N'system', N'2025-02-13 16:25:56.027072', N'2025-02-13', N'PENDING', N'1087.14203813088', NULL, NULL, N'2')
+INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'60', N'1', N'system', N'2025-02-13 16:25:56.027072', N'2025-02-13', N'COMPLETE', N'1087.14203813088', N'admin001', N'2025-03-06 18:45:32.672785', N'2')
 GO
 
-INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'61', N'1', N'system', N'2025-02-13 16:25:56.027072', N'2025-02-13', N'PENDING', N'1087.14203813088', NULL, NULL, N'1')
+INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'61', N'1', N'system', N'2025-02-13 16:25:56.027072', N'2025-02-13', N'CANCELLED', N'1087.14203813088', N'admin001', N'2025-03-06 18:45:35.611957', N'1')
 GO
 
 INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'62', N'1', N'system', N'2025-02-13 16:25:56.027072', N'2025-02-13', N'PENDING', N'1087.14203813088', NULL, NULL, N'1')
@@ -165,6 +170,15 @@ GO
 INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'64', N'1', N'system', N'2025-02-13 16:25:56.027072', N'2025-02-13', N'PENDING', N'1087.14203813088', NULL, NULL, N'1')
 GO
 
+INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'65', N'10', N'customer001', N'2025-03-06 19:22:14.338292', N'2025-03-06', N'PENDING', N'507.480173049904', NULL, NULL, N'2')
+GO
+
+INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'66', N'10', N'customer001', N'2025-03-06 19:23:32.643204', N'2025-03-06', N'PENDING', N'322.81559421672', NULL, NULL, N'2')
+GO
+
+INSERT INTO [Transactions].[Orders] ([ID], [AddressId], [CreatedBy], [CreatedDate], [OrderDate], [OrderStatus], [TotalPrice], [UpdatedBy], [UpdatedDate], [UserId]) VALUES (N'67', N'10', N'customer001', N'2025-03-06 20:46:47.869604', N'2025-03-06', N'PENDING', N'403.5194927709', NULL, NULL, N'2')
+GO
+
 SET IDENTITY_INSERT [Transactions].[Orders] OFF
 GO
 
@@ -172,7 +186,7 @@ GO
 -- ----------------------------
 -- Auto increment value for Carts
 -- ----------------------------
-DBCC CHECKIDENT ('[Transactions].[Carts]', RESEED, 11)
+DBCC CHECKIDENT ('[Transactions].[Carts]', RESEED, 15)
 GO
 
 
@@ -198,7 +212,7 @@ GO
 -- ----------------------------
 -- Auto increment value for OrderItems
 -- ----------------------------
-DBCC CHECKIDENT ('[Transactions].[OrderItems]', RESEED, 11)
+DBCC CHECKIDENT ('[Transactions].[OrderItems]', RESEED, 14)
 GO
 
 
@@ -214,7 +228,7 @@ GO
 -- ----------------------------
 -- Auto increment value for Orders
 -- ----------------------------
-DBCC CHECKIDENT ('[Transactions].[Orders]', RESEED, 64)
+DBCC CHECKIDENT ('[Transactions].[Orders]', RESEED, 67)
 GO
 
 
