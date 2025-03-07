@@ -127,8 +127,7 @@
                                 <label class="mb-3 h6  text-black d-block ">Category :</label>
                                 <label class="d-flex" th:each="ctgr : ${ltCategory}">
                                     <input type="checkbox" name="category" class="mr-2 mt-1" th:value="${ctgr['id']}"
-                                           th:checked="${#lists.contains(categoryIds, T(java.lang.Long).parseLong(ctgr['id'].toString()))}"
-
+                                           th:checked="${ categoryIds != null ? categoryIds.contains(ctgr['id'].toString()) : false }"
                                     >
                                     <span class="text-black" th:text="${ctgr['name']}"></span>
                                 </label>

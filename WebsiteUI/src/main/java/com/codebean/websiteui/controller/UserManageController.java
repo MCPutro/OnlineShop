@@ -92,12 +92,14 @@ public class UserManageController {
         }
 
         //data search
-        model.addAttribute("username", username);
+        model.addAttribute("usernameSearch", username);
         model.addAttribute("email", email);
         model.addAttribute("userRole", userRole);
         model.addAttribute("status", status);
         model.addAttribute("name", name);
         model.addAttribute("size", size);
+
+        GlobalFunction.printModel(model);
         return "userManage/main";
     }
 

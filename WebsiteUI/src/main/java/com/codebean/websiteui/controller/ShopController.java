@@ -92,7 +92,7 @@ public class ShopController {
         model.addAttribute("search", search);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
-        model.addAttribute("categoryIds", categoryIds);
+        model.addAttribute("categoryIds", categoryIds != null ? categoryIds.stream().map(Object::toString).toList() : null);
 
         return "shop/shop";
     }
