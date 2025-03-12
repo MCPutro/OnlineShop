@@ -1,6 +1,6 @@
 # Online Shop
 
-### Live Demo : http://185.201.8.139:8080
+### Live Demo : https://online-shop.mcputro.my.id/
 ### Gambaran Struktur Projek
 
 ```
